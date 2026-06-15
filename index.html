@@ -44,38 +44,23 @@
                 <label class="checkbox-label">
                     <input type="checkbox" id="joinery-enable"> Enable Joinery Scaling
                 </label>
-                <div id="joinery-options" class="hidden-options">
-                    <div class="input-group">
-                        <label for="joinery-virtue">Virtue:</label>
-                        <select id="joinery-virtue">
-                            <option value="courage">Mora (Courage)</option>
-                            <option value="spirit">Iridis (Spirit)</option>
-                            <option value="grace">Sapehene (Grace)</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="joinery-tier">Tier:</label>
-                        <select id="joinery-tier">
-                            <option value="1">Blessed (+1 Pip)</option>
-                            <option value="2">Twice Blessed (+2 Pips)</option>
-                            <option value="3">Thrice Blessed (+3 Pips)</option>
-                        </select>
-                    </div>
-                </div>
+                <p style="font-size: 0.75em; color: #888; margin-top: 8px; line-height: 1.3;">
+                    When enabled, the optimizer automatically generates and calculates all 9 possible Joinery combinations for every weapon to find the highest damage configurations.
+                </p>
             </div>
 
             <div class="control-box">
                 <h3>Weapon Filters</h3>
                 <div class="input-group">
-                    <label for="weapon-filter">Weapon Type:</label>
-                    <select id="weapon-filter">
-                        <option value="all">All Types</option>
-                        <option value="Bow">Bow</option>
-                        <option value="Magick">Magick</option>
-                        <option value="Shield">Shield</option>
-                        <option value="Long Blade">Long Blade</option>
-                        <option value="Short Blade">Short Blade</option>
-                        <option value="Polearm">Polearm</option>
+                    <label for="primary-filter">Primary Class:</label>
+                    <select id="primary-filter">
+                        <option value="all">All Primaries</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-top: 10px;">
+                    <label for="sidearm-filter">Sidearm Class:</label>
+                    <select id="sidearm-filter">
+                        <option value="all">All Sidearms</option>
                     </select>
                 </div>
             </div>
@@ -109,8 +94,12 @@
                 </div>
 
                 <div class="alt-section">
-                    <h2>All Weapon Damage Rankings</h2>
-                    <div id="weapon-rankings" class="list-container"></div>
+                    <h2>Weapon Damage Rankings</h2>
+                    <h3 style="font-size: 0.9em; margin-top: 10px; color: #82c91e;">Primary Weapons</h3>
+                    <div id="primary-rankings" class="list-container"></div>
+                    
+                    <h3 style="font-size: 0.9em; margin-top: 10px; color: #3498db;">Sidearms</h3>
+                    <div id="sidearm-rankings" class="list-container"></div>
                 </div>
             </div>
         </div>
