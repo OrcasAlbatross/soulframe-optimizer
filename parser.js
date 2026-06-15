@@ -104,6 +104,7 @@ function parseWeaponData(data) {
 
         const lvl0Attack = getNestedNumber("Lvl0", "Attack");
         const lvl30Attack = getNestedNumber("Lvl30", "Attack");
+        const damageCap = getNestedNumber("DamageCaps", "LightAttack");
 
         // Skip unreleased weapons that have no attack stats defined yet
         if (lvl0Attack === 0 && lvl30Attack === 0) continue;
@@ -115,7 +116,8 @@ function parseWeaponData(data) {
             requirements: parsePips(getString("ReqVirtue")),
             attunement: parsePips(getString("Attunement")),
             baseAttack: lvl0Attack,
-            maxAttack: lvl30Attack
+            maxAttack: lvl30Attack,
+            damageCap: damageCap
         });
     }
     return parsedList;
