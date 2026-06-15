@@ -39,7 +39,7 @@ function parsePips(attStr) {
 // ARMOR PARSER
 function parseArmorData(data) {
     const parsedList = [];
-    const itemBlocks = data.split(/\n\t*\["/);
+    const itemBlocks = data.split(/\n\s*\["/);
     itemBlocks.shift();
 
     for (let block of itemBlocks) {
@@ -82,7 +82,7 @@ function parseArmorData(data) {
 // WEAPON PARSER
 function parseWeaponData(data) {
     const parsedList = [];
-    const itemBlocks = data.split(/\n\t*\["/);
+    const itemBlocks = data.split(/\n\s*\["/);
     itemBlocks.shift(); 
 
     for (let block of itemBlocks) {
