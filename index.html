@@ -10,37 +10,110 @@
 
     <header>
         <h1>Soulframe Optimizer</h1>
-        <p id="status-msg" style="color: #ccc;">Initializing...</p>
+        <p id="status-msg">Initializing...</p>
+        
+        <!-- Tabs Navigation for Future-Proofing -->
+        <nav class="tabs-nav">
+            <button class="tab-btn active" data-tab="optimizer-tab">Virtue Allocator</button>
+            <button class="tab-btn" data-tab="stat-maxer-tab" disabled>Stat Maxer (Soon)</button>
+            <button class="tab-btn" data-tab="scaling-tab" disabled>Weapon Scaling (Soon)</button>
+        </nav>
     </header>
 
-    <main>
-        <section class="stat-box">
-            <h3>Enter Envoy Stats</h3>
-            <div class="input-group">
-                <label for="courage">Courage:</label>
-                <input type="number" id="courage" value="20">
+    <main id="optimizer-tab" class="tab-content active">
+        <!-- Left Side: Controls/Inputs Panel -->
+        <div class="controls-panel">
+            <div class="control-box">
+                <h3>Envoy Stat Points</h3>
+                <div class="input-group">
+                    <label for="courage">Courage:</label>
+                    <input type="number" id="courage" value="20" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="spirit">Spirit:</label>
+                    <input type="number" id="spirit" value="10" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="grace">Grace:</label>
+                    <input type="number" id="grace" value="10" min="0">
+                </div>
             </div>
-            <div class="input-group">
-                <label for="spirit">Spirit:</label>
-                <input type="number" id="spirit" value="10">
-            </div>
-            <div class="input-group">
-                <label for="grace">Grace:</label>
-                <input type="number" id="grace" value="10">
-            </div>
-            <button id="optimize-btn">Test Load Data</button>
-        </section>
 
-        <section id="results-container" class="grid-container">
-            <div>
-                <h3>Armor Test</h3>
-                <div id="armor-results"></div>
+            <div class="control-box">
+                <h3>Joinery Settings</h3>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="joinery-enable"> Enable Joinery Scaling
+                </label>
+                <div id="joinery-options" class="hidden-options">
+                    <div class="input-group">
+                        <label for="joinery-virtue">Virtue:</label>
+                        <select id="joinery-virtue">
+                            <option value="courage">Mora (Courage)</option>
+                            <option value="spirit">Iridis (Spirit)</option>
+                            <option value="grace">Sapehene (Grace)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="joinery-tier">Tier:</label>
+                        <select id="joinery-tier">
+                            <option value="1">Blessed (+1 Pip)</option>
+                            <option value="2">Twice Blessed (+2 Pips)</option>
+                            <option value="3">Thrice Blessed (+3 Pips)</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3>Weapon Test</h3>
-                <div id="weapon-results"></div>
+
+            <div class="control-box">
+                <h3>Weapon Filters</h3>
+                <div class="input-group">
+                    <label for="weapon-filter">Weapon Type:</label>
+                    <select id="weapon-filter">
+                        <option value="all">All Types</option>
+                        <option value="Bow">Bow</option>
+                        <option value="Magick">Magick</option>
+                        <option value="Shield">Shield</option>
+                        <option value="Long Blade">Long Blade</option>
+                        <option value="Short Blade">Short Blade</option>
+                        <option value="Polearm">Polearm</option>
+                    </select>
+                </div>
             </div>
-        </section>
+
+            <button id="optimize-btn">Run Optimization</button>
+        </div>
+
+        <!-- Right Side: Outputs Layout -->
+        <div class="results-layout">
+            <!-- Best Build Column -->
+            <div class="results-column best-build-card">
+                <h2>Optimal Configuration</h2>
+                <div id="best-build-output">
+                    <p class="placeholder-msg">Enter stats and click "Run Optimization" to calculate.</p>
+                </div>
+            </div>
+
+            <!-- Alternative Lists Column -->
+            <div class="results-column alternative-lists">
+                <div class="alt-section">
+                    <h2>Runner-up Gear</h2>
+                    
+                    <h3>Alternative Helms</h3>
+                    <div id="helm-runner-ups" class="list-container"></div>
+                    
+                    <h3>Alternative Cuirasses</h3>
+                    <div id="cuirass-runner-ups" class="list-container"></div>
+                    
+                    <h3>Alternative Leggings</h3>
+                    <div id="leggings-runner-ups" class="list-container"></div>
+                </div>
+
+                <div class="alt-section">
+                    <h2>All Weapon Damage Rankings</h2>
+                    <div id="weapon-rankings" class="list-container"></div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Scripts -->
