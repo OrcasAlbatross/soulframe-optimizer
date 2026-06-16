@@ -56,7 +56,9 @@ function calculateArmorStats(armorPiece, envoyStats) {
 /**
  * Calculates the scaled damage of a weapon.
  * Formula: Base + (Courage * C_Pips/2) + (Spirit * S_Pips/2) + (Grace * G_Pips/2)
- * Limits: Max final damage is capped by weapon's damageCap.
+ * Limits: 
+ * - Individual attunements are capped at 5 pips max (even with Joineries).
+ * - Max final damage is capped by weapon's damageCap, or falls back to a 150% bonus damage cap if nil.
  */
 function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = true) {
     const baseDamage = useMaxLevel ? weapon.maxAttack : weapon.baseAttack;
@@ -71,18 +73,23 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
         };
     }
 
-    // Default pips from the weapon
+    // Load default pips from the weapon
     const pips = {
         courage: weapon.attunement.courage || 0,
         spirit: weapon.attunement.spirit || 0,
         grace: weapon.attunement.grace || 0
     };
 
-    // Apply Joinery bonuses if enabled and valid
+    // Apply Joinery bonuses if enabled
     const virtues = ["courage", "spirit", "grace"];
     if (joinery && joinery.enabled && virtues.includes(joinery.virtue)) {
-        pips[joinery.virtue] += (joinery.tier || 0); // tier can be 1, 2, or 3 pips
+        pips[joinery.virtue] += (joinery.tier || 0); // tier adds 1, 2, or 3 pips
     }
+
+    // Enforce Attune Cap: Max of 5 pips per individual virtue
+    pips.courage = Math.min(5, pips.courage);
+    pips.spirit = Math.min(5, pips.spirit);
+    pips.grace = Math.min(5, pips.grace);
 
     // Calculate Attunement Bonus
     let bonusDamage = 
@@ -90,11 +97,16 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
         envoyStats.spirit * (pips.spirit / 2) +
         envoyStats.grace * (pips.grace / 2);
 
-    // Enforce Weapon Damage Cap
+    // Establish Damage Cap (Dynamic fallback if wiki damageCap is nil/0)
+    const effectiveCap = (weapon.damageCap && weapon.damageCap > 0)
+        ? weapon.damageCap
+        : (baseDamage * 2.5); // Base (100%) + Max Bonus (150%) = 250% of base damage
+
+    // Enforce the Damage Cap
     let finalDamage = baseDamage + bonusDamage;
-    if (weapon.damageCap && finalDamage > weapon.damageCap) {
-        finalDamage = weapon.damageCap;
-        bonusDamage = weapon.damageCap - baseDamage; // Cap the bonus to match
+    if (finalDamage > effectiveCap) {
+        finalDamage = effectiveCap;
+        bonusDamage = effectiveCap - baseDamage; // Adjust displayed bonus to match
     }
 
     return {

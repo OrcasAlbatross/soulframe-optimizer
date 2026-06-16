@@ -161,15 +161,15 @@ function runOptimization() {
     // Separate slots and sort by final damage
     // Custom sort function with damage-cap and cost tiebreakers
     const sortWeapons = (a, b) => {
-        // 1. Primary Sort: Final Damage (highest first)
+        // Primary Sort: Final Damage (highest first)
         if (b.calculated.finalDamage !== a.calculated.finalDamage) {
             return b.calculated.finalDamage - a.calculated.finalDamage;
         }
-        // 2. Secondary Sort: Joinery Tier (lowest tier / cheapest first)
+        // Secondary Sort: Joinery Tier (lowest tier / cheapest first)
         if (a.joineryTier !== b.joineryTier) {
             return a.joineryTier - b.joineryTier;
         }
-        // 3. Tertiary Sort: Alphabetical order of weapon name
+        // Tertiary Sort: Alphabetical order of weapon name
         return a.weapon.name.localeCompare(b.weapon.name);
     };
 
