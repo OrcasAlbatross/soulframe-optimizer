@@ -97,16 +97,22 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
         envoyStats.spirit * (pips.spirit / 2) +
         envoyStats.grace * (pips.grace / 2);
 
-    // Establish Damage Cap (Dynamic fallback if wiki damageCap is nil/0)
-    const effectiveCap = (weapon.damageCap && weapon.damageCap > 0)
-        ? weapon.damageCap
-        : (baseDamage * 2.5); // Base (100%) + Max Bonus (150%) = 250% of base damage
-
-    // Enforce the Damage Cap
+    // Enforce Damage Caps
     let finalDamage = baseDamage + bonusDamage;
-    if (finalDamage > effectiveCap) {
-        finalDamage = effectiveCap;
-        bonusDamage = effectiveCap - baseDamage; // Adjust displayed bonus to match
+
+    if (weapon.damageCap && weapon.damageCap > 0) {
+        // If there is an explicit damageCap, it caps the final damage (Base + Bonus)
+        if (finalDamage > weapon.damageCap) {
+            finalDamage = weapon.damageCap;
+            bonusDamage = weapon.damageCap - baseDamage; // Adjust displayed bonus to match
+        }
+    } else {
+        // If damageCap is nil (0), the attunement bonus damage is capped at 1.5x of weapon's Lvl0 base attack
+        const maxBonusDamage = weapon.baseAttack * 1.5;
+        if (bonusDamage > maxBonusDamage) {
+            bonusDamage = maxBonusDamage;
+            finalDamage = baseDamage + bonusDamage; // Update final damage based on capped bonus
+        }
     }
 
     return {
