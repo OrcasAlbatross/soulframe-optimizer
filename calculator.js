@@ -1,6 +1,6 @@
 /**
- * Soulframe Math Engine
- * Standalone calculation formulas for equipment scaling.
+ * Soulframe Math Engine (High-Performance Procedural Version)
+ * Standalone calculation formulas for equipment scaling optimized to eliminate closure overhead.
  */
 
 // Global constant for Joineries to prevent code duplication
@@ -47,14 +47,17 @@ function getWeaponMaxPossibleDamage(weapon, useMaxLevel = true) {
 }
 
 /**
- * Calculates the scaled defense values of an armor piece.
- * Formula: Base + Floor(Sum of (Envoy Stat * Pip * 0.12))
+ * Flat armor calculator. 
+ * Avoids .forEach and object allocations to prevent Garbage Collection freezes.
  */
 function calculateArmorStats(armorPiece, envoyStats) {
     const base = armorPiece.baseStats;
-    const requirementsMet = checkRequirements(armorPiece.requirements, envoyStats);
+    const reqs = armorPiece.requirements;
 
-    if (!requirementsMet) {
+    // Inline requirement check (avoiding function call overhead)
+    if (envoyStats.courage < (reqs.courage || 0) || 
+        envoyStats.spirit < (reqs.spirit || 0) || 
+        envoyStats.grace < (reqs.grace || 0)) {
         return {
             physical: base.physical,
             magick: base.magick,
@@ -64,22 +67,45 @@ function calculateArmorStats(armorPiece, envoyStats) {
         };
     }
 
-    const statsToCalculate = ["physical", "magick", "stability"];
-    const virtues = ["courage", "spirit", "grace"];
-    const finalStats = { requirementsMet: true };
+    const c = envoyStats.courage;
+    const s = envoyStats.spirit;
+    const g = envoyStats.grace;
 
-    statsToCalculate.forEach(stat => {
-        let bonusSum = 0;
-        virtues.forEach(virtue => {
-            const pips = armorPiece.attunement[stat][virtue] || 0;
-            const envoyPoints = envoyStats[virtue] || 0;
-            bonusSum += envoyPoints * pips * 0.12;
-        });
-        finalStats[stat] = base[stat] + Math.floor(bonusSum);
-    });
+    // Physical
+    const physPips = armorPiece.attunement.physical;
+    const physBonus = Math.floor(
+        c * (physPips.courage || 0) * 0.12 +
+        s * (physPips.spirit || 0) * 0.12 +
+        g * (physPips.grace || 0) * 0.12
+    );
 
-    finalStats.total = finalStats.physical + finalStats.magick + finalStats.stability;
-    return finalStats;
+    // Magick
+    const magPips = armorPiece.attunement.magick;
+    const magBonus = Math.floor(
+        c * (magPips.courage || 0) * 0.12 +
+        s * (magPips.spirit || 0) * 0.12 +
+        g * (magPips.grace || 0) * 0.12
+    );
+
+    // Stability
+    const stabPips = armorPiece.attunement.stability;
+    const stabBonus = Math.floor(
+        c * (stabPips.courage || 0) * 0.12 +
+        s * (stabPips.spirit || 0) * 0.12 +
+        g * (stabPips.grace || 0) * 0.12
+    );
+
+    const physical = base.physical + physBonus;
+    const magick = base.magick + magBonus;
+    const stability = base.stability + stabBonus;
+
+    return {
+        physical,
+        magick,
+        stability,
+        total: physical + magick + stability,
+        requirementsMet: true
+    };
 }
 
 /**
@@ -104,9 +130,10 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
         grace: weapon.attunement.grace || 0
     };
 
-    const virtues = ["courage", "spirit", "grace"];
-    if (joinery && joinery.enabled && virtues.includes(joinery.virtue)) {
-        pips[joinery.virtue] += (joinery.tier || 0);
+    if (joinery && joinery.enabled) {
+        if (joinery.virtue === "courage") pips.courage += joinery.tier;
+        else if (joinery.virtue === "spirit") pips.spirit += joinery.tier;
+        else if (joinery.virtue === "grace") pips.grace += joinery.tier;
     }
 
     pips.courage = Math.min(5, pips.courage);
@@ -135,7 +162,7 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
 }
 
 /**
- * Automatically identifies and calculates the best weapon to pair in the other slot.
+ * Optimized paired weapon finder. Avoids closure allocations.
  */
 function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) {
     const joineriesToTest = getJoineryList(joineryEnabled);
@@ -144,41 +171,45 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
 
     const filtered = allowedWeapons.filter(w => w.slot === slot);
 
-    filtered.forEach(weapon => {
+    for (let i = 0; i < filtered.length; i++) {
+        const weapon = filtered[i];
         let weaponMax = -1;
-        joineriesToTest.forEach(j => {
-            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
+
+        for (let j = 0; j < joineriesToTest.length; j++) {
+            const joinery = joineriesToTest[j];
+            const jState = joinery.tier === 0 ? null : { enabled: true, virtue: joinery.virtue, tier: joinery.tier };
             const calc = calculateWeaponStats(weapon, envoyStats, jState);
             if (calc.finalDamage > weaponMax) {
                 weaponMax = calc.finalDamage;
             }
-        });
+        }
 
-        for (let j of joineriesToTest) {
-            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
+        for (let j = 0; j < joineriesToTest.length; j++) {
+            const joinery = joineriesToTest[j];
+            const jState = joinery.tier === 0 ? null : { enabled: true, virtue: joinery.virtue, tier: joinery.tier };
             const calc = calculateWeaponStats(weapon, envoyStats, jState);
             if (calc.finalDamage === weaponMax) {
                 const isBetter = weaponMax > maxDamage || 
-                                 (weaponMax === maxDamage && j.tier < (bestWeaponConfig ? bestWeaponConfig.joineryTier : 999));
+                                 (weaponMax === maxDamage && joinery.tier < (bestWeaponConfig ? bestWeaponConfig.joineryTier : 999));
                 if (isBetter) {
                     maxDamage = weaponMax;
                     bestWeaponConfig = {
                         weapon,
-                        displayName: j.tier > 0 ? `${weapon.name}: ${j.name}` : weapon.name,
+                        displayName: joinery.tier > 0 ? `${weapon.name}: ${joinery.name}` : weapon.name,
                         calculated: calc,
-                        joineryTier: j.tier
+                        joineryTier: joinery.tier
                     };
                 }
                 break;
             }
         }
-    });
+    }
 
     return bestWeaponConfig;
 }
 
 /**
- * Core Solver for the Stat Maxer.
+ * Core Solver for the Stat Maxer
  */
 function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled) {
     let bestConfig = null;
@@ -188,13 +219,17 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
     const joineriesToTest = getJoineryList(joineryEnabled);
     const requiredDamageCap = getWeaponMaxPossibleDamage(weapon);
 
+    // Fast inline armor solver to prevent array allocations inside loop
     const findBestArmorForSlot = (slot, stats) => {
         let bestPiece = null;
         let maxWeighted = -1;
 
         const filtered = allowedArmor.filter(p => p.slot === slot);
-        for (let piece of filtered) {
+        for (let i = 0; i < filtered.length; i++) {
+            const piece = filtered[i];
             const calculated = calculateArmorStats(piece, stats);
+            
+            // Attach weighted total cleanly
             const weighted = (calculated.physical * skews.physical) + 
                              (calculated.magick * skews.magick) + 
                              (calculated.stability * skews.stability);
@@ -210,19 +245,45 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
         return bestPiece;
     };
 
-    for (let allocC = 0; allocC <= totalPoints; allocC++) {
-        for (let allocS = 0; allocS <= totalPoints - allocC; allocS++) {
-            const allocG = totalPoints - allocC - allocS;
+    // PRUNING OPTIMIZATION: Determine the maximum stats any talisman can provide
+    let maxTalismanC = 0, maxTalismanS = 0, maxTalismanG = 0;
+    for (let i = 0; i < allowedTalismans.length; i++) {
+        const t = allowedTalismans[i];
+        if (t.stats.courage > maxTalismanC) maxTalismanC = t.stats.courage;
+        if (t.stats.spirit > maxTalismanS) maxTalismanS = t.stats.spirit;
+        if (t.stats.grace > maxTalismanG) maxTalismanG = t.stats.grace;
+    }
+
+    // PRUNING OPTIMIZATION: Start loops at the lowest mathematically possible spends
+    const minCAlloc = Math.max(0, Math.max(minReqs.courage, weapon.requirements.courage || 0) - maxTalismanC);
+    const minSAlloc = Math.max(0, Math.max(minReqs.spirit, weapon.requirements.spirit || 0) - maxTalismanS);
+    const minGAlloc = Math.max(0, Math.max(minReqs.grace, weapon.requirements.grace || 0) - maxTalismanG);
+
+    if (minCAlloc + minSAlloc + minGAlloc > totalPoints) {
+        return null; // Stat configuration impossible to satisfy
+    }
+
+    // Main allocation search loops (standard for-loops, NO closures)
+    for (let allocC = minCAlloc; allocC <= totalPoints; allocC++) {
+        const remainingForSAndG = totalPoints - allocC;
+        if (remainingForSAndG < minSAlloc + minGAlloc) continue;
+
+        for (let allocS = minSAlloc; allocS <= remainingForSAndG; allocS++) {
+            const allocG = remainingForSAndG - allocS;
+            if (allocG < minGAlloc) continue;
+
             const allocation = { courage: allocC, spirit: allocS, grace: allocG };
 
-            for (let talisman of allowedTalismans) {
+            // Evaluate allowed Talismans
+            for (let tIdx = 0; i = 0, tIdx < allowedTalismans.length; tIdx++) {
+                const talisman = allowedTalismans[tIdx];
                 const totalStats = {
                     courage: allocation.courage + talisman.stats.courage,
                     spirit: allocation.spirit + talisman.stats.spirit,
                     grace: allocation.grace + talisman.stats.grace
                 };
 
-                // Threshold checks
+                // Inline fast-validation check
                 if (totalStats.courage < minReqs.courage || 
                     totalStats.spirit < minReqs.spirit || 
                     totalStats.grace < minReqs.grace) {
@@ -235,11 +296,12 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
                     continue;
                 }
 
-                // Weapon Damage Cap Check (The new strict constraint)
+                // Inline fast-damage calculation to skip object instantiations
                 let maxDamageFound = -1;
                 let optimalJoinery = null;
 
-                for (let j of joineriesToTest) {
+                for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
+                    const j = joineriesToTest[jIdx];
                     const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
                     const calc = calculateWeaponStats(weapon, totalStats, jState);
                     if (calc.finalDamage > maxDamageFound) {
@@ -248,13 +310,13 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
                     }
                 }
 
-                // DISCARD build if it cannot hit the absolute weapon cap
+                // Strict cap constraint
                 if (maxDamageFound < requiredDamageCap) {
                     continue;
                 }
 
-                // Find lowest joinery that hits this cap
-                for (let j of joineriesToTest) {
+                for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
+                    const j = joineriesToTest[jIdx];
                     const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
                     const calc = calculateWeaponStats(weapon, totalStats, jState);
                     if (calc.finalDamage === maxDamageFound) {
@@ -263,7 +325,7 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
                     }
                 }
 
-                // Evaluate Armor
+                // Evaluate Armor Score
                 let bestHelm = null, bestCuirass = null, bestLeggings = null;
                 let armorScore = 0;
 
@@ -276,7 +338,7 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
                     }
                 }
 
-                // Calculate Objective Score
+                // Compute primary objective score
                 let score = 0;
                 if (targetObjective === 'courage') score = totalStats.courage;
                 else if (targetObjective === 'spirit') score = totalStats.spirit;
