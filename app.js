@@ -32,6 +32,7 @@ async function initializeApp() {
         // Call dynamically built filter generator in ui.js
         populateFilters();
         populateExclusionsUI();
+        
         // Find default weapon selection if nothing is currently selected
         const defaultWeapon = gameData.weapons.filter(w => !excludedItems.has(w.name))[0];
         selectMaxerWeapon(defaultWeapon); // Set default weapon in ui.js
@@ -45,7 +46,9 @@ async function initializeApp() {
     }
 }
 
-// Main optimization orchestrator
+// ----------------------------------------------------------------------
+// VIRTUE ALLOCATOR ORCHESTRATOR
+// ----------------------------------------------------------------------
 function runOptimization() {
     if (gameData.armor.length === 0 || gameData.weapons.length === 0) {
         alert("Data is still loading or failed to load. Please try again in a moment.");
@@ -70,9 +73,8 @@ function runOptimization() {
     const skewMag = parseFloat(document.getElementById('skew-mag').value) || 0;
     const skewStab = parseFloat(document.getElementById('skew-stab').value) || 0;
 
-    // Process Filtered Armor through math engine (calculator.js) and apply stat skews
+    // Process Armor
     const allowedArmor = gameData.armor.filter(piece => !excludedItems.has(piece.name));
-
     const calculatedArmor = allowedArmor.map(piece => {
         const calculated = calculateArmorStats(piece, envoyStats);
 
@@ -80,7 +82,6 @@ function runOptimization() {
         let weighted = (calculated.physical * skewPhys) +
             (calculated.magick * skewMag) +
             (calculated.stability * skewStab);
-
         calculated.weightedTotal = Math.round(weighted * 10) / 10;
         return { piece, calculated };
     });
@@ -95,7 +96,7 @@ function runOptimization() {
     const leggings = calculatedArmor.filter(item => item.piece.slot === "Leggings")
         .sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
 
-    // Filter out excluded weapons, then apply separate weapon filters
+    // Process Weapons
     const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
 
     let filteredPrimaries = allowedWeapons.filter(w => w.slot === "Weapon");
@@ -109,42 +110,20 @@ function runOptimization() {
     }
 
     const filteredWeapons = [...filteredPrimaries, ...filteredSidearms];
-
-    const JOINERIES = [
-        { name: "Blessed by Mora", virtue: "courage", tier: 1 },
-        { name: "Twice Blessed by Mora", virtue: "courage", tier: 2 },
-        { name: "Thrice Blessed by Mora", virtue: "courage", tier: 3 },
-        { name: "Blessed by Sapehene", virtue: "grace", tier: 1 },
-        { name: "Twice Blessed by Sapehene", virtue: "grace", tier: 2 },
-        { name: "Thrice Blessed by Sapehene", virtue: "grace", tier: 3 },
-        { name: "Blessed by Iridis", virtue: "spirit", tier: 1 },
-        { name: "Twice Blessed by Iridis", virtue: "spirit", tier: 2 },
-        { name: "Thrice Blessed by Iridis", virtue: "spirit", tier: 3 }
-    ];
-
-    // Generate weapon permutations
+    const joineriesToTest = getJoineryList(joineryEnabled); // Using refactored helper
     const weaponCombinations = [];
 
     filteredWeapons.forEach(weapon => {
-        const baseCalc = calculateWeaponStats(weapon, envoyStats, null);
-        weaponCombinations.push({
-            weapon: weapon,
-            displayName: weapon.name,
-            calculated: baseCalc,
-            joineryTier: 0
-        });
-
-        if (joineryEnabled) {
-            JOINERIES.forEach(j => {
-                const jCalc = calculateWeaponStats(weapon, envoyStats, { enabled: true, virtue: j.virtue, tier: j.tier });
-                weaponCombinations.push({
-                    weapon: weapon,
-                    displayName: `${weapon.name}: ${j.name}`,
-                    calculated: jCalc,
-                    joineryTier: j.tier
-                });
+        joineriesToTest.forEach(j => {
+            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
+            const calc = calculateWeaponStats(weapon, envoyStats, jState);
+            weaponCombinations.push({
+                weapon: weapon,
+                displayName: j.tier > 0 ? `${weapon.name}: ${j.name}` : weapon.name,
+                calculated: calc,
+                joineryTier: j.tier
             });
-        }
+        });
     });
 
     const sortWeapons = (a, b) => {
@@ -157,79 +136,95 @@ function runOptimization() {
         return a.weapon.name.localeCompare(b.weapon.name);
     };
 
-    const primaries = weaponCombinations.filter(w => w.weapon.slot === "Weapon")
-        .sort(sortWeapons);
+    const primaries = weaponCombinations.filter(w => w.weapon.slot === "Weapon").sort(sortWeapons);
+    const sidearms = weaponCombinations.filter(w => w.weapon.slot === "Sidearm").sort(sortWeapons);
 
-    const sidearms = weaponCombinations.filter(w => w.weapon.slot === "Sidearm")
-        .sort(sortWeapons);
-
-    // Call view engine in ui.js to update the UI
     renderResults(helms, cuirasses, leggings, primaries, sidearms);
 }
 
-// Bind Global Listeners
+// ----------------------------------------------------------------------
+// STAT MAXER ORCHESTRATOR
+// ----------------------------------------------------------------------
+function runStatMaxer() {
+    if (gameData.armor.length === 0 || gameData.weapons.length === 0) {
+        alert("Data is still loading or failed to load. Please try again in a moment.");
+        return;
+    }
+
+    if (!selectedMaxerWeapon) {
+        alert("Please select a weapon first using the modal.");
+        return;
+    }
+
+    // Retrieve Inputs strictly as Numbers
+    const points = Math.min(500, parseInt(document.getElementById('maxer-points').value, 10) || 0);
+    const minC = parseInt(document.getElementById('min-courage').value, 10) || 0;
+    const minS = parseInt(document.getElementById('min-spirit').value, 10) || 0;
+    const minG = parseInt(document.getElementById('min-grace').value, 10) || 0;
+    const minReqs = { courage: minC, spirit: minS, grace: minG };
+
+    const targetObjective = document.getElementById('maxer-target').value;
+    const talismanEnabled = document.getElementById('maxer-talisman-enable').checked;
+
+    const skewPhys = parseFloat(document.getElementById('maxer-skew-phys').value) || 0;
+    const skewMag = parseFloat(document.getElementById('maxer-skew-mag').value) || 0;
+    const skewStab = parseFloat(document.getElementById('maxer-skew-stab').value) || 0;
+    const maxerSkews = { physical: skewPhys, magick: skewMag, stability: skewStab };
+
+    // Filter Datasets
+    const allowedArmor = gameData.armor.filter(p => !excludedItems.has(p.name));
+    const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
+    
+    const allowedTalismans = [ { name: "None", stats: { courage: 0, spirit: 0, grace: 0 } } ];
+    if (talismanEnabled) {
+        gameData.talismans
+            .filter(t => !excludedItems.has(t.name))
+            .forEach(t => allowedTalismans.push(t));
+    }
+
+    // Run Engine
+    console.log("Running Stat Maxer search...");
+    const result = solveStatMaxer(
+        points, 
+        minReqs, 
+        targetObjective, 
+        selectedMaxerWeapon, 
+        allowedTalismans, 
+        allowedArmor, 
+        maxerSkews, 
+        true // Allow joinery evaluation
+    );
+
+    // Pair the best secondary weapon
+    if (result) {
+        const pairedSlot = selectedMaxerWeapon.slot === "Weapon" ? "Sidearm" : "Weapon";
+        result.pairedWeapon = getBestWeaponForSlot(pairedSlot, result.totalStats, allowedWeapons, true);
+    }
+
+    // Render 
+    renderMaxerResults(result, targetObjective);
+}
+
+
+// ----------------------------------------------------------------------
+// EVENT BINDINGS
+// ----------------------------------------------------------------------
 window.onload = initializeApp;
 document.getElementById('optimize-btn').addEventListener('click', runOptimization);
+document.getElementById('maxer-btn').addEventListener('click', runStatMaxer);
+
 // Tab Switching Controller
 document.querySelectorAll('.tab-btn').forEach(button => {
     button.addEventListener('click', () => {
         const targetTab = button.getAttribute('data-tab');
         if (!targetTab) return;
 
-        // Toggle buttons active class
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        // Toggle content containers active class
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.getElementById(targetTab).classList.add('active');
-
-        // Dynamic update: If they enter the Stat Maxer, rebuild the weapon list
-        if (targetTab === "stat-maxer-tab") {
-            populateMaxerWeaponDropdown();
-        }
-    });
-});
-// Bind Weapon Modal Events
-document.getElementById('open-weapon-modal-btn').addEventListener('click', openWeaponSelectorModal);
-document.querySelector('.close-modal').addEventListener('click', closeWeaponSelectorModal);
-
-// Close modal if user clicks outside of it
-window.addEventListener('click', (event) => {
-    const modal = document.getElementById('weapon-modal');
-    if (event.target === modal) {
-        closeWeaponSelectorModal();
-    }
-});
-
-// Modal Real-time Search and Filter Event Listeners
-document.getElementById('modal-weapon-search').addEventListener('input', populateModalWeapons);
-document.getElementById('modal-weapon-type-filter').addEventListener('change', populateModalWeapons);
-document.getElementById('modal-weapon-slot-filter').addEventListener('change', populateModalWeapons);
-
-// Toggle advanced skews display conditionally based on target selection
-document.getElementById('maxer-target').addEventListener('change', function() {
-    const advBox = document.getElementById('maxer-advanced-settings');
-    if (this.value === 'armor') {
-        advBox.style.display = 'block';
-    } else {
-        advBox.style.display = 'none';
-    }
-});
-
-// Dynamic updates: Ensure maxer dropdown and selections are updated if exclusions change
-document.querySelectorAll('.tab-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        const targetTab = button.getAttribute('data-tab');
-        if (!targetTab) return;
-
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
 
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.getElementById(targetTab).classList.add('active');
 
-        // Verify if selected weapon is still allowed when entering Stat Maxer
         if (targetTab === "stat-maxer-tab") {
             if (!selectedMaxerWeapon || excludedItems.has(selectedMaxerWeapon.name)) {
                 const defaultWeapon = gameData.weapons.filter(w => !excludedItems.has(w.name))[0];
@@ -237,4 +232,30 @@ document.querySelectorAll('.tab-btn').forEach(button => {
             }
         }
     });
+});
+
+// Weapon Modal Events
+document.getElementById('open-weapon-modal-btn').addEventListener('click', openWeaponSelectorModal);
+document.querySelector('.close-modal').addEventListener('click', closeWeaponSelectorModal);
+
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('weapon-modal');
+    if (event.target === modal) {
+        closeWeaponSelectorModal();
+    }
+});
+
+// Modal Search/Filters
+document.getElementById('modal-weapon-search').addEventListener('input', populateModalWeapons);
+document.getElementById('modal-weapon-type-filter').addEventListener('change', populateModalWeapons);
+document.getElementById('modal-weapon-slot-filter').addEventListener('change', populateModalWeapons);
+
+// Toggle advanced skews conditionally
+document.getElementById('maxer-target').addEventListener('change', function() {
+    const advBox = document.getElementById('maxer-advanced-settings');
+    if (this.value === 'armor') {
+        advBox.style.display = 'block';
+    } else {
+        advBox.style.display = 'none';
+    }
 });

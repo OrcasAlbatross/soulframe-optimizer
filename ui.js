@@ -127,7 +127,6 @@ function selectMaxerWeapon(weapon) {
     } else {
         nameLabel.innerText = "None Selected";
     }
-    console.log("Active Weapon updated:", weapon);
 }
 
 // Modal open/close actions
@@ -140,7 +139,64 @@ function closeWeaponSelectorModal() {
     document.getElementById('weapon-modal').classList.remove('open');
 }
 
-// Render computed optimization statistics to the DOM
+// Dynamically build checklists inside the Exclusion Filters tab and bind real-time search
+function populateExclusionsUI() {
+    const armorList = document.getElementById('armor-exclusion-list');
+    const weaponList = document.getElementById('weapon-exclusion-list');
+    const talismanList = document.getElementById('talisman-exclusion-list');
+
+    armorList.innerHTML = '';
+    weaponList.innerHTML = '';
+    talismanList.innerHTML = '';
+
+    const sortedArmor = [...gameData.armor].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedWeapons = [...gameData.weapons].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedTalismans = [...gameData.talismans].sort((a, b) => a.name.localeCompare(b.name));
+
+    const createCheckbox = (name, container) => {
+        const label = document.createElement('label');
+        label.className = 'checklist-item';
+        
+        const isChecked = !excludedItems.has(name);
+        
+        label.innerHTML = `
+            <input type="checkbox" data-name="${name}" ${isChecked ? 'checked' : ''}>
+            <span>${name}</span>
+        `;
+
+        label.querySelector('input').addEventListener('change', function() {
+            if (this.checked) {
+                excludedItems.delete(name);
+            } else {
+                excludedItems.add(name);
+            }
+        });
+
+        container.appendChild(label);
+    };
+
+    sortedArmor.forEach(item => createCheckbox(item.name, armorList));
+    sortedWeapons.forEach(item => createCheckbox(item.name, weaponList));
+    sortedTalismans.forEach(item => createCheckbox(item.name, talismanList));
+
+    document.getElementById('exclusion-search').addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        const items = document.querySelectorAll('.checklist-item');
+
+        items.forEach(item => {
+            const name = item.querySelector('span').textContent.toLowerCase();
+            if (name.includes(query)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+}
+
+// ----------------------------------------------------------------------
+// RENDER VIRTUE ALLOCATOR RESULTS
+// ----------------------------------------------------------------------
 function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
     const bestBuildOutput = document.getElementById('best-build-output');
     const helmRunnerUps = document.getElementById('helm-runner-ups');
@@ -233,7 +289,6 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
         list.slice(1, 6).forEach(item => {
             const row = document.createElement('div');
             row.className = 'gear-row';
-            
             const showWeight = item.calculated.weightedTotal !== item.calculated.total;
             const weightText = showWeight ? ` W:${item.calculated.weightedTotal}` : "";
 
@@ -287,61 +342,167 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
     renderWeaponList(sidearmRankings, sidearms, "sidearm-color");
 }
 
-// Dynamically build checklists inside the Exclusion Filters tab and bind real-time search
-function populateExclusionsUI() {
-    const armorList = document.getElementById('armor-exclusion-list');
-    const weaponList = document.getElementById('weapon-exclusion-list');
-    const talismanList = document.getElementById('talisman-exclusion-list');
-
-    armorList.innerHTML = '';
-    weaponList.innerHTML = '';
-    talismanList.innerHTML = '';
-
-    // Sort items alphabetically to make searching easy for the user
-    const sortedArmor = [...gameData.armor].sort((a, b) => a.name.localeCompare(b.name));
-    const sortedWeapons = [...gameData.weapons].sort((a, b) => a.name.localeCompare(b.name));
-    const sortedTalismans = [...gameData.talismans].sort((a, b) => a.name.localeCompare(b.name));
-
-    const createCheckbox = (name, container) => {
-        const label = document.createElement('label');
-        label.className = 'checklist-item';
-        
-        const isChecked = !excludedItems.has(name);
-        
-        label.innerHTML = `
-            <input type="checkbox" data-name="${name}" ${isChecked ? 'checked' : ''}>
-            <span>${name}</span>
+// ----------------------------------------------------------------------
+// RENDER STAT MAXER RESULTS
+// ----------------------------------------------------------------------
+function renderMaxerResults(result, targetObjective) {
+    const outputContainer = document.getElementById('maxer-output');
+    const rightColumn = document.querySelector('#stat-maxer-tab .alternative-lists');
+    
+    if (!result) {
+        outputContainer.innerHTML = `
+            <div class="optimal-item" style="border-left-color: #ff6b6b;">
+                <h4 style="color: #ff6b6b;">No Valid Configuration Found</h4>
+                <p class="description-sub" style="margin-top: 5px;">
+                    Your points pool is too low to satisfy either your minimum thresholds or your selected weapon's wielding requirements.
+                </p>
+            </div>
         `;
+        rightColumn.innerHTML = '<div class="alt-section"><h2>Runner-ups</h2><p class="placeholder-msg">Optimization failed.</p></div>';
+        return;
+    }
 
-        // Handle checkbox toggles dynamically
-        label.querySelector('input').addEventListener('change', function() {
-            if (this.checked) {
-                excludedItems.delete(name);
-            } else {
-                excludedItems.add(name);
-            }
-        });
+    // --- 1. RENDER MIDDLE COLUMN (OPTIMAL BUILD) ---
+    const bestHelm = result.armor.bestHelm;
+    const bestCuirass = result.armor.bestCuirass;
+    const bestLeggings = result.armor.bestLeggings;
 
-        container.appendChild(label);
+    const grandPhys = bestHelm.calculated.physical + bestCuirass.calculated.physical + bestLeggings.calculated.physical;
+    const grandMag = bestHelm.calculated.magick + bestCuirass.calculated.magick + bestLeggings.calculated.magick;
+    const grandStab = bestHelm.calculated.stability + bestCuirass.calculated.stability + bestLeggings.calculated.stability;
+    const grandTotal = grandPhys + grandMag + grandStab;
+
+    let buildHtml = `
+        <div class="virtue-summary-card">
+            <h3>Final Combined Virtues</h3>
+            <p><strong>Courage:</strong> <span class="summary-highlight">${result.totalStats.courage}</span></p>
+            <p><strong>Spirit:</strong> <span class="summary-highlight">${result.totalStats.spirit}</span></p>
+            <p><strong>Grace:</strong> <span class="summary-highlight">${result.totalStats.grace}</span></p>
+            <p class="border-top-separator" style="font-size: 0.8em; color: #aaa; margin-top: 10px; padding-top: 8px;">
+                Allocated Points Spent: <strong>[ C: ${result.allocation.courage} | S: ${result.allocation.spirit} | G: ${result.allocation.grace} ]</strong>
+            </p>
+        </div>
+    `;
+
+    buildHtml += `
+        <div class="optimal-item" style="border-left: 3px solid #3498db;">
+            <h4>Talisman Slot: <a href="${getWikiUrl(result.talisman.name)}" target="_blank" class="wiki-link">${result.talisman.name}</a></h4>
+            <p class="description-sub">Stat Bonuses: C:+${result.talisman.stats.courage} | S:+${result.talisman.stats.spirit} | G:+${result.talisman.stats.grace}</p>
+        </div>
+    `;
+
+    const mainWeaponNameText = result.optimalJoinery.tier > 0 
+        ? `${result.weapon.name}: ${result.optimalJoinery.name}`
+        : result.weapon.name;
+
+    buildHtml += `
+        <div class="optimal-item" style="border-left: 3px solid #82c91e;">
+            <h4>Optimized Target Weapon (${result.weapon.slot}): <a href="${getWikiUrl(result.weapon.name)}" target="_blank" class="wiki-link">${mainWeaponNameText}</a></h4>
+            <p style="font-size: 0.85em; color: #ccc;">Damage: <span style="color: #82c91e; font-weight: bold;">${result.optimalJoinery.calc.finalDamage}</span> (Base: ${result.optimalJoinery.calc.baseDamage}, Scaling: +${result.optimalJoinery.calc.bonusDamage})</p>
+            <p style="font-size: 0.75em; color: #888;">Class: ${result.weapon.type} | Level: 30</p>
+        </div>
+    `;
+
+    if (result.pairedWeapon) {
+        const paired = result.pairedWeapon;
+        const pairedWeaponNameText = paired.joineryTier > 0 
+            ? `${paired.weapon.name}: ${paired.displayName.split(': ')[1]}`
+            : paired.weapon.name;
+
+        buildHtml += `
+            <div class="optimal-item" style="border-left: 3px solid #e67e22;">
+                <h4>Optimal Paired Secondary (${paired.weapon.slot}): <a href="${getWikiUrl(paired.weapon.name)}" target="_blank" class="wiki-link">${pairedWeaponNameText}</a></h4>
+                <p style="font-size: 0.85em; color: #ccc;">Damage: <span style="color: #e67e22; font-weight: bold;">${paired.calculated.finalDamage}</span> (Base: ${paired.calculated.baseDamage}, Scaling: +${paired.calculated.bonusDamage})</p>
+                <p style="font-size: 0.75em; color: #888;">Class: ${paired.weapon.type}</p>
+            </div>
+        `;
+    }
+
+    buildHtml += `
+        <div class="total-summary-card">
+            <h3>Combined Build Defense</h3>
+            <p><strong>Physical Defense:</strong> ${grandPhys}</p>
+            <p><strong>Magick Defense:</strong> ${grandMag}</p>
+            <p><strong>Stability:</strong> ${grandStab}</p>
+            <p class="border-top-separator">
+                <strong>Grand Total Defense Points:</strong> <span class="summary-highlight">${grandTotal}</span>
+            </p>
+        </div>
+    `;
+
+    const renderOptimalItem = (item, type) => {
+        const showWeight = item.calculated.weightedTotal !== item.calculated.total;
+        const weightText = showWeight ? `, Weighted: ${item.calculated.weightedTotal}` : "";
+        return `
+            <div class="optimal-item">
+                <h4>${type}: <a href="${getWikiUrl(item.piece.name)}" target="_blank" class="wiki-link">${item.piece.name}</a></h4>
+                <div class="optimal-stats-breakdown">
+                    <span>Phys: ${item.calculated.physical}</span>
+                    <span>Mag: ${item.calculated.magick}</span>
+                    <span>Stab: ${item.calculated.stability}</span>
+                    <span>(Total: ${item.calculated.total}${weightText})</span>
+                </div>
+            </div>
+        `;
     };
 
-    // Populate all 3 lists
-    sortedArmor.forEach(item => createCheckbox(item.name, armorList));
-    sortedWeapons.forEach(item => createCheckbox(item.name, weaponList));
-    sortedTalismans.forEach(item => createCheckbox(item.name, talismanList));
+    buildHtml += renderOptimalItem(bestHelm, "Helm");
+    buildHtml += renderOptimalItem(bestCuirass, "Cuirass");
+    buildHtml += renderOptimalItem(bestLeggings, "Leggings");
 
-    // Bind real-time search filter
-    document.getElementById('exclusion-search').addEventListener('input', function() {
-        const query = this.value.toLowerCase().trim();
-        const items = document.querySelectorAll('.checklist-item');
+    outputContainer.innerHTML = buildHtml;
 
-        items.forEach(item => {
-            const name = item.querySelector('span').textContent.toLowerCase();
-            if (name.includes(query)) {
-                item.style.display = 'flex';
-            } else {
-                item.style.display = 'none';
-            }
-        });
+    // --- 2. RENDER RIGHT COLUMN (RUNNER-UPS DYNAMIC CALCULATION) ---
+    // Recalculate armors using result.totalStats to get proper runner-ups
+    const skewPhys = parseFloat(document.getElementById('maxer-skew-phys').value) || 0;
+    const skewMag = parseFloat(document.getElementById('maxer-skew-mag').value) || 0;
+    const skewStab = parseFloat(document.getElementById('maxer-skew-stab').value) || 0;
+
+    const allowedArmor = gameData.armor.filter(piece => !excludedItems.has(piece.name));
+    const recalculatedArmor = allowedArmor.map(piece => {
+        const calc = calculateArmorStats(piece, result.totalStats);
+        let w = (calc.physical * skewPhys) + (calc.magick * skewMag) + (calc.stability * skewStab);
+        calc.weightedTotal = Math.round(w * 10) / 10;
+        return { piece, calculated: calc };
     });
+
+    const helms = recalculatedArmor.filter(i => i.piece.slot === "Helm").sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
+    const cuirasses = recalculatedArmor.filter(i => i.piece.slot === "Cuirass").sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
+    const leggings = recalculatedArmor.filter(i => i.piece.slot === "Leggings").sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
+
+    rightColumn.innerHTML = `
+        <div class="alt-section">
+            <h2>Runner-up Alternatives</h2>
+            <p class="joinery-caption" style="margin-bottom: 15px;">Other gear that performs well with these Final Combined Virtues.</p>
+            
+            <h3>Alternative Helms</h3>
+            <div id="maxer-helm-runners" class="list-container"></div>
+            
+            <h3>Alternative Cuirasses</h3>
+            <div id="maxer-cuirass-runners" class="list-container"></div>
+            
+            <h3>Alternative Leggings</h3>
+            <div id="maxer-leggings-runners" class="list-container"></div>
+        </div>
+    `;
+
+    const renderRunnerUpList = (containerId, list) => {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        list.slice(1, 6).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'gear-row';
+            const showW = item.calculated.weightedTotal !== item.calculated.total;
+            const wText = showW ? ` W:${item.calculated.weightedTotal}` : "";
+            row.innerHTML = `
+                <span class="gear-name"><a href="${getWikiUrl(item.piece.name)}" target="_blank" class="wiki-link">${item.piece.name}</a></span>
+                <span class="gear-stats">P:${item.calculated.physical} M:${item.calculated.magick} S:${item.calculated.stability} (T:${item.calculated.total}${wText})</span>
+            `;
+            container.appendChild(row);
+        });
+    };
+
+    renderRunnerUpList('maxer-helm-runners', helms);
+    renderRunnerUpList('maxer-cuirass-runners', cuirasses);
+    renderRunnerUpList('maxer-leggings-runners', leggings);
 }
