@@ -198,9 +198,13 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
             const weighted = (calculated.physical * skews.physical) + 
                              (calculated.magick * skews.magick) + 
                              (calculated.stability * skews.stability);
+            
+            // Attach to the calculated object for the UI renderer
+            calculated.weightedTotal = Math.round(weighted * 10) / 10;
+
             if (weighted > maxWeighted) {
                 maxWeighted = weighted;
-                bestPiece = { piece, calculated, weightedTotal: Math.round(weighted * 10) / 10 };
+                bestPiece = { piece, calculated, weightedTotal: calculated.weightedTotal };
             }
         }
         return bestPiece;
