@@ -145,6 +145,7 @@ function runOptimization() {
 // ----------------------------------------------------------------------
 // STAT MAXER ORCHESTRATOR
 // ----------------------------------------------------------------------
+// Stat Maxer optimization orchestrator (Deferred and Thread-Safe)
 function runStatMaxer() {
     if (gameData.armor.length === 0 || gameData.weapons.length === 0) {
         alert("Data is still loading or failed to load. Please try again in a moment.");
@@ -156,55 +157,64 @@ function runStatMaxer() {
         return;
     }
 
-    // Retrieve Inputs strictly as Numbers
-    const points = Math.min(500, parseInt(document.getElementById('maxer-points').value, 10) || 0);
-    const minC = parseInt(document.getElementById('min-courage').value, 10) || 0;
-    const minS = parseInt(document.getElementById('min-spirit').value, 10) || 0;
-    const minG = parseInt(document.getElementById('min-grace').value, 10) || 0;
-    const minReqs = { courage: minC, spirit: minS, grace: minG };
+    // Show the loading spinner overlay instantly
+    const loader = document.getElementById('loading-overlay');
+    loader.classList.add('open');
 
-    const targetObjective = document.getElementById('maxer-target').value;
-    const talismanEnabled = document.getElementById('maxer-talisman-enable').checked;
+    // Yield the execution thread to allow the browser to paint the loading screen
+    setTimeout(() => {
+        // Retrieve Points and Thresholds
+        const points = Math.min(500, parseInt(document.getElementById('maxer-points').value, 10) || 0);
+        const minC = parseInt(document.getElementById('min-courage').value, 10) || 0;
+        const minS = parseInt(document.getElementById('min-spirit').value, 10) || 0;
+        const minG = parseInt(document.getElementById('min-grace').value, 10) || 0;
+        const minReqs = { courage: minC, spirit: minS, grace: minG };
 
-    const skewPhys = parseFloat(document.getElementById('maxer-skew-phys').value) || 0;
-    const skewMag = parseFloat(document.getElementById('maxer-skew-mag').value) || 0;
-    const skewStab = parseFloat(document.getElementById('maxer-skew-stab').value) || 0;
-    const maxerSkews = { physical: skewPhys, magick: skewMag, stability: skewStab };
+        const targetObjective = document.getElementById('maxer-target').value;
+        const talismanEnabled = document.getElementById('maxer-talisman-enable').checked;
 
-    // Filter Datasets
-    const allowedArmor = gameData.armor.filter(p => !excludedItems.has(p.name));
-    const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
-    
-    const allowedTalismans = [ { name: "None", stats: { courage: 0, spirit: 0, grace: 0 } } ];
-    if (talismanEnabled) {
-        gameData.talismans
-            .filter(t => !excludedItems.has(t.name))
-            .forEach(t => allowedTalismans.push(t));
-    }
+        const skewPhys = parseFloat(document.getElementById('maxer-skew-phys').value) || 0;
+        const skewMag = parseFloat(document.getElementById('maxer-skew-mag').value) || 0;
+        const skewStab = parseFloat(document.getElementById('maxer-skew-stab').value) || 0;
+        const maxerSkews = { physical: skewPhys, magick: skewMag, stability: skewStab };
 
-    // Run Engine
-    console.log("Running Stat Maxer search...");
-    const result = solveStatMaxer(
-        points, 
-        minReqs, 
-        targetObjective, 
-        selectedMaxerWeapon, 
-        allowedTalismans, 
-        allowedArmor, 
-        maxerSkews, 
-        true // Allow joinery evaluation
-    );
+        // Filter datasets
+        const allowedArmor = gameData.armor.filter(p => !excludedItems.has(p.name));
+        const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
+        
+        const allowedTalismans = [ { name: "None", stats: { courage: 0, spirit: 0, grace: 0 } } ];
+        if (talismanEnabled) {
+            gameData.talismans
+                .filter(t => !excludedItems.has(t.name))
+                .forEach(t => allowedTalismans.push(t));
+        }
 
-    // Pair the best secondary weapon
-    if (result) {
-        const pairedSlot = selectedMaxerWeapon.slot === "Weapon" ? "Sidearm" : "Weapon";
-        result.pairedWeapon = getBestWeaponForSlot(pairedSlot, result.totalStats, allowedWeapons, true);
-    }
+        // Run Engine calculations
+        console.log("Running Stat Maxer search...");
+        const result = solveStatMaxer(
+            points, 
+            minReqs, 
+            targetObjective, 
+            selectedMaxerWeapon, 
+            allowedTalismans, 
+            allowedArmor, 
+            maxerSkews, 
+            true
+        );
 
-    // Render 
-    renderMaxerResults(result, targetObjective);
+        // Pair the best secondary weapon
+        if (result) {
+            const pairedSlot = selectedMaxerWeapon.slot === "Weapon" ? "Sidearm" : "Weapon";
+            result.pairedWeapon = getBestWeaponForSlot(pairedSlot, result.totalStats, allowedWeapons, true);
+        }
+
+        // Render the results
+        renderMaxerResults(result, targetObjective);
+
+        // Close the loading spinner overlay
+        loader.classList.remove('open');
+    }, 50); // 50ms to guarantee a paint cycle completes
 }
-
 
 // ----------------------------------------------------------------------
 // EVENT BINDINGS
