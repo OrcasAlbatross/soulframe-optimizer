@@ -183,15 +183,15 @@
                 </div>
             </div>
 
-            <div class="control-box">
+<div class="control-box">
                 <h3>Target Configurations</h3>
                 <div class="input-group">
-                    <label for="maxer-weapon">Weapon:</label>
-                    <select id="maxer-weapon">
-                        <option value="">Loading weapons...</option>
-                    </select>
+                    <label>Active Weapon:</label>
+                    <span id="maxer-selected-weapon-name" class="font-bold primary-color" style="font-size: 0.9em; text-align: right; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">None Selected</span>
                 </div>
-                <div class="input-group" style="margin-top: 10px;">
+                <button id="open-weapon-modal-btn" class="secondary-btn" style="margin-top: 5px; margin-bottom: 12px;">Change Weapon...</button>
+                
+                <div class="input-group">
                     <label for="maxer-target">Max Target:</label>
                     <select id="maxer-target">
                         <option value="courage">Courage</option>
@@ -205,7 +205,27 @@
                 </label>
             </div>
 
-            <button id="maxer-btn">Run Stat Maxer</button>
+            <!-- Advanced Settings specifically for the Stat Maxer -->
+            <details class="control-box advanced-settings" id="maxer-advanced-settings" style="display: none;">
+                <summary>Maxer Armor Skews</summary>
+                <p class="joinery-caption" style="margin-bottom: 10px;">
+                    Multipliers used only when "Weighted Armor" is selected as the Max Target.
+                </p>
+                <div class="input-group">
+                    <label for="maxer-skew-phys">Phys Multiplier:</label>
+                    <input type="number" id="maxer-skew-phys" value="1.0" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="maxer-skew-mag">Magick Multiplier:</label>
+                    <input type="number" id="maxer-skew-mag" value="1.0" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="maxer-skew-stab">Stability Multiplier:</label>
+                    <input type="number" id="maxer-skew-stab" value="1.0" min="0" step="0.1">
+                </div>
+            </details>
+
+            <button id="maxer-btn" class="optimize-btn-style">Run Stat Maxer</button>
         </div>
 
         <!-- Right Side: Outputs Layout -->
@@ -229,6 +249,36 @@
             </div>
         </div>
     </main>
+
+    <!-- Searchable Weapon Selection Modal -->
+    <div id="weapon-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Target Weapon</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            
+            <p class="joinery-caption" style="margin-bottom: 12px;">
+                Select the active weapon you want your stats to be optimized around. Excluded weapons will not show up here.
+            </p>
+
+            <div class="modal-search-row">
+                <input type="text" id="modal-weapon-search" placeholder="Search weapons by name...">
+                <select id="modal-weapon-type-filter">
+                    <option value="all">All Classes</option>
+                </select>
+                <select id="modal-weapon-slot-filter">
+                    <option value="all">All Slots</option>
+                    <option value="Weapon">Primary</option>
+                    <option value="Sidearm">Sidearm</option>
+                </select>
+            </div>
+
+            <div id="modal-weapon-list" class="modal-grid">
+                <!-- Weapon cards will be generated dynamically here -->
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts (Ordered sequentially by dependencies) -->
     <script src="parser.js"></script>

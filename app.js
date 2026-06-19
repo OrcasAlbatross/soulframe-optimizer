@@ -10,6 +10,7 @@ let gameData = {
 };
 
 const excludedItems = new Set();
+let selectedMaxerWeapon = null;
 
 // Fetch and load data on initialization
 async function initializeApp() {
@@ -31,7 +32,9 @@ async function initializeApp() {
         // Call dynamically built filter generator in ui.js
         populateFilters();
         populateExclusionsUI();
-        populateMaxerWeaponDropdown();
+        // Find default weapon selection if nothing is currently selected
+        const defaultWeapon = gameData.weapons.filter(w => !excludedItems.has(w.name))[0];
+        selectMaxerWeapon(defaultWeapon); // Set default weapon in ui.js
 
         document.getElementById('status-msg').innerText = `Loaded ${gameData.armor.length} Armor pieces and ${gameData.weapons.length} Weapons successfully!`;
         console.log("Data loaded successfully:", gameData);
@@ -184,6 +187,54 @@ document.querySelectorAll('.tab-btn').forEach(button => {
         // Dynamic update: If they enter the Stat Maxer, rebuild the weapon list
         if (targetTab === "stat-maxer-tab") {
             populateMaxerWeaponDropdown();
+        }
+    });
+});
+// Bind Weapon Modal Events
+document.getElementById('open-weapon-modal-btn').addEventListener('click', openWeaponSelectorModal);
+document.querySelector('.close-modal').addEventListener('click', closeWeaponSelectorModal);
+
+// Close modal if user clicks outside of it
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('weapon-modal');
+    if (event.target === modal) {
+        closeWeaponSelectorModal();
+    }
+});
+
+// Modal Real-time Search and Filter Event Listeners
+document.getElementById('modal-weapon-search').addEventListener('input', populateModalWeapons);
+document.getElementById('modal-weapon-type-filter').addEventListener('change', populateModalWeapons);
+document.getElementById('modal-weapon-slot-filter').addEventListener('change', populateModalWeapons);
+
+// Toggle advanced skews display conditionally based on target selection
+document.getElementById('maxer-target').addEventListener('change', function() {
+    const advBox = document.getElementById('maxer-advanced-settings');
+    if (this.value === 'armor') {
+        advBox.style.display = 'block';
+    } else {
+        advBox.style.display = 'none';
+    }
+});
+
+// Dynamic updates: Ensure maxer dropdown and selections are updated if exclusions change
+document.querySelectorAll('.tab-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        if (!targetTab) return;
+
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(targetTab).classList.add('active');
+
+        // Verify if selected weapon is still allowed when entering Stat Maxer
+        if (targetTab === "stat-maxer-tab") {
+            if (!selectedMaxerWeapon || excludedItems.has(selectedMaxerWeapon.name)) {
+                const defaultWeapon = gameData.weapons.filter(w => !excludedItems.has(w.name))[0];
+                selectMaxerWeapon(defaultWeapon);
+            }
         }
     });
 });

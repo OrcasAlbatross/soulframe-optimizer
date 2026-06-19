@@ -43,26 +43,101 @@ function populateFilters() {
     });
 }
 
-// Dynamically populate the Stat Maxer's weapon selector based on unexcluded items
-function populateMaxerWeaponDropdown() {
-    const weaponSelect = document.getElementById('maxer-weapon');
-    weaponSelect.innerHTML = '';
+// Populate the modal's scrollable list of weapons with search & filter configurations
+function populateModalWeapons() {
+    const listContainer = document.getElementById('modal-weapon-list');
+    const typeFilter = document.getElementById('modal-weapon-type-filter');
+    const slotFilter = document.getElementById('modal-weapon-slot-filter');
+    const searchVal = document.getElementById('modal-weapon-search').value.toLowerCase().trim();
 
-    // Filter out weapons that are currently excluded by the user, then sort alphabetically
-    const allowedWeapons = gameData.weapons
-        .filter(w => !excludedItems.has(w.name))
-        .sort((a, b) => a.name.localeCompare(b.name));
+    listContainer.innerHTML = '';
 
-    allowedWeapons.forEach(w => {
+    // Filter out excluded items and apply filters
+    const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
+
+    // Dynamic extraction of unique weapon types to populate the modal's type dropdown
+    const uniqueTypes = new Set(allowedWeapons.map(w => w.type).filter(Boolean));
+    const currentSelectedType = typeFilter.value;
+    
+    typeFilter.innerHTML = '<option value="all">All Classes</option>';
+    Array.from(uniqueTypes).sort().forEach(t => {
         const opt = document.createElement('option');
-        opt.value = w.name;
-        opt.textContent = `${w.name} (${w.slot}: ${w.type})`;
-        weaponSelect.appendChild(opt);
+        opt.value = t;
+        opt.textContent = t;
+        typeFilter.appendChild(opt);
+    });
+    typeFilter.value = currentSelectedType; // Preserve selected type across searches
+
+    // Apply search and filter matrices
+    let filtered = allowedWeapons;
+    if (searchVal) {
+        filtered = filtered.filter(w => w.name.toLowerCase().includes(searchVal));
+    }
+    if (typeFilter.value !== 'all') {
+        filtered = filtered.filter(w => w.type === typeFilter.value);
+    }
+    if (slotFilter.value !== 'all') {
+        filtered = filtered.filter(w => w.slot === slotFilter.value);
+    }
+
+    // Sort alphabetically
+    filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Render Weapon Cards
+    filtered.forEach(w => {
+        const card = document.createElement('div');
+        card.className = 'weapon-card';
+        if (selectedMaxerWeapon && selectedMaxerWeapon.name === w.name) {
+            card.classList.add('selected');
+        }
+
+        const slotLabel = w.slot === "Weapon" ? "Primary" : "Sidearm";
+        const reqStr = Object.entries(w.requirements)
+            .filter(([_, v]) => v > 0)
+            .map(([k, v]) => `${v} ${k.charAt(0).toUpperCase()}`)
+            .join(', ') || "None";
+
+        card.innerHTML = `
+            <h4>${w.name}</h4>
+            <div class="weapon-card-meta">Slot: ${slotLabel} | Class: ${w.type}</div>
+            <div class="weapon-card-stats">Base DMG: ${w.baseAttack} | Max DMG: ${w.maxAttack}</div>
+            <div class="weapon-card-meta" style="margin-top: 2px;">Wield Reqs: ${reqStr}</div>
+        `;
+
+        // Handle card click selection
+        card.addEventListener('click', () => {
+            selectMaxerWeapon(w);
+            closeWeaponSelectorModal();
+        });
+
+        listContainer.appendChild(card);
     });
 
-    if (allowedWeapons.length === 0) {
-        weaponSelect.innerHTML = '<option value="">No weapons available</option>';
+    if (filtered.length === 0) {
+        listContainer.innerHTML = '<p class="placeholder-msg" style="grid-column: span 2;">No weapons match your search filters.</p>';
     }
+}
+
+// Synchronize state with selection
+function selectMaxerWeapon(weapon) {
+    selectedMaxerWeapon = weapon;
+    const nameLabel = document.getElementById('maxer-selected-weapon-name');
+    if (weapon) {
+        nameLabel.innerText = weapon.name;
+    } else {
+        nameLabel.innerText = "None Selected";
+    }
+    console.log("Active Weapon updated:", weapon);
+}
+
+// Modal open/close actions
+function openWeaponSelectorModal() {
+    document.getElementById('weapon-modal').classList.add('open');
+    populateModalWeapons();
+}
+
+function closeWeaponSelectorModal() {
+    document.getElementById('weapon-modal').classList.remove('open');
 }
 
 // Render computed optimization statistics to the DOM
