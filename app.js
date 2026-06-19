@@ -269,3 +269,15 @@ document.getElementById('maxer-target').addEventListener('change', function() {
         advBox.style.display = 'none';
     }
 });
+
+// Force the Virtue Pool input field to clamp between 0 and 500 dynamically
+document.getElementById('maxer-points').addEventListener('input', function() {
+    let val = parseInt(this.value, 10);
+    if (isNaN(val)) return; // Allow the user to temporarily backspace and have an empty field
+
+    if (val > 500) {
+        this.value = 500;
+    } else if (val < 0) {
+        this.value = 0;
+    }
+});
