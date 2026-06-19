@@ -98,14 +98,12 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
         };
     }
 
-    // Load default pips from the weapon
     const pips = {
         courage: weapon.attunement.courage || 0,
         spirit: weapon.attunement.spirit || 0,
         grace: weapon.attunement.grace || 0
     };
 
-    // Apply Joinery bonuses if enabled
     const virtues = ["courage", "spirit", "grace"];
     if (joinery && joinery.enabled && virtues.includes(joinery.virtue)) {
         pips[joinery.virtue] += (joinery.tier || 0);
