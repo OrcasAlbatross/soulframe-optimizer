@@ -20,17 +20,18 @@ async function initializeApp() {
         // Fetch and parse Armor
         const rawArmor = await fetchWikiModule('Module:Data/Armour', 'sf_raw_armor');
         gameData.armor = parseArmorData(rawArmor);
-        gameData.talismans = parseTalismanData(rawArmor); 
+        gameData.talismans = parseTalismanData(rawArmor);
         sessionStorage.setItem('sf_raw_armor', JSON.stringify(rawArmor));
 
         // Fetch and parse Weapons
         const rawWeapons = await fetchWikiModule('Module:Data/Weapons', 'sf_raw_weapons');
         gameData.weapons = parseWeaponData(rawWeapons);
         sessionStorage.setItem('sf_raw_weapons', JSON.stringify(rawWeapons));
-        
+
         // Call dynamically built filter generator in ui.js
         populateFilters();
         populateExclusionsUI();
+        populateMaxerWeaponDropdown();
 
         document.getElementById('status-msg').innerText = `Loaded ${gameData.armor.length} Armor pieces and ${gameData.weapons.length} Weapons successfully!`;
         console.log("Data loaded successfully:", gameData);
@@ -71,12 +72,12 @@ function runOptimization() {
 
     const calculatedArmor = allowedArmor.map(piece => {
         const calculated = calculateArmorStats(piece, envoyStats);
-        
+
         // Compute the skewed total based on user multipliers
-        let weighted = (calculated.physical * skewPhys) + 
-                       (calculated.magick * skewMag) + 
-                       (calculated.stability * skewStab);
-                       
+        let weighted = (calculated.physical * skewPhys) +
+            (calculated.magick * skewMag) +
+            (calculated.stability * skewStab);
+
         calculated.weightedTotal = Math.round(weighted * 10) / 10;
         return { piece, calculated };
     });
@@ -179,5 +180,10 @@ document.querySelectorAll('.tab-btn').forEach(button => {
         // Toggle content containers active class
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.getElementById(targetTab).classList.add('active');
+
+        // Dynamic update: If they enter the Stat Maxer, rebuild the weapon list
+        if (targetTab === "stat-maxer-tab") {
+            populateMaxerWeaponDropdown();
+        }
     });
 });

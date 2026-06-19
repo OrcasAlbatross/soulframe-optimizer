@@ -15,7 +15,7 @@
         <!-- Tabs Navigation -->
         <nav class="tabs-nav">
             <button class="tab-btn active" data-tab="optimizer-tab">Virtue Allocator</button>
-            <button class="tab-btn" data-tab="stat-maxer-tab" disabled>Stat Maxer (Soon)</button>
+            <button class="tab-btn" data-tab="stat-maxer-tab">Stat Maxer</button>
             <button class="tab-btn" data-tab="exclusions-tab">Exclusion Filters</button>
         </nav>
     </header>
@@ -149,6 +149,82 @@
                 <div class="exclusion-box">
                     <h3>Talismans</h3>
                     <div id="talisman-exclusion-list" class="checklist-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Stat Maxer Tab Content Container -->
+    <main id="stat-maxer-tab" class="tab-content">
+        <!-- Left Side: Controls/Inputs Panel -->
+        <div class="controls-panel">
+            <div class="control-box">
+                <h3>Virtue Pool</h3>
+                <div class="input-group">
+                    <label for="maxer-points">Free Points:</label>
+                    <input type="number" id="maxer-points" value="50" min="0" max="500">
+                </div>
+                <p class="joinery-caption">Max allowed is 500 points to prevent browser freeze.</p>
+            </div>
+
+            <div class="control-box">
+                <h3>Minimum Thresholds</h3>
+                <div class="input-group">
+                    <label for="min-courage">Min Courage:</label>
+                    <input type="number" id="min-courage" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="min-spirit">Min Spirit:</label>
+                    <input type="number" id="min-spirit" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="min-grace">Min Grace:</label>
+                    <input type="number" id="min-grace" value="0" min="0">
+                </div>
+            </div>
+
+            <div class="control-box">
+                <h3>Target Configurations</h3>
+                <div class="input-group">
+                    <label for="maxer-weapon">Weapon:</label>
+                    <select id="maxer-weapon">
+                        <option value="">Loading weapons...</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-top: 10px;">
+                    <label for="maxer-target">Max Target:</label>
+                    <select id="maxer-target">
+                        <option value="courage">Courage</option>
+                        <option value="spirit">Spirit</option>
+                        <option value="grace">Grace</option>
+                        <option value="armor">Weighted Armor</option>
+                    </select>
+                </div>
+                <label class="checkbox-label" style="margin-top: 12px; cursor: pointer;">
+                    <input type="checkbox" id="maxer-talisman-enable" checked> Optimize Talisman Slot
+                </label>
+            </div>
+
+            <button id="maxer-btn">Run Stat Maxer</button>
+        </div>
+
+        <!-- Right Side: Outputs Layout -->
+        <div class="results-layout">
+            <!-- Best Build Column -->
+            <div class="results-column best-build-card">
+                <h2>Optimal Allocation</h2>
+                <div id="maxer-output">
+                    <p class="placeholder-msg">Configure settings and click "Run Stat Maxer" to optimize.</p>
+                </div>
+            </div>
+
+            <!-- Alternative Lists Column -->
+            <div class="results-column alternative-lists">
+                <div class="alt-section">
+                    <h2>Allocation Breakdown</h2>
+                    <div id="maxer-allocation-details" class="list-container" style="max-height: 400px;">
+                        <p class="placeholder-msg" style="margin-top: 20px;">Allocation details will appear here.</p>
+                    </div>
                 </div>
             </div>
         </div>

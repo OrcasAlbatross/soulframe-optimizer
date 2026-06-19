@@ -43,6 +43,28 @@ function populateFilters() {
     });
 }
 
+// Dynamically populate the Stat Maxer's weapon selector based on unexcluded items
+function populateMaxerWeaponDropdown() {
+    const weaponSelect = document.getElementById('maxer-weapon');
+    weaponSelect.innerHTML = '';
+
+    // Filter out weapons that are currently excluded by the user, then sort alphabetically
+    const allowedWeapons = gameData.weapons
+        .filter(w => !excludedItems.has(w.name))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    allowedWeapons.forEach(w => {
+        const opt = document.createElement('option');
+        opt.value = w.name;
+        opt.textContent = `${w.name} (${w.slot}: ${w.type})`;
+        weaponSelect.appendChild(opt);
+    });
+
+    if (allowedWeapons.length === 0) {
+        weaponSelect.innerHTML = '<option value="">No weapons available</option>';
+    }
+}
+
 // Render computed optimization statistics to the DOM
 function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
     const bestBuildOutput = document.getElementById('best-build-output');
