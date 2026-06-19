@@ -110,7 +110,7 @@ function runOptimization() {
     }
 
     const filteredWeapons = [...filteredPrimaries, ...filteredSidearms];
-    const joineriesToTest = getJoineryList(joineryEnabled); // Using refactored helper
+    const joineriesToTest = getJoineryList(joineryEnabled);
     const weaponCombinations = [];
 
     filteredWeapons.forEach(weapon => {
@@ -145,7 +145,6 @@ function runOptimization() {
 // ----------------------------------------------------------------------
 // STAT MAXER ORCHESTRATOR
 // ----------------------------------------------------------------------
-// Stat Maxer optimization orchestrator (Deferred and Thread-Safe)
 function runStatMaxer() {
     if (gameData.armor.length === 0 || gameData.weapons.length === 0) {
         alert("Data is still loading or failed to load. Please try again in a moment.");
@@ -157,11 +156,11 @@ function runStatMaxer() {
         return;
     }
 
-    // Show the loading spinner overlay instantly
+    // Show loading spinner
     const loader = document.getElementById('loading-overlay');
-    loader.classList.add('open');
+    if (loader) loader.classList.add('open');
 
-    // Yield the execution thread to allow the browser to paint the loading screen
+    // Defer calculations so the UI can paint the loader
     setTimeout(() => {
         // Retrieve Points and Thresholds
         const points = Math.min(500, parseInt(document.getElementById('maxer-points').value, 10) || 0);
@@ -173,12 +172,18 @@ function runStatMaxer() {
         const targetObjective = document.getElementById('maxer-target').value;
         const talismanEnabled = document.getElementById('maxer-talisman-enable').checked;
 
+        // Retrieve Pact Points Inputs
+        const pactEnabled = document.getElementById('maxer-pact-enable').checked;
+        const pactPoints = Math.min(60, parseInt(document.getElementById('maxer-pact-points').value, 10) || 0);
+        const pactPref = document.getElementById('maxer-pact-pref').value;
+
+        // Retrieve Advanced Skews
         const skewPhys = parseFloat(document.getElementById('maxer-skew-phys').value) || 0;
         const skewMag = parseFloat(document.getElementById('maxer-skew-mag').value) || 0;
         const skewStab = parseFloat(document.getElementById('maxer-skew-stab').value) || 0;
         const maxerSkews = { physical: skewPhys, magick: skewMag, stability: skewStab };
 
-        // Filter datasets
+        // Filter Datasets
         const allowedArmor = gameData.armor.filter(p => !excludedItems.has(p.name));
         const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
         
@@ -189,7 +194,7 @@ function runStatMaxer() {
                 .forEach(t => allowedTalismans.push(t));
         }
 
-        // Run Engine calculations
+        // Run Engine
         console.log("Running Stat Maxer search...");
         const result = solveStatMaxer(
             points, 
@@ -199,7 +204,10 @@ function runStatMaxer() {
             allowedTalismans, 
             allowedArmor, 
             maxerSkews, 
-            true
+            true, // Allow joinery evaluation
+            pactEnabled,
+            pactPoints,
+            pactPref
         );
 
         // Pair the best secondary weapon
@@ -208,13 +216,14 @@ function runStatMaxer() {
             result.pairedWeapon = getBestWeaponForSlot(pairedSlot, result.totalStats, allowedWeapons, true);
         }
 
-        // Render the results
+        // Render 
         renderMaxerResults(result, targetObjective);
 
-        // Close the loading spinner overlay
-        loader.classList.remove('open');
-    }, 50); // 50ms to guarantee a paint cycle completes
+        // Hide loader
+        if (loader) loader.classList.remove('open');
+    }, 50);
 }
+
 
 // ----------------------------------------------------------------------
 // EVENT BINDINGS
@@ -273,11 +282,33 @@ document.getElementById('maxer-target').addEventListener('change', function() {
 // Force the Virtue Pool input field to clamp between 0 and 500 dynamically
 document.getElementById('maxer-points').addEventListener('input', function() {
     let val = parseInt(this.value, 10);
-    if (isNaN(val)) return; // Allow the user to temporarily backspace and have an empty field
+    if (isNaN(val)) return;
 
     if (val > 500) {
         this.value = 500;
     } else if (val < 0) {
         this.value = 0;
+    }
+});
+
+// Force the Pact Points input field to clamp between 0 and 60 dynamically
+document.getElementById('maxer-pact-points').addEventListener('input', function() {
+    let val = parseInt(this.value, 10);
+    if (isNaN(val)) return;
+
+    if (val > 60) {
+        this.value = 60;
+    } else if (val < 0) {
+        this.value = 0;
+    }
+});
+
+// Toggle Pact Options visibility dynamically
+document.getElementById('maxer-pact-enable').addEventListener('change', function() {
+    const options = document.getElementById('maxer-pact-options');
+    if (this.checked) {
+        options.style.display = 'block';
+    } else {
+        options.style.display = 'none';
     }
 });

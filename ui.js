@@ -66,7 +66,7 @@ function populateModalWeapons() {
         opt.textContent = t;
         typeFilter.appendChild(opt);
     });
-    typeFilter.value = currentSelectedType; // Preserve selected type across searches
+    typeFilter.value = currentSelectedType; 
 
     // Apply search and filter matrices
     let filtered = allowedWeapons;
@@ -354,7 +354,7 @@ function renderMaxerResults(result, targetObjective) {
             <div class="optimal-item" style="border-left-color: #ff6b6b;">
                 <h4 style="color: #ff6b6b;">No Valid Configuration Found</h4>
                 <p class="description-sub" style="margin-top: 5px;">
-                    Your points pool is too low to satisfy either your minimum thresholds or your selected weapon's wielding requirements.
+                    Your points pool is too low to satisfy your minimum thresholds, your selected weapon's wielding requirements, or it is impossible to reach the weapon's maximum damage cap.
                 </p>
             </div>
         `;
@@ -362,7 +362,7 @@ function renderMaxerResults(result, targetObjective) {
         return;
     }
 
-    // --- 1. RENDER MIDDLE COLUMN (OPTIMAL BUILD) ---
+    // --- 1. MIDDLE COLUMN (OPTIMAL ALLOCATION) ---
     const bestHelm = result.armor.bestHelm;
     const bestCuirass = result.armor.bestCuirass;
     const bestLeggings = result.armor.bestLeggings;
@@ -372,6 +372,7 @@ function renderMaxerResults(result, targetObjective) {
     const grandStab = bestHelm.calculated.stability + bestCuirass.calculated.stability + bestLeggings.calculated.stability;
     const grandTotal = grandPhys + grandMag + grandStab;
 
+    // Combined Virtues Card
     let buildHtml = `
         <div class="virtue-summary-card">
             <h3>Final Combined Virtues</h3>
@@ -379,30 +380,47 @@ function renderMaxerResults(result, targetObjective) {
             <p><strong>Spirit:</strong> <span class="summary-highlight">${result.totalStats.spirit}</span></p>
             <p><strong>Grace:</strong> <span class="summary-highlight">${result.totalStats.grace}</span></p>
             <p class="border-top-separator" style="font-size: 0.8em; color: #aaa; margin-top: 10px; padding-top: 8px;">
-                Allocated Points Spent: <strong>[ C: ${result.allocation.courage} | S: ${result.allocation.spirit} | G: ${result.allocation.grace} ]</strong>
+                Allocated Base Spend: <strong>[ C: ${result.allocation.courage} | S: ${result.allocation.spirit} | G: ${result.allocation.grace} ]</strong>
             </p>
         </div>
     `;
 
+    // Pact Point Exchange Card (Only rendered if Pact was used)
+    const totalPactCost = result.pact.courage + result.pact.spirit + result.pact.grace;
+    if (totalPactCost > 0) {
+        buildHtml += `
+            <div class="optimal-item" style="border-left: 3px solid #d4af37;">
+                <h4>Pact Exchange Setup (Cost: ${totalPactCost} Pact Points)</h4>
+                <p class="description-sub" style="margin-top: 4px;">Purchase these exact exchanges in-game:</p>
+                ${result.pact.courage > 0 ? `<p class="description-sub"><strong>Mora's Pride (Courage):</strong> +${result.pact.courage} (Costs ${result.pact.courage} Pact Points)</p>` : ''}
+                ${result.pact.spirit > 0 ? `<p class="description-sub"><strong>Iridis' Favour (Spirit):</strong> +${result.pact.spirit} (Costs ${result.pact.spirit} Pact Points)</p>` : ''}
+                ${result.pact.grace > 0 ? `<p class="description-sub"><strong>Sapehene's Gift (Grace):</strong> +${result.pact.grace} (Costs ${result.pact.grace} Pact Points)</p>` : ''}
+            </div>
+        `;
+    }
+
+    // Talisman Card
     buildHtml += `
         <div class="optimal-item" style="border-left: 3px solid #3498db;">
-            <h4>Talisman Slot: <a href="${getWikiUrl(result.talisman.name)}" target="_blank" class="wiki-link">${result.talisman.name}</a></h4>
+            <h4>Equipped Talisman: <a href="${getWikiUrl(result.talisman.name)}" target="_blank" class="wiki-link">${result.talisman.name}</a></h4>
             <p class="description-sub">Stat Bonuses: C:+${result.talisman.stats.courage} | S:+${result.talisman.stats.spirit} | G:+${result.talisman.stats.grace}</p>
         </div>
     `;
 
+    // Optimized Target Weapon Card
     const mainWeaponNameText = result.optimalJoinery.tier > 0 
         ? `${result.weapon.name}: ${result.optimalJoinery.name}`
         : result.weapon.name;
 
     buildHtml += `
         <div class="optimal-item" style="border-left: 3px solid #82c91e;">
-            <h4>Optimized Target Weapon (${result.weapon.slot}): <a href="${getWikiUrl(result.weapon.name)}" target="_blank" class="wiki-link">${mainWeaponNameText}</a></h4>
+            <h4>Optimized Weapon (${result.weapon.slot === 'Weapon' ? 'Primary' : 'Sidearm'}): <a href="${getWikiUrl(result.weapon.name)}" target="_blank" class="wiki-link">${mainWeaponNameText}</a></h4>
             <p style="font-size: 0.85em; color: #ccc;">Damage: <span style="color: #82c91e; font-weight: bold;">${result.optimalJoinery.calc.finalDamage}</span> (Base: ${result.optimalJoinery.calc.baseDamage}, Scaling: +${result.optimalJoinery.calc.bonusDamage})</p>
             <p style="font-size: 0.75em; color: #888;">Class: ${result.weapon.type} | Level: 30</p>
         </div>
     `;
 
+    // Optimal Paired Weapon Card
     if (result.pairedWeapon) {
         const paired = result.pairedWeapon;
         const pairedWeaponNameText = paired.joineryTier > 0 
@@ -411,13 +429,14 @@ function renderMaxerResults(result, targetObjective) {
 
         buildHtml += `
             <div class="optimal-item" style="border-left: 3px solid #e67e22;">
-                <h4>Optimal Paired Secondary (${paired.weapon.slot}): <a href="${getWikiUrl(paired.weapon.name)}" target="_blank" class="wiki-link">${pairedWeaponNameText}</a></h4>
+                <h4>Optimal Paired Secondary (${paired.weapon.slot === 'Weapon' ? 'Primary' : 'Sidearm'}): <a href="${getWikiUrl(paired.weapon.name)}" target="_blank" class="wiki-link">${pairedWeaponNameText}</a></h4>
                 <p style="font-size: 0.85em; color: #ccc;">Damage: <span style="color: #e67e22; font-weight: bold;">${paired.calculated.finalDamage}</span> (Base: ${paired.calculated.baseDamage}, Scaling: +${paired.calculated.bonusDamage})</p>
                 <p style="font-size: 0.75em; color: #888;">Class: ${paired.weapon.type}</p>
             </div>
         `;
     }
 
+    // Combined Defense Card
     buildHtml += `
         <div class="total-summary-card">
             <h3>Combined Build Defense</h3>
@@ -452,12 +471,13 @@ function renderMaxerResults(result, targetObjective) {
 
     outputContainer.innerHTML = buildHtml;
 
-    // --- 2. RENDER RIGHT COLUMN (RUNNER-UPS DYNAMIC CALCULATION) ---
-    // Recalculate armors using result.totalStats to get proper runner-ups
+    // --- 2. RENDER RIGHT COLUMN (RUNNER-UP OPTIONS UNDER OPTIMAL VIRTUES) ---
     const skewPhys = parseFloat(document.getElementById('maxer-skew-phys').value) || 0;
     const skewMag = parseFloat(document.getElementById('maxer-skew-mag').value) || 0;
     const skewStab = parseFloat(document.getElementById('maxer-skew-stab').value) || 0;
+    const maxerSkews = { physical: skewPhys, magick: skewMag, stability: skewStab };
 
+    // Recalculate and sort Armor
     const allowedArmor = gameData.armor.filter(piece => !excludedItems.has(piece.name));
     const recalculatedArmor = allowedArmor.map(piece => {
         const calc = calculateArmorStats(piece, result.totalStats);
@@ -470,10 +490,42 @@ function renderMaxerResults(result, targetObjective) {
     const cuirasses = recalculatedArmor.filter(i => i.piece.slot === "Cuirass").sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
     const leggings = recalculatedArmor.filter(i => i.piece.slot === "Leggings").sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
 
+    // Recalculate and sort Weapons
+    const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
+    const joineriesToTest = getJoineryList(true);
+    const weaponCombinations = [];
+
+    allowedWeapons.forEach(weapon => {
+        joineriesToTest.forEach(j => {
+            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
+            const calc = calculateWeaponStats(weapon, result.totalStats, jState);
+            weaponCombinations.push({
+                weapon: weapon,
+                displayName: j.tier > 0 ? `${weapon.name}: ${j.name}` : weapon.name,
+                calculated: calc,
+                joineryTier: j.tier
+            });
+        });
+    });
+
+    const sortWeapons = (a, b) => {
+        if (b.calculated.finalDamage !== a.calculated.finalDamage) {
+            return b.calculated.finalDamage - a.calculated.finalDamage;
+        }
+        if (a.joineryTier !== b.joineryTier) {
+            return a.joineryTier - b.joineryTier;
+        }
+        return a.weapon.name.localeCompare(b.weapon.name);
+    };
+
+    const primaries = weaponCombinations.filter(w => w.weapon.slot === "Weapon").sort(sortWeapons);
+    const sidearms = weaponCombinations.filter(w => w.weapon.slot === "Sidearm").sort(sortWeapons);
+
+    // Overwrite right column layout
     rightColumn.innerHTML = `
         <div class="alt-section">
-            <h2>Runner-up Alternatives</h2>
-            <p class="joinery-caption" style="margin-bottom: 15px;">Other gear that performs well with these Final Combined Virtues.</p>
+            <h2>Alternative Runner-ups</h2>
+            <p class="joinery-caption" style="margin-bottom: 15px;">Other gear that performs well under your optimized virtues.</p>
             
             <h3>Alternative Helms</h3>
             <div id="maxer-helm-runners" class="list-container"></div>
@@ -483,6 +535,12 @@ function renderMaxerResults(result, targetObjective) {
             
             <h3>Alternative Leggings</h3>
             <div id="maxer-leggings-runners" class="list-container"></div>
+
+            <h3 class="weapon-title-header primary-color">Alternative Primaries</h3>
+            <div id="maxer-primary-runners" class="list-container"></div>
+
+            <h3 class="weapon-title-header sidearm-color">Alternative Sidearms</h3>
+            <div id="maxer-sidearm-runners" class="list-container"></div>
         </div>
     `;
 
@@ -500,9 +558,44 @@ function renderMaxerResults(result, targetObjective) {
             `;
             container.appendChild(row);
         });
+        if (list.length <= 1) {
+            container.innerHTML = '<p class="placeholder-msg">No alternatives available.</p>';
+        }
+    };
+
+    const renderWeaponList = (containerId, list, highlightClass) => {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        // Skip index 0 (which is the optimized best build element)
+        list.slice(1, 8).forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'gear-row';
+            const reqClass = item.calculated.requirementsMet ? "" : "text-strike";
+            const bonusText = item.calculated.requirementsMet ? `(+${item.calculated.bonusDamage})` : "(Reqs Not Met)";
+
+            row.innerHTML = `
+                <span class="gear-name">
+                    <a href="${getWikiUrl(item.weapon.name)}" target="_blank" class="wiki-link ${reqClass}">
+                        ${item.displayName}
+                    </a>
+                    <small class="text-dark-dim">(${item.weapon.type})</small>
+                </span>
+                <span class="gear-stats">
+                    <strong class="${highlightClass}">${item.calculated.finalDamage}</strong> 
+                    <small class="text-dim">Base: ${item.calculated.baseDamage} ${bonusText}</small>
+                </span>
+            `;
+            container.appendChild(row);
+        });
+
+        if (list.length <= 1) {
+            container.innerHTML = '<p class="placeholder-msg">No weapons found for active filters.</p>';
+        }
     };
 
     renderRunnerUpList('maxer-helm-runners', helms);
     renderRunnerUpList('maxer-cuirass-runners', cuirasses);
     renderRunnerUpList('maxer-leggings-runners', leggings);
+    renderWeaponList('maxer-primary-runners', primaries, 'primary-color');
+    renderWeaponList('maxer-sidearm-runners', sidearms, 'sidearm-color');
 }
