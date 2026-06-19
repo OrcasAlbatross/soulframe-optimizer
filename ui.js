@@ -190,17 +190,20 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
     renderWeaponList(sidearmRankings, sidearms, "sidearm-color");
 }
 
-// Dynamically build and manage checklists inside the Exclusion Filters tab
+// Dynamically build checklists inside the Exclusion Filters tab and bind real-time search
 function populateExclusionsUI() {
     const armorList = document.getElementById('armor-exclusion-list');
     const weaponList = document.getElementById('weapon-exclusion-list');
+    const talismanList = document.getElementById('talisman-exclusion-list');
 
     armorList.innerHTML = '';
     weaponList.innerHTML = '';
+    talismanList.innerHTML = '';
 
     // Sort items alphabetically to make searching easy for the user
     const sortedArmor = [...gameData.armor].sort((a, b) => a.name.localeCompare(b.name));
     const sortedWeapons = [...gameData.weapons].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedTalismans = [...gameData.talismans].sort((a, b) => a.name.localeCompare(b.name));
 
     const createCheckbox = (name, container) => {
         const label = document.createElement('label');
@@ -225,6 +228,23 @@ function populateExclusionsUI() {
         container.appendChild(label);
     };
 
+    // Populate all 3 lists
     sortedArmor.forEach(item => createCheckbox(item.name, armorList));
     sortedWeapons.forEach(item => createCheckbox(item.name, weaponList));
+    sortedTalismans.forEach(item => createCheckbox(item.name, talismanList));
+
+    // Bind real-time search filter
+    document.getElementById('exclusion-search').addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        const items = document.querySelectorAll('.checklist-item');
+
+        items.forEach(item => {
+            const name = item.querySelector('span').textContent.toLowerCase();
+            if (name.includes(query)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 }

@@ -123,3 +123,40 @@ function parseWeaponData(data) {
     return parsedList;
 }
 
+// TALISMAN PARSER
+function parseTalismanData(data) {
+    const parsedList = [];
+    const itemBlocks = data.split(/\n\s*\["/);
+    itemBlocks.shift();
+
+    for (let block of itemBlocks) {
+        block = '["' + block;
+        const nameMatch = block.match(/\["(.*?)"\]/);
+        if (!nameMatch) continue;
+
+        const getString = (key) => {
+            const match = block.match(new RegExp(`${key}\\s*=\\s*"([^"]+)"`));
+            return match ? match[1] : "Unknown";
+        };
+        const getNumber = (key) => {
+            const match = block.match(new RegExp(`${key}\\s*=\\s*([0-9.]+)`));
+            return match ? parseFloat(match[1]) : 0;
+        };
+
+        const slot = getString("Slot");
+        if (slot !== "Talisman") continue;
+
+        parsedList.push({
+            name: nameMatch[1],
+            slot: slot,
+            set: getString("AccessorySet"),
+            rarity: getString("Rarity"),
+            stats: {
+                courage: getNumber("Courage"),
+                spirit: getNumber("Spirit"),
+                grace: getNumber("Grace")
+            }
+        });
+    }
+    return parsedList;
+}

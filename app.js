@@ -5,7 +5,8 @@
 
 let gameData = {
     armor: [],
-    weapons: []
+    weapons: [],
+    talismans: []
 };
 
 const excludedItems = new Set();
@@ -19,6 +20,7 @@ async function initializeApp() {
         // Fetch and parse Armor
         const rawArmor = await fetchWikiModule('Module:Data/Armour', 'sf_raw_armor');
         gameData.armor = parseArmorData(rawArmor);
+        gameData.talismans = parseTalismanData(rawArmor); 
         sessionStorage.setItem('sf_raw_armor', JSON.stringify(rawArmor));
 
         // Fetch and parse Weapons
@@ -179,7 +181,3 @@ document.querySelectorAll('.tab-btn').forEach(button => {
         document.getElementById(targetTab).classList.add('active');
     });
 });
-
-// Initialize on page load
-window.onload = initializeApp;
-document.getElementById('optimize-btn').addEventListener('click', runOptimization);

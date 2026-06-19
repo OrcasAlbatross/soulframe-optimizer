@@ -128,10 +128,15 @@
     <main id="exclusions-tab" class="tab-content">
         <div class="exclusions-panel">
             <h2>Acquisition & Exclusion Filters</h2>
-            <p class="joinery-caption">
+            <p class="joinery-caption" style="margin-bottom: 15px;">
                 Uncheck any armor or weapon you do not own or cannot acquire. Excluded gear will be ignored during calculations to speed up optimization.
             </p>
             
+            <!-- Real-time Search Bar -->
+            <div class="search-bar-container">
+                <input type="text" id="exclusion-search" placeholder="Search armor, weapons, or talismans by name..." style="width: 100%; padding: 10px; background-color: #1a1a1a; color: white; border: 1px solid #444; border-radius: 4px; font-size: 0.9em; outline: none;">
+            </div>
+
             <div class="exclusions-grid">
                 <div class="exclusion-box">
                     <h3>Armor Pieces</h3>
@@ -140,6 +145,10 @@
                 <div class="exclusion-box">
                     <h3>Weapons & Sidearms</h3>
                     <div id="weapon-exclusion-list" class="checklist-container"></div>
+                </div>
+                <div class="exclusion-box">
+                    <h3>Talismans</h3>
+                    <div id="talisman-exclusion-list" class="checklist-container"></div>
                 </div>
             </div>
         </div>
