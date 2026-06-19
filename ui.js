@@ -3,6 +3,12 @@
  * Purely handles DOM updates, dropdown generation, and HTML rendering.
  */
 
+// Helper to construct a clean, encoded MediaWiki URL from an item name
+function getWikiUrl(name) {
+    const cleanName = name.replace(/ /g, '_');
+    return `https://wiki.avakot.org/wiki/${encodeURIComponent(cleanName)}`;
+}
+
 // Dynamically build dropdown filter options from parsed weapon list
 function populateFilters() {
     const primaryFilter = document.getElementById('primary-filter');
@@ -78,13 +84,12 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
 
     const renderOptimalItem = (item, type) => {
         const reqMetText = item.calculated.requirementsMet ? "" : ` <span class="reqs-not-met">(Reqs Not Met)</span>`;
-        // Show weighted value only if it differs from the raw total
         const showWeight = item.calculated.weightedTotal !== item.calculated.total;
         const weightText = showWeight ? `, Weighted: ${item.calculated.weightedTotal}` : "";
 
         return `
             <div class="optimal-item">
-                <h4>${type}: ${item.piece.name} ${reqMetText}</h4>
+                <h4>${type}: <a href="${getWikiUrl(item.piece.name)}" target="_blank" class="wiki-link">${item.piece.name}</a> ${reqMetText}</h4>
                 <div class="optimal-stats-breakdown">
                     <span>Phys: ${item.calculated.physical}</span>
                     <span>Mag: ${item.calculated.magick}</span>
@@ -104,7 +109,7 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
         const reqMetText = bestPrimary.calculated.requirementsMet ? "" : ` <span class="reqs-not-met">(Reqs Not Met)</span>`;
         buildHtml += `
             <div class="optimal-item primary-border">
-                <h4>Optimal Primary: ${bestPrimary.displayName} ${reqMetText}</h4>
+                <h4>Optimal Primary: <a href="${getWikiUrl(bestPrimary.weapon.name)}" target="_blank" class="wiki-link">${bestPrimary.displayName}</a> ${reqMetText}</h4>
                 <p class="description-sub">Damage: <span class="primary-color font-bold">${bestPrimary.calculated.finalDamage}</span> (Base: ${bestPrimary.calculated.baseDamage}, Scaling: +${bestPrimary.calculated.bonusDamage})</p>
                 <p class="weapon-tag-sub">Type: ${bestPrimary.weapon.type}</p>
             </div>
@@ -116,7 +121,7 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
         const reqMetText = bestSidearm.calculated.requirementsMet ? "" : ` <span class="reqs-not-met">(Reqs Not Met)</span>`;
         buildHtml += `
             <div class="optimal-item sidearm-border">
-                <h4>Optimal Sidearm: ${bestSidearm.displayName} ${reqMetText}</h4>
+                <h4>Optimal Sidearm: <a href="${getWikiUrl(bestSidearm.weapon.name)}" target="_blank" class="wiki-link">${bestSidearm.displayName}</a> ${reqMetText}</h4>
                 <p class="description-sub">Damage: <span class="sidearm-color font-bold">${bestSidearm.calculated.finalDamage}</span> (Base: ${bestSidearm.calculated.baseDamage}, Scaling: +${bestSidearm.calculated.bonusDamage})</p>
                 <p class="weapon-tag-sub">Type: ${bestSidearm.weapon.type}</p>
             </div>
@@ -125,7 +130,7 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
 
     bestBuildOutput.innerHTML = buildHtml;
 
-    // Render Runner-Ups (helms, cuirasses, leggings)
+    // Render Armour Runner Up helper
     const renderRunnerUpList = (container, list) => {
         container.innerHTML = '';
         list.slice(1, 6).forEach(item => {
@@ -136,7 +141,7 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
             const weightText = showWeight ? ` W:${item.calculated.weightedTotal}` : "";
 
             row.innerHTML = `
-                <span class="gear-name">${item.piece.name}</span>
+                <span class="gear-name"><a href="${getWikiUrl(item.piece.name)}" target="_blank" class="wiki-link">${item.piece.name}</a></span>
                 <span class="gear-stats">P:${item.calculated.physical} M:${item.calculated.magick} S:${item.calculated.stability} (T:${item.calculated.total}${weightText})</span>
             `;
             container.appendChild(row);
@@ -144,7 +149,7 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
 
         // Fallback message if list is empty
         if (container.children.length === 0) {
-            container.innerHTML = '<p class="placeholder-msg list-spacing">No alternative runner-ups available.</p>';
+            container.innerHTML = '<p class="placeholder-msg">No alternative runner-ups available.</p>';
         }
     };
 
@@ -162,7 +167,12 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
             const bonusText = item.calculated.requirementsMet ? `(+${item.calculated.bonusDamage})` : "(Reqs Not Met)";
 
             row.innerHTML = `
-                <span class="gear-name ${reqClass}">${item.displayName} <small class="text-dark-dim">(${item.weapon.type})</small></span>
+                <span class="gear-name">
+                    <a href="${getWikiUrl(item.weapon.name)}" target="_blank" class="wiki-link ${reqClass}">
+                        ${item.displayName}
+                    </a>
+                    <small class="text-dark-dim">(${item.weapon.type})</small>
+                </span>
                 <span class="gear-stats">
                     <strong class="${highlightClass}">${item.calculated.finalDamage}</strong> 
                     <small class="text-dim">Base: ${item.calculated.baseDamage} ${bonusText}</small>

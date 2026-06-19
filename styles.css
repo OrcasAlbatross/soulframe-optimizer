@@ -312,3 +312,22 @@ h1 {
     padding-bottom: 8px;
     margin-bottom: 12px;
 }
+
+/* Wiki Links Styling */
+.wiki-link {
+    color: #d4af37; /* Matches gold accents */
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+    border-bottom: 1px dotted transparent;
+}
+.wiki-link:hover {
+    color: #f1c40f;
+    border-bottom-color: #f1c40f;
+}
+.gear-row .wiki-link {
+    color: #e5e5e5; /* Subtler link color inside rankings lists */
+}
+.gear-row .wiki-link:hover {
+    color: #d4af37;
+    border-bottom-color: #d4af37;
+}
