@@ -290,3 +290,25 @@ h1 {
 .text-dark-dim {
     color: #777;
 }
+
+/* Advanced Settings Collapsible */
+.advanced-settings summary {
+    font-size: 1em;
+    color: #d4af37;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+.advanced-settings {
+    border-left: 2px solid #444;
+    transition: border-color 0.2s;
+}
+.advanced-settings[open] {
+    border-left: 2px solid #d4af37;
+}
+.advanced-settings[open] summary {
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}

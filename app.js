@@ -56,21 +56,35 @@ function runOptimization() {
     const primaryFilterVal = document.getElementById('primary-filter').value;
     const sidearmFilterVal = document.getElementById('sidearm-filter').value;
 
-    // Process Armor through math engine (calculator.js)
+    // Retrieve Stat Skews (Advanced Settings)
+    const skewPhys = parseFloat(document.getElementById('skew-phys').value) || 0;
+    const skewMag = parseFloat(document.getElementById('skew-mag').value) || 0;
+    const skewStab = parseFloat(document.getElementById('skew-stab').value) || 0;
+
+    // Process Armor through math engine (calculator.js) and apply stat skews
     const calculatedArmor = gameData.armor.map(piece => {
         const calculated = calculateArmorStats(piece, envoyStats);
+        
+        // Compute the skewed total based on user multipliers
+        let weighted = (calculated.physical * skewPhys) + 
+                       (calculated.magick * skewMag) + 
+                       (calculated.stability * skewStab);
+                       
+        // Round to 1 decimal place to avoid JavaScript floating point errors
+        calculated.weightedTotal = Math.round(weighted * 10) / 10;
+        
         return { piece, calculated };
     });
 
-    // Sort armor by total defense
+    // Sort armor by weighted total defense
     const helms = calculatedArmor.filter(item => item.piece.slot === "Helm")
-        .sort((a, b) => b.calculated.total - a.calculated.total);
+        .sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
 
     const cuirasses = calculatedArmor.filter(item => item.piece.slot === "Cuirass")
-        .sort((a, b) => b.calculated.total - a.calculated.total);
+        .sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
 
     const leggings = calculatedArmor.filter(item => item.piece.slot === "Leggings")
-        .sort((a, b) => b.calculated.total - a.calculated.total);
+        .sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
 
     // Filter primaries
     let filteredPrimaries = gameData.weapons.filter(w => w.slot === "Weapon");

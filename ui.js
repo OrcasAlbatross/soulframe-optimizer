@@ -78,6 +78,10 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
 
     const renderOptimalItem = (item, type) => {
         const reqMetText = item.calculated.requirementsMet ? "" : ` <span class="reqs-not-met">(Reqs Not Met)</span>`;
+        // Show weighted value only if it differs from the raw total
+        const showWeight = item.calculated.weightedTotal !== item.calculated.total;
+        const weightText = showWeight ? `, Weighted: ${item.calculated.weightedTotal}` : "";
+
         return `
             <div class="optimal-item">
                 <h4>${type}: ${item.piece.name} ${reqMetText}</h4>
@@ -85,7 +89,7 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
                     <span>Phys: ${item.calculated.physical}</span>
                     <span>Mag: ${item.calculated.magick}</span>
                     <span>Stab: ${item.calculated.stability}</span>
-                    <span>(Total: ${item.calculated.total})</span>
+                    <span>(Total: ${item.calculated.total}${weightText})</span>
                 </div>
             </div>
         `;
@@ -127,12 +131,18 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
         list.slice(1, 6).forEach(item => {
             const row = document.createElement('div');
             row.className = 'gear-row';
+            
+            const showWeight = item.calculated.weightedTotal !== item.calculated.total;
+            const weightText = showWeight ? ` W:${item.calculated.weightedTotal}` : "";
+
             row.innerHTML = `
                 <span class="gear-name">${item.piece.name}</span>
-                <span class="gear-stats">P:${item.calculated.physical} M:${item.calculated.magick} S:${item.calculated.stability} (T:${item.calculated.total})</span>
+                <span class="gear-stats">P:${item.calculated.physical} M:${item.calculated.magick} S:${item.calculated.stability} (T:${item.calculated.total}${weightText})</span>
             `;
             container.appendChild(row);
         });
+
+        // Fallback message if list is empty
         if (container.children.length === 0) {
             container.innerHTML = '<p class="placeholder-msg list-spacing">No alternative runner-ups available.</p>';
         }

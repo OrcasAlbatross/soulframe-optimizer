@@ -65,6 +65,25 @@
                 </div>
             </div>
 
+            <details class="control-box advanced-settings">
+                <summary>Advanced Settings</summary>
+                <p class="joinery-caption" style="margin-bottom: 10px;">
+                    Adjust multipliers to weight specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
+                </p>
+                <div class="input-group">
+                    <label for="skew-phys">Phys Multiplier:</label>
+                    <input type="number" id="skew-phys" value="1.0" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="skew-mag">Magick Multiplier:</label>
+                    <input type="number" id="skew-mag" value="1.0" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="skew-stab">Stability Multiplier:</label>
+                    <input type="number" id="skew-stab" value="1.0" min="0" step="0.1">
+                </div>
+            </details>
+
             <button id="optimize-btn">Run Optimization</button>
         </div>
 
