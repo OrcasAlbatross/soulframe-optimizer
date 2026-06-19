@@ -139,11 +139,12 @@ function runOptimization() {
     const primaries = weaponCombinations.filter(w => w.weapon.slot === "Weapon").sort(sortWeapons);
     const sidearms = weaponCombinations.filter(w => w.weapon.slot === "Sidearm").sort(sortWeapons);
 
+    // Call view engine in ui.js to update the UI
     renderResults(helms, cuirasses, leggings, primaries, sidearms);
 }
 
 // ----------------------------------------------------------------------
-// STAT MAXER ORCHESTRATOR
+// STAT MAXER ORCHESTRATOR (Asynchronous Chunked Thread-Safe Version)
 // ----------------------------------------------------------------------
 function runStatMaxer() {
     if (gameData.armor.length === 0 || gameData.weapons.length === 0) {
@@ -158,9 +159,16 @@ function runStatMaxer() {
 
     // Show loading spinner
     const loader = document.getElementById('loading-overlay');
-    if (loader) loader.classList.add('open');
+    const progressBar = document.getElementById('loading-progress');
+    const percentLabel = document.getElementById('loading-percent');
+    
+    if (loader) {
+        progressBar.style.width = "0%";
+        percentLabel.innerText = "0%";
+        loader.classList.add('open');
+    }
 
-    // Defer calculations so the UI can paint the loader
+    // Yield thread to paint the loader
     setTimeout(() => {
         // Retrieve Points and Thresholds
         const points = Math.min(500, parseInt(document.getElementById('maxer-points').value, 10) || 0);
@@ -194,9 +202,8 @@ function runStatMaxer() {
                 .forEach(t => allowedTalismans.push(t));
         }
 
-        // Run Engine
-        console.log("Running Stat Maxer search...");
-        const result = solveStatMaxer(
+        // Run Async Cooperative Multitasking Engine
+        solveStatMaxerAsync(
             points, 
             minReqs, 
             targetObjective, 
@@ -204,23 +211,30 @@ function runStatMaxer() {
             allowedTalismans, 
             allowedArmor, 
             maxerSkews, 
-            true, // Allow joinery evaluation
+            true, // Allow joineries
             pactEnabled,
             pactPoints,
-            pactPref
+            pactPref,
+            // 1. onProgress Callback: Updates UI elements in real-time
+            (percent) => {
+                if (progressBar) progressBar.style.width = `${percent}%`;
+                if (percentLabel) percentLabel.innerText = `${percent}%`;
+            },
+            // 2. onComplete Callback: Runs on loop completion
+            (result) => {
+                // Pair the best secondary weapon
+                if (result) {
+                    const pairedSlot = selectedMaxerWeapon.slot === "Weapon" ? "Sidearm" : "Weapon";
+                    result.pairedWeapon = getBestWeaponForSlot(pairedSlot, result.totalStats, allowedWeapons, true);
+                }
+
+                // Render 
+                renderMaxerResults(result, targetObjective);
+
+                // Hide loader
+                if (loader) loader.classList.remove('open');
+            }
         );
-
-        // Pair the best secondary weapon
-        if (result) {
-            const pairedSlot = selectedMaxerWeapon.slot === "Weapon" ? "Sidearm" : "Weapon";
-            result.pairedWeapon = getBestWeaponForSlot(pairedSlot, result.totalStats, allowedWeapons, true);
-        }
-
-        // Render 
-        renderMaxerResults(result, targetObjective);
-
-        // Hide loader
-        if (loader) loader.classList.remove('open');
     }, 50);
 }
 

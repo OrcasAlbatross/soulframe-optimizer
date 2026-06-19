@@ -68,7 +68,7 @@
             <details class="control-box advanced-settings">
                 <summary>Advanced Settings</summary>
                 <p class="joinery-caption" style="margin-bottom: 10px;">
-                    Adjust multipliers to weight specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
+                    Adjust multipliers to weigh specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
                 </p>
                 <div class="input-group">
                     <label for="skew-phys">Phys Multiplier:</label>
@@ -168,15 +168,15 @@
 
                 <!-- Pact Points Settings -->
                 <label class="checkbox-label" style="margin-top: 15px; cursor: pointer;">
-                    <input type="checkbox" id="maxer-pact-enable" checked> Enable Pact Point Scaling
+                    <input type="checkbox" id="maxer-pact-enable"> Enable Pact Point Scaling
                 </label>
                 
-                <div id="maxer-pact-options" style="margin-top: 12px; border-top: 1px dotted #444; padding-top: 10px;">
+                <div id="maxer-pact-options" class="hidden-options">
                     <div class="input-group">
                         <label for="maxer-pact-points">Pact Points:</label>
                         <input type="number" id="maxer-pact-points" value="20" min="0" max="60">
                     </div>
-                    <div class="input-group" style="margin-top: 10px;">
+                    <div class="input-group mt-10">
                         <label for="maxer-pact-pref">Pact Mode:</label>
                         <select id="maxer-pact-pref" style="width: 130px;">
                             <option value="minimize">Min Spending</option>
@@ -202,7 +202,7 @@
                 </div>
             </div>
 
-<div class="control-box">
+            <div class="control-box">
                 <h3>Target Configurations</h3>
                 <div class="input-group">
                     <label>Active Weapon:</label>
@@ -299,10 +299,14 @@
         </div>
     </div>
 
-    <!-- Real-time Loading Spinner Overlay -->
+    <!-- Real-time Loading Spinner Overlay with Progress Bar -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loader-spinner"></div>
-        <p class="joinery-caption" style="font-size: 1.1em; color: #d4af37;">Running permutations and optimizing builds... please wait.</p>
+        <p class="joinery-caption" style="font-size: 1.1em; color: #d4af37; font-weight: bold; margin-bottom: 5px;">Running permutations and optimizing builds... please wait.</p>
+        <div class="progress-bar-container">
+            <div id="loading-progress" class="progress-bar-fill"></div>
+        </div>
+        <span id="loading-percent" style="font-size: 0.85em; color: #aaa;">0%</span>
     </div>
 
     <!-- Scripts (Ordered sequentially by dependencies) -->

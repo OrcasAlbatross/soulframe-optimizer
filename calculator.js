@@ -1,6 +1,6 @@
 /**
- * Soulframe Math Engine (High-Performance Procedural Version)
- * Standalone calculation formulas for equipment scaling optimized to eliminate closure overhead.
+ * Soulframe Math Engine (High-Performance Asynchronous Version)
+ * Standalone calculation formulas for equipment scaling optimized to prevent browser freezing.
  */
 
 // Global constant for Joineries to prevent code duplication
@@ -235,9 +235,10 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
 }
 
 /**
- * Core Solver for the Stat Maxer (Procedurally Optimized with Pact Scaling).
+ * High-Performance Asynchronous Solver for the Stat Maxer.
+ * Uses Cooperative Multitasking to prevent browser thread freeze.
  */
-function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled, pactEnabled, availablePactPoints, pactPref) {
+function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled, pactEnabled, availablePactPoints, pactPref, onProgress, onComplete) {
     let bestConfig = null;
     let bestObjectiveValue = -1;
     let bestTiebreakerArmorDef = -1;
@@ -293,144 +294,170 @@ function solveStatMaxer(totalPoints, minReqs, targetObjective, weapon, allowedTa
     const minGAlloc = Math.max(0, Math.max(minReqs.grace, weapon.requirements.grace || 0) - maxTalismanG - maxPactG);
 
     if (minCAlloc + minSAlloc + minGAlloc > totalPoints) {
-        return null; // Stat configuration impossible to satisfy
+        onProgress(100);
+        onComplete(null); // Stat configuration impossible to satisfy
+        return;
     }
 
-    // Main allocation search loops
-    for (let allocC = minCAlloc; allocC <= totalPoints; allocC++) {
-        const remainingForSAndG = totalPoints - allocC;
-        if (remainingForSAndG < minSAlloc + minGAlloc) continue;
+    // Establish Chunking bounds
+    let currentC = minCAlloc;
+    const totalSteps = totalPoints - minCAlloc + 1;
 
-        for (let allocS = minSAlloc; allocS <= remainingForSAndG; allocS++) {
-            const allocG = remainingForSAndG - allocS;
-            if (allocG < minGAlloc) continue;
+    function runChunk() {
+        const chunkSize = 15; // Process 15 steps of Courage per frame tick
+        const endC = Math.min(totalPoints, currentC + chunkSize);
 
-            const allocation = { courage: allocC, spirit: allocS, grace: allocG };
+        for (let allocC = currentC; allocC <= endC; allocC++) {
+            const remainingForSAndG = totalPoints - allocC;
+            if (remainingForSAndG < minSAlloc + minGAlloc) continue;
 
-            // Evaluate Pact Point combinations
-            for (let pIdx = 0; pIdx < pactCombinations.length; pIdx++) {
-                const pact = pactCombinations[pIdx];
+            for (let allocS = minSAlloc; allocS <= remainingForSAndG; allocS++) {
+                const allocG = remainingForSAndG - allocS;
+                if (allocG < minGAlloc) continue;
 
-                // Evaluate allowed Talismans
-                for (let tIdx = 0; tIdx < allowedTalismans.length; tIdx++) {
-                    const talisman = allowedTalismans[tIdx];
-                    
-                    const totalStats = {
-                        courage: allocation.courage + talisman.stats.courage + pact.courage,
-                        spirit: allocation.spirit + talisman.stats.spirit + pact.spirit,
-                        grace: allocation.grace + talisman.stats.grace + pact.grace
-                    };
+                const allocation = { courage: allocC, spirit: allocS, grace: allocG };
 
-                    // Threshold and wielding requirement validations
-                    if (totalStats.courage < minReqs.courage || 
-                        totalStats.spirit < minReqs.spirit || 
-                        totalStats.grace < minReqs.grace) {
-                        continue; 
-                    }
-                    if (totalStats.courage < (weapon.requirements.courage || 0) || 
-                        totalStats.spirit < (weapon.requirements.spirit || 0) || 
-                        totalStats.grace < (weapon.requirements.grace || 0)) {
-                        continue;
-                    }
+                // Evaluate Pact Point combinations
+                for (let pIdx = 0; pIdx < pactCombinations.length; pIdx++) {
+                    const pact = pactCombinations[pIdx];
 
-                    // Fast-damage calculations
-                    let maxDamageFound = -1;
-                    let optimalJoinery = null;
+                    // Evaluate allowed Talismans
+                    for (let tIdx = 0; tIdx < allowedTalismans.length; tIdx++) {
+                        const talisman = allowedTalismans[tIdx];
+                        
+                        const totalStats = {
+                            courage: allocation.courage + talisman.stats.courage + pact.courage,
+                            spirit: allocation.spirit + talisman.stats.spirit + pact.spirit,
+                            grace: allocation.grace + talisman.stats.grace + pact.grace
+                        };
 
-                    for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
-                        const j = joineriesToTest[jIdx];
-                        const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
-                        const calc = calculateWeaponStats(weapon, totalStats, jState);
-                        if (calc.finalDamage > maxDamageFound) {
-                            maxDamageFound = calc.finalDamage;
-                            optimalJoinery = { name: j.name, calc, tier: j.tier };
+                        // Threshold and wielding requirement validations
+                        if (totalStats.courage < minReqs.courage || 
+                            totalStats.spirit < minReqs.spirit || 
+                            totalStats.grace < minReqs.grace) {
+                            continue; 
                         }
-                    }
-
-                    // Strict weapon cap constraint: Discard build if it fails to cap
-                    if (maxDamageFound < requiredDamageCap) {
-                        continue;
-                    }
-
-                    for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
-                        const j = joineriesToTest[jIdx];
-                        const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
-                        const calc = calculateWeaponStats(weapon, totalStats, jState);
-                        if (calc.finalDamage === maxDamageFound) {
-                            optimalJoinery = { name: j.name, calc, tier: j.tier };
-                            break;
+                        if (totalStats.courage < (weapon.requirements.courage || 0) || 
+                            totalStats.spirit < (weapon.requirements.spirit || 0) || 
+                            totalStats.grace < (weapon.requirements.grace || 0)) {
+                            continue;
                         }
-                    }
 
-                    // Evaluate Armor
-                    let bestHelm = null, bestCuirass = null, bestLeggings = null;
-                    let armorScore = 0;
+                        // Fast-damage calculations
+                        let maxDamageFound = -1;
+                        let optimalJoinery = null;
 
-                    if (targetObjective === 'armor') {
-                        bestHelm = findBestArmorForSlot("Helm", totalStats);
-                        bestCuirass = findBestArmorForSlot("Cuirass", totalStats);
-                        bestLeggings = findBestArmorForSlot("Leggings", totalStats);
-                        if (bestHelm && bestCuirass && bestLeggings) {
-                            armorScore = bestHelm.weightedTotal + bestCuirass.weightedTotal + bestLeggings.weightedTotal;
-                        }
-                    }
-
-                    // Calculate Objective Score
-                    let score = 0;
-                    if (targetObjective === 'courage') score = totalStats.courage;
-                    else if (targetObjective === 'spirit') score = totalStats.spirit;
-                    else if (targetObjective === 'grace') score = totalStats.grace;
-                    else if (targetObjective === 'armor') score = armorScore;
-
-                    // Tiebreaker evaluation incorporating Pact Point spending preference
-                    let isBetter = false;
-                    if (score > bestObjectiveValue) {
-                        isBetter = true;
-                    } else if (score === bestObjectiveValue) {
-                        if (armorScore > bestTiebreakerArmorDef) {
-                            isBetter = true;
-                        } else if (armorScore === bestTiebreakerArmorDef) {
-                            if (pactPref === 'minimize') {
-                                isBetter = pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
-                            } else {
-                                isBetter = pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
+                        for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
+                            const j = joineriesToTest[jIdx];
+                            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
+                            const calc = calculateWeaponStats(weapon, totalStats, jState);
+                            if (calc.finalDamage > maxDamageFound) {
+                                maxDamageFound = calc.finalDamage;
+                                optimalJoinery = { name: j.name, calc, tier: j.tier };
                             }
                         }
-                    }
 
-                    if (isBetter) {
-                        bestObjectiveValue = score;
-                        bestTiebreakerArmorDef = armorScore;
+                        // Strict weapon cap constraint: Discard build if it fails to cap
+                        if (maxDamageFound < requiredDamageCap) {
+                            continue;
+                        }
 
-                        bestConfig = {
-                            allocation,
-                            talisman,
-                            pact,
-                            totalStats,
-                            optimalJoinery,
-                            weapon,
-                            armor: targetObjective === 'armor' ? { bestHelm, bestCuirass, bestLeggings, total: armorScore } : null
-                        };
+                        for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
+                            const j = joineriesToTest[jIdx];
+                            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
+                            const calc = calculateWeaponStats(weapon, totalStats, jState);
+                            if (calc.finalDamage === maxDamageFound) {
+                                optimalJoinery = { name: j.name, calc, tier: j.tier };
+                                break;
+                            }
+                        }
+
+                        // Evaluate Armor
+                        let bestHelm = null, bestCuirass = null, bestLeggings = null;
+                        let armorScore = 0;
+
+                        if (targetObjective === 'armor') {
+                            bestHelm = findBestArmorForSlot("Helm", totalStats);
+                            bestCuirass = findBestArmorForSlot("Cuirass", totalStats);
+                            bestLeggings = findBestArmorForSlot("Leggings", totalStats);
+                            if (bestHelm && bestCuirass && bestLeggings) {
+                                armorScore = bestHelm.weightedTotal + bestCuirass.weightedTotal + bestLeggings.weightedTotal;
+                            }
+                        }
+
+                        // Calculate Objective Score
+                        let score = 0;
+                        if (targetObjective === 'courage') score = totalStats.courage;
+                        else if (targetObjective === 'spirit') score = totalStats.spirit;
+                        else if (targetObjective === 'grace') score = totalStats.grace;
+                        else if (targetObjective === 'armor') score = armorScore;
+
+                        // Tiebreaker evaluation incorporating Pact Point spending preference
+                        let isBetter = false;
+                        if (score > bestObjectiveValue) {
+                            isBetter = true;
+                        } else if (score === bestObjectiveValue) {
+                            if (armorScore > bestTiebreakerArmorDef) {
+                                isBetter = true;
+                            } else if (armorScore === bestTiebreakerArmorDef) {
+                                if (pactPref === 'minimize') {
+                                    isBetter = pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
+                                } else {
+                                    isBetter = pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
+                                }
+                            }
+                        }
+
+                        if (isBetter) {
+                            bestObjectiveValue = score;
+                            bestTiebreakerArmorDef = armorScore;
+
+                            bestConfig = {
+                                allocation,
+                                talisman,
+                                pact,
+                                totalStats,
+                                optimalJoinery,
+                                weapon,
+                                armor: targetObjective === 'armor' ? { bestHelm, bestCuirass, bestLeggings, total: armorScore } : null
+                            };
+                        }
                     }
                 }
             }
         }
-    }
 
-    // Resolve optimal armor once at the end for virtue-maxing objectives
-    if (bestConfig && !bestConfig.armor) {
-        const bestHelm = findBestArmorForSlot("Helm", bestConfig.totalStats);
-        const bestCuirass = findBestArmorForSlot("Cuirass", bestConfig.totalStats);
-        const bestLeggings = findBestArmorForSlot("Leggings", bestConfig.totalStats);
-        if (bestHelm && bestCuirass && bestLeggings) {
-            bestConfig.armor = {
-                bestHelm,
-                bestCuirass,
-                bestLeggings,
-                total: bestHelm.weightedTotal + bestCuirass.weightedTotal + bestLeggings.weightedTotal
-            };
+        currentC += chunkSize + 1;
+
+        if (currentC <= totalPoints) {
+            // Update UI progress bar
+            const percent = Math.min(99, Math.round(((currentC - minCAlloc) / totalSteps) * 100));
+            onProgress(percent);
+
+            // Yield control back to the browser on the next tick
+            setTimeout(runChunk, 0);
+        } else {
+            // Complete!
+            onProgress(100);
+
+            // Resolve optimal armor once at the end for virtue-maxing objectives
+            if (bestConfig && !bestConfig.armor) {
+                const bestHelm = findBestArmorForSlot("Helm", bestConfig.totalStats);
+                const bestCuirass = findBestArmorForSlot("Cuirass", bestConfig.totalStats);
+                const bestLeggings = findBestArmorForSlot("Leggings", bestConfig.totalStats);
+                if (bestHelm && bestCuirass && bestLeggings) {
+                    bestConfig.armor = {
+                        bestHelm,
+                        bestCuirass,
+                        bestLeggings,
+                        total: bestHelm.weightedTotal + bestCuirass.weightedTotal + bestLeggings.weightedTotal
+                    };
+                }
+            }
+            onComplete(bestConfig);
         }
     }
 
-    return bestConfig;
+    // Begin chunked execution
+    runChunk();
 }
