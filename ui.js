@@ -189,3 +189,42 @@ function renderResults(helms, cuirasses, leggings, primaries, sidearms) {
     renderWeaponList(primaryRankings, primaries, "primary-color");
     renderWeaponList(sidearmRankings, sidearms, "sidearm-color");
 }
+
+// Dynamically build and manage checklists inside the Exclusion Filters tab
+function populateExclusionsUI() {
+    const armorList = document.getElementById('armor-exclusion-list');
+    const weaponList = document.getElementById('weapon-exclusion-list');
+
+    armorList.innerHTML = '';
+    weaponList.innerHTML = '';
+
+    // Sort items alphabetically to make searching easy for the user
+    const sortedArmor = [...gameData.armor].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedWeapons = [...gameData.weapons].sort((a, b) => a.name.localeCompare(b.name));
+
+    const createCheckbox = (name, container) => {
+        const label = document.createElement('label');
+        label.className = 'checklist-item';
+        
+        const isChecked = !excludedItems.has(name);
+        
+        label.innerHTML = `
+            <input type="checkbox" data-name="${name}" ${isChecked ? 'checked' : ''}>
+            <span>${name}</span>
+        `;
+
+        // Handle checkbox toggles dynamically
+        label.querySelector('input').addEventListener('change', function() {
+            if (this.checked) {
+                excludedItems.delete(name);
+            } else {
+                excludedItems.add(name);
+            }
+        });
+
+        container.appendChild(label);
+    };
+
+    sortedArmor.forEach(item => createCheckbox(item.name, armorList));
+    sortedWeapons.forEach(item => createCheckbox(item.name, weaponList));
+}

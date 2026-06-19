@@ -12,11 +12,11 @@
         <h1>Soulframe Optimizer</h1>
         <p id="status-msg">Initializing...</p>
         
-        <!-- Tabs Navigation for Future-Proofing -->
+        <!-- Tabs Navigation -->
         <nav class="tabs-nav">
             <button class="tab-btn active" data-tab="optimizer-tab">Virtue Allocator</button>
             <button class="tab-btn" data-tab="stat-maxer-tab" disabled>Stat Maxer (Soon)</button>
-            <button class="tab-btn" data-tab="scaling-tab" disabled>Weapon Scaling (Soon)</button>
+            <button class="tab-btn" data-tab="exclusions-tab">Exclusion Filters</button>
         </nav>
     </header>
 
@@ -119,6 +119,27 @@
                     
                     <h3 class="weapon-title-header sidearm-color">Sidearms</h3>
                     <div id="sidearm-rankings" class="list-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Exclusions Tab Content Container -->
+    <main id="exclusions-tab" class="tab-content">
+        <div class="exclusions-panel">
+            <h2>Acquisition & Exclusion Filters</h2>
+            <p class="joinery-caption">
+                Uncheck any armor or weapon you do not own or cannot acquire. Excluded gear will be ignored during calculations to speed up optimization.
+            </p>
+            
+            <div class="exclusions-grid">
+                <div class="exclusion-box">
+                    <h3>Armor Pieces</h3>
+                    <div id="armor-exclusion-list" class="checklist-container"></div>
+                </div>
+                <div class="exclusion-box">
+                    <h3>Weapons & Sidearms</h3>
+                    <div id="weapon-exclusion-list" class="checklist-container"></div>
                 </div>
             </div>
         </div>

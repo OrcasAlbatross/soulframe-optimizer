@@ -8,6 +8,8 @@ let gameData = {
     weapons: []
 };
 
+const excludedItems = new Set();
+
 // Fetch and load data on initialization
 async function initializeApp() {
     console.log("Loading live data from Soulframe Wiki...");
@@ -26,6 +28,7 @@ async function initializeApp() {
         
         // Call dynamically built filter generator in ui.js
         populateFilters();
+        populateExclusionsUI();
 
         document.getElementById('status-msg').innerText = `Loaded ${gameData.armor.length} Armor pieces and ${gameData.weapons.length} Weapons successfully!`;
         console.log("Data loaded successfully:", gameData);
@@ -61,8 +64,10 @@ function runOptimization() {
     const skewMag = parseFloat(document.getElementById('skew-mag').value) || 0;
     const skewStab = parseFloat(document.getElementById('skew-stab').value) || 0;
 
-    // Process Armor through math engine (calculator.js) and apply stat skews
-    const calculatedArmor = gameData.armor.map(piece => {
+    // Process Filtered Armor through math engine (calculator.js) and apply stat skews
+    const allowedArmor = gameData.armor.filter(piece => !excludedItems.has(piece.name));
+
+    const calculatedArmor = allowedArmor.map(piece => {
         const calculated = calculateArmorStats(piece, envoyStats);
         
         // Compute the skewed total based on user multipliers
@@ -70,9 +75,7 @@ function runOptimization() {
                        (calculated.magick * skewMag) + 
                        (calculated.stability * skewStab);
                        
-        // Round to 1 decimal place to avoid JavaScript floating point errors
         calculated.weightedTotal = Math.round(weighted * 10) / 10;
-        
         return { piece, calculated };
     });
 
@@ -86,14 +89,15 @@ function runOptimization() {
     const leggings = calculatedArmor.filter(item => item.piece.slot === "Leggings")
         .sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
 
-    // Filter primaries
-    let filteredPrimaries = gameData.weapons.filter(w => w.slot === "Weapon");
+    // Filter out excluded weapons, then apply separate weapon filters
+    const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
+
+    let filteredPrimaries = allowedWeapons.filter(w => w.slot === "Weapon");
     if (primaryFilterVal !== "all") {
         filteredPrimaries = filteredPrimaries.filter(w => w.type === primaryFilterVal);
     }
 
-    // Filter sidearms
-    let filteredSidearms = gameData.weapons.filter(w => w.slot === "Sidearm");
+    let filteredSidearms = allowedWeapons.filter(w => w.slot === "Sidearm");
     if (sidearmFilterVal !== "all") {
         filteredSidearms = filteredSidearms.filter(w => w.type === sidearmFilterVal);
     }
@@ -158,5 +162,24 @@ function runOptimization() {
 }
 
 // Bind Global Listeners
+window.onload = initializeApp;
+document.getElementById('optimize-btn').addEventListener('click', runOptimization);
+// Tab Switching Controller
+document.querySelectorAll('.tab-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        if (!targetTab) return;
+
+        // Toggle buttons active class
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Toggle content containers active class
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(targetTab).classList.add('active');
+    });
+});
+
+// Initialize on page load
 window.onload = initializeApp;
 document.getElementById('optimize-btn').addEventListener('click', runOptimization);
