@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soulframe Equipment Optimizer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <header style="position: relative;">
         <h1>Soulframe Optimizer</h1>
         <p id="status-msg">Initializing...</p>
-        
+
         <!-- Theme Swapper Button -->
-        <button id="theme-toggle-btn" class="secondary-btn" style="position: absolute; right: 0; top: 10px; width: auto;">Light Mode</button>
-        
+        <button id="theme-toggle-btn" class="secondary-btn"
+            style="position: absolute; right: 0; top: 10px; width: auto;">Light Mode</button>
+
         <!-- Tabs Navigation -->
         <nav class="tabs-nav">
             <button class="tab-btn active" data-tab="optimizer-tab">Virtue Allocator</button>
@@ -48,7 +51,8 @@
                     <input type="checkbox" id="joinery-enable"> Enable Joinery Scaling
                 </label>
                 <p class="joinery-caption">
-                    When enabled, the optimizer automatically generates and calculates all 9 possible Joinery combinations for every weapon to find the highest damage configurations.
+                    When enabled, the optimizer automatically generates and calculates all 9 possible Joinery
+                    combinations for every weapon to find the highest damage configurations.
                 </p>
             </div>
 
@@ -71,7 +75,8 @@
             <details class="control-box advanced-settings">
                 <summary>Advanced Settings</summary>
                 <p class="joinery-caption" style="margin-bottom: 10px;">
-                    Adjust multipliers to weigh specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
+                    Adjust multipliers to weigh specific defenses higher or lower. Optimal armor will be chosen based on
+                    the weighted total.
                 </p>
                 <div class="input-group">
                     <label for="skew-phys">Phys Multiplier:</label>
@@ -104,13 +109,13 @@
             <div class="results-column alternative-lists">
                 <div class="alt-section">
                     <h2>Runner-up Gear</h2>
-                    
+
                     <h3>Alternative Helms</h3>
                     <div id="helm-runner-ups" class="list-container"></div>
-                    
+
                     <h3>Alternative Cuirasses</h3>
                     <div id="cuirass-runner-ups" class="list-container"></div>
-                    
+
                     <h3>Alternative Leggings</h3>
                     <div id="leggings-runner-ups" class="list-container"></div>
                 </div>
@@ -119,7 +124,7 @@
                     <h2>Weapon Damage Rankings</h2>
                     <h3 class="weapon-title-header primary-color">Primary Weapons</h3>
                     <div id="primary-rankings" class="list-container"></div>
-                    
+
                     <h3 class="weapon-title-header sidearm-color">Sidearms</h3>
                     <div id="sidearm-rankings" class="list-container"></div>
                 </div>
@@ -132,12 +137,14 @@
         <div class="exclusions-panel">
             <h2>Acquisition & Exclusion Filters</h2>
             <p class="joinery-caption" style="margin-bottom: 15px;">
-                Uncheck any armor or weapon you do not own or cannot acquire. Excluded gear will be ignored during calculations to speed up optimization.
+                Uncheck any armor or weapon you do not own or cannot acquire. Excluded gear will be ignored during
+                calculations to speed up optimization.
             </p>
-            
+
             <!-- Real-time Search Bar -->
             <div class="search-bar-container">
-                <input type="text" id="exclusion-search" placeholder="Search armor, weapons, or talismans by name..." style="width: 100%; padding: 10px; background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9em; outline: none;">
+                <input type="text" id="exclusion-search" placeholder="Search armor, weapons, or talismans by name..."
+                    style="width: 100%; padding: 10px; background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9em; outline: none;">
             </div>
 
             <div class="exclusions-grid">
@@ -161,7 +168,7 @@
     <main id="stat-maxer-tab" class="tab-content">
         <!-- Left Side: Controls/Inputs Panel -->
         <div class="controls-panel">
-            
+
             <button id="open-guided-modal-btn" class="guided-btn">Guided Setup (Consult a Wazzard)</button>
             <label class="checkbox-label" style="margin-bottom: 15px;">
                 <input type="checkbox" id="manual-edit-enable"> Enable Manual Editing
@@ -173,7 +180,8 @@
                     <h3>Virtue Pool</h3>
                     <div class="input-group">
                         <label for="maxer-points">Total Points:</label>
-                        <input type="number" id="maxer-points" value="16" min="0" max="500" readonly class="locked-input">
+                        <input type="number" id="maxer-points" value="16" min="0" max="500" readonly
+                            class="locked-input">
                     </div>
                     <p class="joinery-caption">Max allowed is 500 points to prevent browser freeze.</p>
                 </div>
@@ -199,10 +207,13 @@
                 <h3>Target Configurations</h3>
                 <div class="input-group">
                     <label>Active Weapon:</label>
-                    <span id="maxer-selected-weapon-name" class="font-bold primary-color" style="font-size: 0.9em; text-align: right; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">None Selected</span>
+                    <span id="maxer-selected-weapon-name" class="font-bold primary-color"
+                        style="font-size: 0.9em; text-align: right; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">None
+                        Selected</span>
                 </div>
-                <button id="open-weapon-modal-btn" class="secondary-btn" style="margin-top: 5px; margin-bottom: 12px;">Change Weapon...</button>
-                
+                <button id="open-weapon-modal-btn" class="secondary-btn"
+                    style="margin-top: 5px; margin-bottom: 12px;">Change Weapon...</button>
+
                 <div class="input-group">
                     <label for="maxer-target">Max Target:</label>
                     <select id="maxer-target">
@@ -241,14 +252,18 @@
             <details class="control-box advanced-settings" id="maxer-pact-settings-box">
                 <summary>Dynamic Pact Scaling</summary>
                 <p class="joinery-caption" style="margin-bottom: 10px;">
-                    Allow engine to calculate optimal Pact exchanges automatically. Disable if using Manual Pacts in Guided Mode.
+                    Allow engine to calculate optimal Pact exchanges automatically. Disable if using Manual Pacts in
+                    Guided Mode.
                 </p>
                 <label class="checkbox-label" style="cursor: pointer; margin-bottom: 5px;">
                     <input type="checkbox" id="maxer-pact-enable"> Enable Dynamic Pacts
                 </label>
-                <div id="maxer-pact-options" style="display: none; border-top: 1px dotted var(--border-color); padding-top: 10px; margin-top: 10px;">
-                    <p style="font-size: 0.72em; color: #ff6b6b; margin-bottom: 10px; line-height: 1.3; font-weight: bold;">
-                        ⚠️ WARNING: Dynamically scaling Pacts adds complexity. The engine will solve it, but manual pacts are faster.
+                <div id="maxer-pact-options"
+                    style="display: none; border-top: 1px dotted var(--border-color); padding-top: 10px; margin-top: 10px;">
+                    <p
+                        style="font-size: 0.72em; color: #ff6b6b; margin-bottom: 10px; line-height: 1.3; font-weight: bold;">
+                        ⚠️ WARNING: Dynamically scaling Pacts adds complexity. The engine will solve it, but manual
+                        pacts are faster.
                     </p>
                     <div class="input-group">
                         <label for="maxer-pact-points">Available Pacts:</label>
@@ -263,6 +278,12 @@
                     </div>
                 </div>
             </details>
+
+            <!-- Conditional Wazzard Setup Warning -->
+            <p id="maxer-warning-msg" class="maxer-warning">
+                ⚠️ NOTICE: Please complete the "Guided Setup" above (or enable Manual Editing) to configure your stats
+                before running the optimizer.
+            </p>
 
             <button id="maxer-btn" class="optimize-btn-style">Run Stat Maxer</button>
         </div>
@@ -296,9 +317,10 @@
                 <h2>Select Target Weapon</h2>
                 <span class="close-modal">&times;</span>
             </div>
-            
+
             <p class="joinery-caption" style="margin-bottom: 12px;">
-                Select the active weapon you want your stats to be optimized around. Excluded weapons will not show up here.
+                Select the active weapon you want your stats to be optimized around. Excluded weapons will not show up
+                here.
             </p>
 
             <div class="modal-search-row">
@@ -323,10 +345,12 @@
     <div id="guided-modal" class="modal-overlay">
         <div class="modal-content modal-large">
             <div class="modal-header">
-                <h2>Guided Setup <span style="font-size: 0.6em; color: #888; font-style: italic; font-weight: normal;">(Consult a Wazzard)</span></h2>
+                <h2>Guided Setup <span
+                        style="font-size: 0.6em; color: #888; font-style: italic; font-weight: normal;">(Consult a
+                        Wazzard)</span></h2>
                 <span class="close-guided-modal close-modal">&times;</span>
             </div>
-            
+
             <div class="guided-modal-columns">
                 <!-- Left Column inside Modal -->
                 <div class="guided-col">
@@ -341,9 +365,12 @@
 
                     <div class="control-box">
                         <h3>Active Elixirs <span style="font-size: 0.8em; color: #aaa;">(+10 Total & Min)</span></h3>
-                        <label class="checkbox-label"><input type="checkbox" id="guided-elixir-c"> Curaidh's Breath (Courage)</label>
-                        <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-s"> Dancing Galdre (Spirit)</label>
-                        <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-g"> Shademaker (Grace)</label>
+                        <label class="checkbox-label"><input type="checkbox" id="guided-elixir-c"> Curaidh's Breath
+                            (Courage)</label>
+                        <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox"
+                                id="guided-elixir-s"> Dancing Galdre (Spirit)</label>
+                        <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox"
+                                id="guided-elixir-g"> Shademaker (Grace)</label>
                     </div>
 
                     <div class="control-box">
@@ -373,7 +400,8 @@
                 <div class="guided-col">
                     <div class="control-box">
                         <h3>Pact Nodes Unlocked</h3>
-                        <p class="joinery-caption">Select unlocked nodes. (Applying this disables dynamic pact scaling in the side panel).</p>
+                        <p class="joinery-caption">Select unlocked nodes. (Applying this disables dynamic pact scaling
+                            in the side panel).</p>
                         <div class="input-group mt-10">
                             <label>Mora's Pride (C):</label>
                             <select id="guided-pact-c">
@@ -405,15 +433,24 @@
 
                     <div class="control-box">
                         <h3>Preferred Minimums & Extras</h3>
-                        <p class="joinery-caption">The optimizer will guarantee at least these values. Extra Virtues add to Total and Minimums.</p>
-                        <div class="input-group mt-10"><label>Pref Min Courage:</label><input type="number" id="guided-pref-c" value="0" min="0"></div>
-                        <div class="input-group mt-10"><label>Pref Min Spirit:</label><input type="number" id="guided-pref-s" value="0" min="0"></div>
-                        <div class="input-group mt-10"><label>Pref Min Grace:</label><input type="number" id="guided-pref-g" value="0" min="0"></div>
-                        
-                        <div class="input-group mt-10" style="border-top: 1px dotted var(--border-color); padding-top: 10px;"><label>Extra Any Virtues:</label><input type="number" id="guided-extra-any" value="0" min="0"></div>
-                        <div class="input-group mt-10"><label>Extra Courage:</label><input type="number" id="guided-extra-c" value="0" min="0"></div>
-                        <div class="input-group mt-10"><label>Extra Spirit:</label><input type="number" id="guided-extra-s" value="0" min="0"></div>
-                        <div class="input-group mt-10"><label>Extra Grace:</label><input type="number" id="guided-extra-g" value="0" min="0"></div>
+                        <p class="joinery-caption">The optimizer will guarantee at least these values. Extra Virtues add
+                            to Total and Minimums.</p>
+                        <div class="input-group mt-10"><label>Pref Min Courage:</label><input type="number"
+                                id="guided-pref-c" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Pref Min Spirit:</label><input type="number"
+                                id="guided-pref-s" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Pref Min Grace:</label><input type="number"
+                                id="guided-pref-g" value="0" min="0"></div>
+
+                        <div class="input-group mt-10"
+                            style="border-top: 1px dotted var(--border-color); padding-top: 10px;"><label>Extra Any
+                                Virtues:</label><input type="number" id="guided-extra-any" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Extra Courage:</label><input type="number"
+                                id="guided-extra-c" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Extra Spirit:</label><input type="number"
+                                id="guided-extra-s" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Extra Grace:</label><input type="number"
+                                id="guided-extra-g" value="0" min="0"></div>
                     </div>
                 </div>
             </div>
@@ -425,7 +462,8 @@
     <!-- Real-time Loading Spinner Overlay with Progress Bar -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loader-spinner"></div>
-        <p class="joinery-caption" style="font-size: 1.1em; color: #d4af37; font-weight: bold; margin-bottom: 5px;">Running permutations and optimizing builds... please wait.</p>
+        <p class="joinery-caption" style="font-size: 1.1em; color: #d4af37; font-weight: bold; margin-bottom: 5px;">
+            Running permutations and optimizing builds... please wait.</p>
         <div class="progress-bar-container">
             <div id="loading-progress" class="progress-bar-fill"></div>
         </div>
@@ -438,4 +476,5 @@
     <script src="ui.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>

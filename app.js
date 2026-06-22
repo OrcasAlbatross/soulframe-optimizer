@@ -11,6 +11,7 @@ let gameData = {
 
 const excludedItems = new Set();
 let selectedMaxerWeapon = null;
+let guidedSetupPerformed = false; // Tracks if the user has consulted the Wazzard
 
 // Fetch and load data on initialization
 async function initializeApp() {
@@ -285,7 +286,12 @@ function applyGuidedSetup() {
     document.getElementById('min-spirit').value = minS;
     document.getElementById('min-grace').value = minG;
 
-    // Auto-disable dynamic pacts if manual pacts were used
+    // Toggle setup flag to True
+    guidedSetupPerformed = true;
+
+    // Hide the setup warning instantly since values were successfully calculated
+    document.getElementById('maxer-warning-msg').style.display = 'none';
+
     if (pactC > 0 || pactS > 0 || pactG > 0) {
         const pactCheckbox = document.getElementById('maxer-pact-enable');
         pactCheckbox.checked = false;
@@ -359,11 +365,13 @@ document.getElementById('maxer-target').addEventListener('change', function() {
 // Manual Editing Checkbox Toggle
 document.getElementById('manual-edit-enable').addEventListener('change', function() {
     const manualFieldsBox = document.getElementById('maxer-manual-fields');
+    const warningMsg = document.getElementById('maxer-warning-msg');
     const isManual = this.checked;
     const inputs = ['maxer-points', 'min-courage', 'min-spirit', 'min-grace'];
     
     if (isManual) {
         manualFieldsBox.style.display = 'flex';
+        warningMsg.style.display = 'none'; // Hide warning when manual editing is active
         inputs.forEach(id => {
             const el = document.getElementById(id);
             el.removeAttribute('readonly');
@@ -371,6 +379,10 @@ document.getElementById('manual-edit-enable').addEventListener('change', functio
         });
     } else {
         manualFieldsBox.style.display = 'none';
+        // Restore warning ONLY if they toggled manual off and have not run guided setup
+        if (!guidedSetupPerformed) {
+            warningMsg.style.display = 'block';
+        }
         inputs.forEach(id => {
             const el = document.getElementById(id);
             el.setAttribute('readonly', true);
@@ -387,7 +399,6 @@ document.getElementById('maxer-points').addEventListener('input', function() {
     else if (val < 0) this.value = 0;
 });
 
-// Force the Pact Points input field to clamp between 0 and 60 dynamically
 document.getElementById('maxer-pact-points').addEventListener('input', function() {
     let val = parseInt(this.value, 10);
     if (isNaN(val)) return;
@@ -400,7 +411,7 @@ document.getElementById('maxer-pact-enable').addEventListener('change', function
     document.getElementById('maxer-pact-options').style.display = this.checked ? 'block' : 'none';
 });
 
-// Theme Swapping Event Listener (Saves preference in LocalStorage)
+// Theme Swapping Event Listener
 document.getElementById('theme-toggle-btn').addEventListener('click', function() {
     const isLight = document.body.classList.toggle('light-mode');
     this.innerText = isLight ? "Dark Mode" : "Light Mode";

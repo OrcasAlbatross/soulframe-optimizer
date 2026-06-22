@@ -12,8 +12,8 @@
     --input-bg: #1a1a1a;
     --input-border: #444;
     --shadow: none;
-    --blue-btn: #1f3044; /* Midnight Slate Blue */
-    --blue-hover: #294161;
+    --blue-btn: #112a1d; /* Deep Wevetwood Forest Green */
+    --blue-hover: #1c3d2c;
     --dark-dim-text: #777;
     --dim-text: #666;
 }
@@ -32,8 +32,8 @@ body.light-mode {
     --input-bg: #ffffff;
     --input-border: #cbd5e1;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --blue-btn: #2980b9; /* Steel Blue */
-    --blue-hover: #1f618d;
+    --blue-btn: #27ae60; /* Vibrant Emerald Green */
+    --blue-hover: #219653;
     --dark-dim-text: #888;
     --dim-text: #777;
 }
@@ -680,7 +680,7 @@ body.light-mode .sidearm-border {
 .guided-btn {
     background-color: var(--blue-btn) !important;
     color: #fff !important;
-    border: none;
+    border: 1px solid var(--gold-color) !important; /* Gilded Border Trim */
     padding: 10px 16px !important;
     font-size: 0.9em;
     font-weight: bold;
@@ -693,12 +693,19 @@ body.light-mode .sidearm-border {
 .guided-btn:hover {
     background-color: var(--blue-hover) !important;
 }
-
 /* Custom class for a prominent Apply button inside the large modal */
 #apply-guided-btn {
     padding: 15px !important;
     font-size: 1.05em !important;
     background-color: var(--blue-btn) !important;
+    border: 1px solid var(--gold-color) !important; /* Gilded Border Trim */
+    color: #ffffff !important; /* Force clean, highly readable white text */
+    font-weight: bold;
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    text-align: center;
 }
 #apply-guided-btn:hover {
     background-color: var(--blue-hover) !important;
@@ -739,4 +746,24 @@ body.light-mode .sidearm-border {
 }
 .guided-modal-columns::-webkit-scrollbar-thumb:hover {
     background: var(--gold-color);
+}
+
+/* Stat Maxer Warning Alert */
+.maxer-warning {
+    color: #ff6b6b;
+    font-weight: bold;
+    font-size: 0.75em;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    line-height: 1.3;
+    text-align: center;
+    background-color: rgba(255, 107, 107, 0.08);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    padding: 10px;
+    border-radius: 4px;
+}
+body.light-mode .maxer-warning {
+    background-color: rgba(231, 76, 60, 0.05);
+    border-color: rgba(231, 76, 60, 0.2);
+    color: #c0392b;
 }
