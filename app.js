@@ -17,6 +17,13 @@ async function initializeApp() {
     console.log("Loading live data from Soulframe Wiki...");
     document.getElementById('status-msg').innerText = "Fetching live data from the wiki...";
 
+    // Apply saved theme preference immediately on load
+    const savedTheme = localStorage.getItem('sf_theme_preference');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('theme-toggle-btn').innerText = "Dark Mode";
+    }
+
     try {
         // Fetch and parse Armor
         const rawArmor = await fetchWikiModule('Module:Data/Armour', 'sf_raw_armor');
@@ -29,13 +36,13 @@ async function initializeApp() {
         gameData.weapons = parseWeaponData(rawWeapons);
         sessionStorage.setItem('sf_raw_weapons', JSON.stringify(rawWeapons));
 
-        // Call dynamically built filter generator in ui.js
+        // Call dynamically built filter generators in ui.js
         populateFilters();
         populateExclusionsUI();
         
         // Find default weapon selection if nothing is currently selected
         const defaultWeapon = gameData.weapons.filter(w => !excludedItems.has(w.name))[0];
-        selectMaxerWeapon(defaultWeapon);
+        selectMaxerWeapon(defaultWeapon); // Set default weapon in ui.js
 
         document.getElementById('status-msg').innerText = `Loaded ${gameData.armor.length} Armor pieces and ${gameData.weapons.length} Weapons successfully!`;
         console.log("Data loaded successfully:", gameData);
@@ -134,7 +141,7 @@ function runOptimization() {
 }
 
 // ----------------------------------------------------------------------
-// STAT MAXER ORCHESTRATOR 
+// STAT MAXER ORCHESTRATOR
 // ----------------------------------------------------------------------
 function runStatMaxer() {
     if (gameData.armor.length === 0 || gameData.weapons.length === 0) {
@@ -215,7 +222,7 @@ function runStatMaxer() {
 }
 
 // ----------------------------------------------------------------------
-// GUIDED MODE CALCULATOR (The Wazzard's Math)
+// GUIDED SETUP MODAL (The Wazzard's Math)
 // ----------------------------------------------------------------------
 function openGuidedModal() {
     document.getElementById('guided-modal').classList.add('open');
@@ -243,15 +250,17 @@ function applyGuidedSetup() {
     const prefC = parseInt(document.getElementById('guided-pref-c').value, 10) || 0;
     const prefS = parseInt(document.getElementById('guided-pref-s').value, 10) || 0;
     const prefG = parseInt(document.getElementById('guided-pref-g').value, 10) || 0;
-    const extraTotal = parseInt(document.getElementById('guided-extra-any').value, 10) || 0;
+    
+    const extraAny = parseInt(document.getElementById('guided-extra-any').value, 10) || 0;
+    const extraC = parseInt(document.getElementById('guided-extra-c').value, 10) || 0;
+    const extraS = parseInt(document.getElementById('guided-extra-s').value, 10) || 0;
+    const extraG = parseInt(document.getElementById('guided-extra-g').value, 10) || 0;
 
-    // Base Math
-    let totalPoints = 16 + rank + extraTotal;
-    let minC = 1 + pactC;
-    let minS = 1 + pactS;
-    let minG = 1 + pactG;
+    let totalPoints = 16 + rank + extraAny + extraC + extraS + extraG;
+    let minC = 1 + pactC + extraC;
+    let minS = 1 + pactS + extraS;
+    let minG = 1 + pactG + extraG;
 
-    // Elixirs
     if (hasCuraidh) { totalPoints += 10; minC += 10; }
     if (hasDancing) { totalPoints += 10; minS += 10; }
     if (hasShade) { totalPoints += 10; minG += 10; }
@@ -288,31 +297,13 @@ function applyGuidedSetup() {
     const inputsToFlash = ['maxer-points', 'min-courage', 'min-spirit', 'min-grace'];
     inputsToFlash.forEach(id => {
         const el = document.getElementById(id);
-        el.style.transition = 'background-color 0.3s';
-        el.style.backgroundColor = '#2c3e50';
-        setTimeout(() => el.style.backgroundColor = '', 400);
+        el.style.transition = 'background-color 0.35s';
+        el.style.backgroundColor = '#1e3040';
+        setTimeout(() => el.style.backgroundColor = '', 450);
     });
 
     closeGuidedModal();
 }
-
-// Handle Manual Editing Checkbox Toggle
-document.getElementById('manual-edit-enable').addEventListener('change', function() {
-    const isManual = this.checked;
-    const inputs = ['maxer-points', 'min-courage', 'min-spirit', 'min-grace'];
-    
-    inputs.forEach(id => {
-        const el = document.getElementById(id);
-        if (isManual) {
-            el.removeAttribute('readonly');
-            el.classList.remove('locked-input');
-        } else {
-            el.setAttribute('readonly', true);
-            el.classList.add('locked-input');
-        }
-    });
-});
-
 
 // ----------------------------------------------------------------------
 // EVENT BINDINGS
@@ -321,7 +312,7 @@ window.onload = initializeApp;
 document.getElementById('optimize-btn').addEventListener('click', runOptimization);
 document.getElementById('maxer-btn').addEventListener('click', runStatMaxer);
 
-// Guided Modal Bindings
+// Guided Modal Triggers
 document.getElementById('open-guided-modal-btn').addEventListener('click', openGuidedModal);
 document.querySelector('.close-guided-modal').addEventListener('click', closeGuidedModal);
 document.getElementById('apply-guided-btn').addEventListener('click', applyGuidedSetup);
@@ -365,7 +356,30 @@ document.getElementById('maxer-target').addEventListener('change', function() {
     advBox.style.display = (this.value === 'armor') ? 'block' : 'none';
 });
 
-// Clamping Logic
+// Manual Editing Checkbox Toggle
+document.getElementById('manual-edit-enable').addEventListener('change', function() {
+    const manualFieldsBox = document.getElementById('maxer-manual-fields');
+    const isManual = this.checked;
+    const inputs = ['maxer-points', 'min-courage', 'min-spirit', 'min-grace'];
+    
+    if (isManual) {
+        manualFieldsBox.style.display = 'flex';
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            el.removeAttribute('readonly');
+            el.classList.remove('locked-input');
+        });
+    } else {
+        manualFieldsBox.style.display = 'none';
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            el.setAttribute('readonly', true);
+            el.classList.add('locked-input');
+        });
+    }
+});
+
+// Clamping inputs
 document.getElementById('maxer-points').addEventListener('input', function() {
     let val = parseInt(this.value, 10);
     if (isNaN(val)) return;
@@ -384,4 +398,11 @@ document.getElementById('maxer-pact-points').addEventListener('input', function(
 // Toggle Pact Options visibility
 document.getElementById('maxer-pact-enable').addEventListener('change', function() {
     document.getElementById('maxer-pact-options').style.display = this.checked ? 'block' : 'none';
+});
+
+// Theme Swapping Event Listener (Saves preference in LocalStorage)
+document.getElementById('theme-toggle-btn').addEventListener('click', function() {
+    const isLight = document.body.classList.toggle('light-mode');
+    this.innerText = isLight ? "Dark Mode" : "Light Mode";
+    localStorage.setItem('sf_theme_preference', isLight ? 'light' : 'dark');
 });
