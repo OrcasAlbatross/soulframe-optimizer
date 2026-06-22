@@ -1,6 +1,5 @@
 /**
- * Soulframe Math Engine (High-Performance Asynchronous Version)
- * Standalone calculation formulas for equipment scaling optimized to prevent browser freezing.
+ * Soulframe Math Engine (Time-Budgeted, Inlined High-Performance Version)
  */
 
 // Global constant for Joineries to prevent code duplication
@@ -39,12 +38,7 @@ function getPactCombinations(pactEnabled, availablePactPoints) {
             for (let g of TIERS) {
                 const cost = c + s + g;
                 if (cost <= availablePactPoints) {
-                    combinations.push({
-                        courage: c,
-                        spirit: s,
-                        grace: g,
-                        cost: cost
-                    });
+                    combinations.push({ courage: c, spirit: s, grace: g, cost: cost });
                 }
             }
         }
@@ -99,36 +93,22 @@ function calculateArmorStats(armorPiece, envoyStats) {
 
     // Physical
     const physPips = armorPiece.attunement.physical;
-    const physBonus = Math.floor(
-        c * (physPips.courage || 0) * 0.12 +
-        s * (physPips.spirit || 0) * 0.12 +
-        g * (physPips.grace || 0) * 0.12
-    );
+    const physBonus = Math.floor(c * (physPips.courage || 0) * 0.12 + s * (physPips.spirit || 0) * 0.12 + g * (physPips.grace || 0) * 0.12);
 
     // Magick
     const magPips = armorPiece.attunement.magick;
-    const magBonus = Math.floor(
-        c * (magPips.courage || 0) * 0.12 +
-        s * (magPips.spirit || 0) * 0.12 +
-        g * (magPips.grace || 0) * 0.12
-    );
+    const magBonus = Math.floor(c * (magPips.courage || 0) * 0.12 + s * (magPips.spirit || 0) * 0.12 + g * (magPips.grace || 0) * 0.12);
 
     // Stability
     const stabPips = armorPiece.attunement.stability;
-    const stabBonus = Math.floor(
-        c * (stabPips.courage || 0) * 0.12 +
-        s * (stabPips.spirit || 0) * 0.12 +
-        g * (stabPips.grace || 0) * 0.12
-    );
+    const stabBonus = Math.floor(c * (stabPips.courage || 0) * 0.12 + s * (stabPips.spirit || 0) * 0.12 + g * (stabPips.grace || 0) * 0.12);
 
     const physical = base.physical + physBonus;
     const magick = base.magick + magBonus;
     const stability = base.stability + stabBonus;
 
     return {
-        physical,
-        magick,
-        stability,
+        physical, magick, stability,
         total: physical + magick + stability,
         requirementsMet: true
     };
@@ -142,12 +122,7 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
     const requirementsMet = checkRequirements(weapon.requirements, envoyStats);
 
     if (!requirementsMet) {
-        return {
-            baseDamage: baseDamage,
-            bonusDamage: 0,
-            finalDamage: baseDamage,
-            requirementsMet: false
-        };
+        return { baseDamage, bonusDamage: 0, finalDamage: baseDamage, requirementsMet: false };
     }
 
     const pips = {
@@ -166,11 +141,7 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
     pips.spirit = Math.min(5, pips.spirit);
     pips.grace = Math.min(5, pips.grace);
 
-    let bonusDamage = 
-        envoyStats.courage * (pips.courage / 2) +
-        envoyStats.spirit * (pips.spirit / 2) +
-        envoyStats.grace * (pips.grace / 2);
-
+    let bonusDamage = envoyStats.courage * (pips.courage / 2) + envoyStats.spirit * (pips.spirit / 2) + envoyStats.grace * (pips.grace / 2);
     let finalDamage = baseDamage + bonusDamage;
     const effectiveCap = getWeaponMaxPossibleDamage(weapon, useMaxLevel);
 
@@ -180,7 +151,7 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
     }
 
     return {
-        baseDamage: baseDamage,
+        baseDamage,
         bonusDamage: Number(bonusDamage.toFixed(1)),
         finalDamage: Number(finalDamage.toFixed(1)),
         requirementsMet: true
@@ -205,9 +176,7 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
             const joinery = joineriesToTest[j];
             const jState = joinery.tier === 0 ? null : { enabled: true, virtue: joinery.virtue, tier: joinery.tier };
             const calc = calculateWeaponStats(weapon, envoyStats, jState);
-            if (calc.finalDamage > weaponMax) {
-                weaponMax = calc.finalDamage;
-            }
+            if (calc.finalDamage > weaponMax) weaponMax = calc.finalDamage;
         }
 
         for (let j = 0; j < joineriesToTest.length; j++) {
@@ -215,8 +184,7 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
             const jState = joinery.tier === 0 ? null : { enabled: true, virtue: joinery.virtue, tier: joinery.tier };
             const calc = calculateWeaponStats(weapon, envoyStats, jState);
             if (calc.finalDamage === weaponMax) {
-                const isBetter = weaponMax > maxDamage || 
-                                 (weaponMax === maxDamage && joinery.tier < (bestWeaponConfig ? bestWeaponConfig.joineryTier : 999));
+                const isBetter = weaponMax > maxDamage || (weaponMax === maxDamage && joinery.tier < (bestWeaponConfig ? bestWeaponConfig.joineryTier : 999));
                 if (isBetter) {
                     maxDamage = weaponMax;
                     bestWeaponConfig = {
@@ -230,234 +198,229 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
             }
         }
     }
-
     return bestWeaponConfig;
 }
 
 /**
- * High-Performance Asynchronous Solver for the Stat Maxer.
- * Uses Cooperative Multitasking to prevent browser thread freeze.
+ * High-Performance Asynchronous Solver (Time-Budgeted Inlined Iteration)
  */
 function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled, pactEnabled, availablePactPoints, pactPref, onProgress, onComplete) {
+    const joineriesToTest = getJoineryList(joineryEnabled);
+    const pactCombinations = getPactCombinations(pactEnabled, availablePactPoints);
+    const requiredDamageCap = getWeaponMaxPossibleDamage(weapon);
+    const weaponBase = weapon.maxAttack;
+
+    // PRE-CALCULATE MODIFIERS: Flatten Talismans + Pacts into a single array to remove an inner loop
+    const modifiers = [];
+    for (let p = 0; p < pactCombinations.length; p++) {
+        for (let t = 0; t < allowedTalismans.length; t++) {
+            const pact = pactCombinations[p];
+            const talisman = allowedTalismans[t];
+            modifiers.push({
+                pact, talisman,
+                c: pact.courage + talisman.stats.courage,
+                s: pact.spirit + talisman.stats.spirit,
+                g: pact.grace + talisman.stats.grace
+            });
+        }
+    }
+
+    // PRE-CALCULATE JOINERIES: Pre-compute exact pip scaling math to inline weapon checks
+    const weaponJoineries = [];
+    for (let j = 0; j < joineriesToTest.length; j++) {
+        const joinery = joineriesToTest[j];
+        let cPip = weapon.attunement.courage || 0;
+        let sPip = weapon.attunement.spirit || 0;
+        let gPip = weapon.attunement.grace || 0;
+        
+        if (joinery.tier > 0) {
+            if (joinery.virtue === "courage") cPip += joinery.tier;
+            else if (joinery.virtue === "spirit") sPip += joinery.tier;
+            else if (joinery.virtue === "grace") gPip += joinery.tier;
+        }
+
+        weaponJoineries.push({
+            name: joinery.name,
+            tier: joinery.tier,
+            cHalf: Math.min(5, cPip) / 2,
+            sHalf: Math.min(5, sPip) / 2,
+            gHalf: Math.min(5, gPip) / 2
+        });
+    }
+
+    // Fast inline armor solver (Only called when optimizing for armor)
+    const findBestArmorScore = (totalC, totalS, totalG) => {
+        let helmMax = -1, cuirassMax = -1, leggingsMax = -1;
+
+        for (let i = 0; i < allowedArmor.length; i++) {
+            const p = allowedArmor[i];
+            const req = p.requirements;
+            if (totalC < (req.courage || 0) || totalS < (req.spirit || 0) || totalG < (req.grace || 0)) continue;
+
+            const base = p.baseStats;
+            const physBonus = Math.floor(totalC * (p.attunement.physical.courage || 0) * 0.12 + totalS * (p.attunement.physical.spirit || 0) * 0.12 + totalG * (p.attunement.physical.grace || 0) * 0.12);
+            const magBonus = Math.floor(totalC * (p.attunement.magick.courage || 0) * 0.12 + totalS * (p.attunement.magick.spirit || 0) * 0.12 + totalG * (p.attunement.magick.grace || 0) * 0.12);
+            const stabBonus = Math.floor(totalC * (p.attunement.stability.courage || 0) * 0.12 + totalS * (p.attunement.stability.spirit || 0) * 0.12 + totalG * (p.attunement.stability.grace || 0) * 0.12);
+
+            const weighted = ((base.physical + physBonus) * skews.physical) + ((base.magick + magBonus) * skews.magick) + ((base.stability + stabBonus) * skews.stability);
+
+            if (p.slot === "Helm" && weighted > helmMax) helmMax = weighted;
+            else if (p.slot === "Cuirass" && weighted > cuirassMax) cuirassMax = weighted;
+            else if (p.slot === "Leggings" && weighted > leggingsMax) leggingsMax = weighted;
+        }
+
+        if (helmMax > -1 && cuirassMax > -1 && leggingsMax > -1) return helmMax + cuirassMax + leggingsMax;
+        return 0;
+    };
+
     let bestConfig = null;
     let bestObjectiveValue = -1;
     let bestTiebreakerArmorDef = -1;
 
-    const joineriesToTest = getJoineryList(joineryEnabled);
-    const pactCombinations = getPactCombinations(pactEnabled, availablePactPoints);
-    const requiredDamageCap = getWeaponMaxPossibleDamage(weapon);
+    let allocC = 0;
+    let allocS = 0;
 
-    // Fast inline armor solver
-    const findBestArmorForSlot = (slot, stats) => {
-        let bestPiece = null;
-        let maxWeighted = -1;
+    // --- TIME-BUDGETED EXECUTION LOOP ---
+    function runTimeChunk() {
+        const startTick = performance.now();
+        let loopCounter = 0;
 
-        const filtered = allowedArmor.filter(p => p.slot === slot);
-        for (let i = 0; i < filtered.length; i++) {
-            const piece = filtered[i];
-            const calculated = calculateArmorStats(piece, stats);
-            
-            const weighted = (calculated.physical * skews.physical) + 
-                             (calculated.magick * skews.magick) + 
-                             (calculated.stability * skews.stability);
-            calculated.weightedTotal = Math.round(weighted * 10) / 10;
+        while (allocC <= totalPoints) {
+            const allocG = totalPoints - allocC - allocS;
 
-            if (weighted > maxWeighted) {
-                maxWeighted = weighted;
-                bestPiece = { piece, calculated, weightedTotal: calculated.weightedTotal };
-            }
-        }
-        return bestPiece;
-    };
+            for (let mIdx = 0; mIdx < modifiers.length; mIdx++) {
+                const mod = modifiers[mIdx];
+                const tC = allocC + mod.c;
+                const tS = allocS + mod.s;
+                const tG = allocG + mod.g;
 
-    // Calculate maximum stats any talisman can provide
-    let maxTalismanC = 0, maxTalismanS = 0, maxTalismanG = 0;
-    for (let i = 0; i < allowedTalismans.length; i++) {
-        const t = allowedTalismans[i];
-        if (t.stats.courage > maxTalismanC) maxTalismanC = t.stats.courage;
-        if (t.stats.spirit > maxTalismanS) maxTalismanS = t.stats.spirit;
-        if (t.stats.grace > maxTalismanG) maxTalismanG = t.stats.grace;
-    }
+                // Thresholds Check
+                if (tC < minReqs.courage || tS < minReqs.spirit || tG < minReqs.grace) continue;
+                if (tC < (weapon.requirements.courage || 0) || tS < (weapon.requirements.spirit || 0) || tG < (weapon.requirements.grace || 0)) continue;
 
-    // Determine the highest points any Pact combination can offer per category
-    let maxPactC = 0, maxPactS = 0, maxPactG = 0;
-    for (let i = 0; i < pactCombinations.length; i++) {
-        const p = pactCombinations[i];
-        if (p.courage > maxPactC) maxPactC = p.courage;
-        if (p.spirit > maxPactS) maxPactS = p.spirit;
-        if (p.grace > maxPactG) maxPactG = p.grace;
-    }
+                // Inline Damage Eval
+                let maxDamageFound = -1;
+                let optJoinery = null;
 
-    // Prune starting search bounds
-    const minCAlloc = Math.max(0, Math.max(minReqs.courage, weapon.requirements.courage || 0) - maxTalismanC - maxPactC);
-    const minSAlloc = Math.max(0, Math.max(minReqs.spirit, weapon.requirements.spirit || 0) - maxTalismanS - maxPactS);
-    const minGAlloc = Math.max(0, Math.max(minReqs.grace, weapon.requirements.grace || 0) - maxTalismanG - maxPactG);
+                for (let jIdx = 0; jIdx < weaponJoineries.length; jIdx++) {
+                    const wj = weaponJoineries[jIdx];
+                    let dmg = weaponBase + (tC * wj.cHalf) + (tS * wj.sHalf) + (tG * wj.gHalf);
+                    if (dmg > requiredDamageCap) dmg = requiredDamageCap;
+                    if (dmg > maxDamageFound) {
+                        maxDamageFound = dmg;
+                        optJoinery = wj;
+                    }
+                }
 
-    if (minCAlloc + minSAlloc + minGAlloc > totalPoints) {
-        onProgress(100);
-        onComplete(null); // Stat configuration impossible to satisfy
-        return;
-    }
+                if (maxDamageFound < requiredDamageCap) continue; // Discard invalid builds
 
-    // Establish Chunking bounds
-    let currentC = minCAlloc;
-    const totalSteps = totalPoints - minCAlloc + 1;
+                // Tie-breaker Joinery Check
+                for (let jIdx = 0; jIdx < weaponJoineries.length; jIdx++) {
+                    const wj = weaponJoineries[jIdx];
+                    let dmg = weaponBase + (tC * wj.cHalf) + (tS * wj.sHalf) + (tG * wj.gHalf);
+                    if (dmg > requiredDamageCap) dmg = requiredDamageCap;
+                    if (dmg === maxDamageFound) {
+                        optJoinery = wj;
+                        break;
+                    }
+                }
 
-    function runChunk() {
-        const chunkSize = 2; // Process 2 steps of Courage per frame tick
-        const endC = Math.min(totalPoints, currentC + chunkSize);
+                // Armor Score Evaluation
+                let armorScore = 0;
+                if (targetObjective === 'armor') {
+                    armorScore = findBestArmorScore(tC, tS, tG);
+                }
 
-        for (let allocC = currentC; allocC <= endC; allocC++) {
-            const remainingForSAndG = totalPoints - allocC;
-            if (remainingForSAndG < minSAlloc + minGAlloc) continue;
+                // Objective Evaluation
+                let score = 0;
+                if (targetObjective === 'courage') score = tC;
+                else if (targetObjective === 'spirit') score = tS;
+                else if (targetObjective === 'grace') score = tG;
+                else if (targetObjective === 'armor') score = armorScore;
 
-            for (let allocS = minSAlloc; allocS <= remainingForSAndG; allocS++) {
-                const allocG = remainingForSAndG - allocS;
-                if (allocG < minGAlloc) continue;
-
-                const allocation = { courage: allocC, spirit: allocS, grace: allocG };
-
-                // Evaluate Pact Point combinations
-                for (let pIdx = 0; pIdx < pactCombinations.length; pIdx++) {
-                    const pact = pactCombinations[pIdx];
-
-                    // Evaluate allowed Talismans
-                    for (let tIdx = 0; tIdx < allowedTalismans.length; tIdx++) {
-                        const talisman = allowedTalismans[tIdx];
-                        
-                        const totalStats = {
-                            courage: allocation.courage + talisman.stats.courage + pact.courage,
-                            spirit: allocation.spirit + talisman.stats.spirit + pact.spirit,
-                            grace: allocation.grace + talisman.stats.grace + pact.grace
-                        };
-
-                        // Threshold and wielding requirement validations
-                        if (totalStats.courage < minReqs.courage || 
-                            totalStats.spirit < minReqs.spirit || 
-                            totalStats.grace < minReqs.grace) {
-                            continue; 
-                        }
-                        if (totalStats.courage < (weapon.requirements.courage || 0) || 
-                            totalStats.spirit < (weapon.requirements.spirit || 0) || 
-                            totalStats.grace < (weapon.requirements.grace || 0)) {
-                            continue;
-                        }
-
-                        // Fast-damage calculations
-                        let maxDamageFound = -1;
-                        let optimalJoinery = null;
-
-                        for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
-                            const j = joineriesToTest[jIdx];
-                            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
-                            const calc = calculateWeaponStats(weapon, totalStats, jState);
-                            if (calc.finalDamage > maxDamageFound) {
-                                maxDamageFound = calc.finalDamage;
-                                optimalJoinery = { name: j.name, calc, tier: j.tier };
-                            }
-                        }
-
-                        // Strict weapon cap constraint: Discard build if it fails to cap
-                        if (maxDamageFound < requiredDamageCap) {
-                            continue;
-                        }
-
-                        for (let jIdx = 0; jIdx < joineriesToTest.length; jIdx++) {
-                            const j = joineriesToTest[jIdx];
-                            const jState = j.tier === 0 ? null : { enabled: true, virtue: j.virtue, tier: j.tier };
-                            const calc = calculateWeaponStats(weapon, totalStats, jState);
-                            if (calc.finalDamage === maxDamageFound) {
-                                optimalJoinery = { name: j.name, calc, tier: j.tier };
-                                break;
-                            }
-                        }
-
-                        // Evaluate Armor
-                        let bestHelm = null, bestCuirass = null, bestLeggings = null;
-                        let armorScore = 0;
-
-                        if (targetObjective === 'armor') {
-                            bestHelm = findBestArmorForSlot("Helm", totalStats);
-                            bestCuirass = findBestArmorForSlot("Cuirass", totalStats);
-                            bestLeggings = findBestArmorForSlot("Leggings", totalStats);
-                            if (bestHelm && bestCuirass && bestLeggings) {
-                                armorScore = bestHelm.weightedTotal + bestCuirass.weightedTotal + bestLeggings.weightedTotal;
-                            }
-                        }
-
-                        // Calculate Objective Score
-                        let score = 0;
-                        if (targetObjective === 'courage') score = totalStats.courage;
-                        else if (targetObjective === 'spirit') score = totalStats.spirit;
-                        else if (targetObjective === 'grace') score = totalStats.grace;
-                        else if (targetObjective === 'armor') score = armorScore;
-
-                        // Tiebreaker evaluation incorporating Pact Point spending preference
-                        let isBetter = false;
-                        if (score > bestObjectiveValue) {
-                            isBetter = true;
-                        } else if (score === bestObjectiveValue) {
-                            if (armorScore > bestTiebreakerArmorDef) {
-                                isBetter = true;
-                            } else if (armorScore === bestTiebreakerArmorDef) {
-                                if (pactPref === 'minimize') {
-                                    isBetter = pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
-                                } else {
-                                    isBetter = pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
-                                }
-                            }
-                        }
-
-                        if (isBetter) {
-                            bestObjectiveValue = score;
-                            bestTiebreakerArmorDef = armorScore;
-
-                            bestConfig = {
-                                allocation,
-                                talisman,
-                                pact,
-                                totalStats,
-                                optimalJoinery,
-                                weapon,
-                                armor: targetObjective === 'armor' ? { bestHelm, bestCuirass, bestLeggings, total: armorScore } : null
-                            };
+                let isBetter = false;
+                if (score > bestObjectiveValue) {
+                    isBetter = true;
+                } else if (score === bestObjectiveValue) {
+                    if (armorScore > bestTiebreakerArmorDef) {
+                        isBetter = true;
+                    } else if (armorScore === bestTiebreakerArmorDef) {
+                        if (pactPref === 'minimize') {
+                            isBetter = mod.pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
+                        } else {
+                            isBetter = mod.pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
                         }
                     }
                 }
-            }
-        }
 
-        currentC += chunkSize + 1;
-
-        if (currentC <= totalPoints) {
-            // Update UI progress bar
-            const percent = Math.min(99, Math.round(((currentC - minCAlloc) / totalSteps) * 100));
-            onProgress(percent);
-
-            // Yield control back to the browser on the next tick
-            setTimeout(runChunk, 0);
-        } else {
-            // Complete!
-            onProgress(100);
-
-            // Resolve optimal armor once at the end for virtue-maxing objectives
-            if (bestConfig && !bestConfig.armor) {
-                const bestHelm = findBestArmorForSlot("Helm", bestConfig.totalStats);
-                const bestCuirass = findBestArmorForSlot("Cuirass", bestConfig.totalStats);
-                const bestLeggings = findBestArmorForSlot("Leggings", bestConfig.totalStats);
-                if (bestHelm && bestCuirass && bestLeggings) {
-                    bestConfig.armor = {
-                        bestHelm,
-                        bestCuirass,
-                        bestLeggings,
-                        total: bestHelm.weightedTotal + bestCuirass.weightedTotal + bestLeggings.weightedTotal
+                if (isBetter) {
+                    bestObjectiveValue = score;
+                    bestTiebreakerArmorDef = armorScore;
+                    bestConfig = {
+                        allocation: { courage: allocC, spirit: allocS, grace: allocG },
+                        talisman: mod.talisman,
+                        pact: mod.pact,
+                        totalStats: { courage: tC, spirit: tS, grace: tG },
+                        optimalJoinery: { name: optJoinery.name, tier: optJoinery.tier },
+                        weapon: weapon
                     };
                 }
             }
-            onComplete(bestConfig);
+
+            // State Machine Increments
+            allocS++;
+            if (allocS > totalPoints - allocC) {
+                allocC++;
+                allocS = 0;
+                
+                // Update Progress accurately based on the triangular area progression
+                const completedPoints = allocC;
+                const totalTriangle = (totalPoints * (totalPoints + 1)) / 2;
+                const currentTriangle = (completedPoints * (2 * totalPoints - completedPoints + 1)) / 2;
+                const percent = Math.min(99, Math.round((currentTriangle / totalTriangle) * 100));
+                onProgress(percent);
+            }
+
+            // Time-Budget Yield Check (Check clock every 1000 inner loops)
+            loopCounter++;
+            if (loopCounter % 1000 === 0 && performance.now() - startTick > 15) {
+                setTimeout(runTimeChunk, 0); // Yield thread back to browser
+                return;
+            }
         }
+
+        // --- SEARCH COMPLETE ---
+        onProgress(100);
+
+        if (bestConfig) {
+            // Re-hydrate the full object details for the UI exactly once at the end
+            const fullJoineryState = bestConfig.optimalJoinery.tier === 0 ? null : { enabled: true, virtue: bestConfig.optimalJoinery.name.includes("Mora") ? "courage" : bestConfig.optimalJoinery.name.includes("Iridis") ? "spirit" : "grace", tier: bestConfig.optimalJoinery.tier };
+            bestConfig.optimalJoinery.calc = calculateWeaponStats(weapon, bestConfig.totalStats, fullJoineryState);
+
+            const getFullArmor = (slot) => {
+                let best = null, maxW = -1;
+                allowedArmor.filter(p => p.slot === slot).forEach(p => {
+                    const c = calculateArmorStats(p, bestConfig.totalStats);
+                    let w = (c.physical * skews.physical) + (c.magick * skews.magick) + (c.stability * skews.stability);
+                    c.weightedTotal = Math.round(w * 10) / 10;
+                    if (w > maxW) { maxW = w; best = { piece: p, calculated: c, weightedTotal: c.weightedTotal }; }
+                });
+                return best;
+            };
+
+            bestConfig.armor = {
+                bestHelm: getFullArmor("Helm"),
+                bestCuirass: getFullArmor("Cuirass"),
+                bestLeggings: getFullArmor("Leggings")
+            };
+            if(bestConfig.armor.bestHelm) {
+                 bestConfig.armor.total = bestConfig.armor.bestHelm.weightedTotal + bestConfig.armor.bestCuirass.weightedTotal + bestConfig.armor.bestLeggings.weightedTotal;
+            }
+        }
+
+        onComplete(bestConfig);
     }
 
-    // Begin chunked execution
-    runChunk();
+    // Begin time-budgeted execution
+    runTimeChunk();
 }
