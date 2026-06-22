@@ -595,3 +595,59 @@ h1 {
 .close-guided-modal {
     margin-left: auto;
 }
+
+/* Guided Setup Blue Button styling */
+.guided-btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.guided-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Expanded Modal Layout for Guided Setup */
+.modal-content.modal-large {
+    max-width: 900px; /* Expands width to handle two columns comfortably */
+    width: 95%;
+}
+
+/* 2-Column Grid inside the Modal */
+.guided-modal-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Split equally */
+    gap: 20px;
+    overflow-y: auto;
+    max-height: 65vh; /* Prevents overflow off-screen */
+    padding-right: 10px;
+}
+.guided-col {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Scrollbar styling for the modal checklist */
+.guided-modal-columns::-webkit-scrollbar {
+    width: 6px;
+}
+.guided-modal-columns::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+.guided-modal-columns::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 3px;
+}
+.guided-modal-columns::-webkit-scrollbar-thumb:hover {
+    background: #d4af37;
+}

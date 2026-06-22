@@ -68,7 +68,7 @@
             <details class="control-box advanced-settings">
                 <summary>Advanced Settings</summary>
                 <p class="joinery-caption" style="margin-bottom: 10px;">
-                    Adjust multipliers to weight specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
+                    Adjust multipliers to weigh specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
                 </p>
                 <div class="input-group">
                     <label for="skew-phys">Phys Multiplier:</label>
@@ -159,33 +159,36 @@
         <!-- Left Side: Controls/Inputs Panel -->
         <div class="controls-panel">
             
-            <button id="open-guided-modal-btn" class="optimize-btn-style" style="margin-top: 0; margin-bottom: 5px; background-color: #3498db; color: white;">Guided Setup (Consult a Wazzard)</button>
+            <button id="open-guided-modal-btn" class="guided-btn">Guided Setup (Consult a Wazzard)</button>
             <label class="checkbox-label" style="margin-bottom: 15px;">
                 <input type="checkbox" id="manual-edit-enable"> Enable Manual Editing
             </label>
 
-            <div class="control-box">
-                <h3>Virtue Pool</h3>
-                <div class="input-group">
-                    <label for="maxer-points">Total Points:</label>
-                    <input type="number" id="maxer-points" value="16" min="0" max="500" readonly class="locked-input">
+            <!-- Manual Fields Container: Grouped and hidden by default unless Manual Editing is checked -->
+            <div id="maxer-manual-fields" style="display: none; flex-direction: column; gap: 15px;">
+                <div class="control-box">
+                    <h3>Virtue Pool</h3>
+                    <div class="input-group">
+                        <label for="maxer-points">Total Points:</label>
+                        <input type="number" id="maxer-points" value="16" min="0" max="500" readonly class="locked-input">
+                    </div>
+                    <p class="joinery-caption">Max allowed is 500 points to prevent browser freeze.</p>
                 </div>
-                <p class="joinery-caption">Max allowed is 500 points to prevent browser freeze.</p>
-            </div>
 
-            <div class="control-box">
-                <h3>Calculated Minimums</h3>
-                <div class="input-group">
-                    <label for="min-courage">Min Courage:</label>
-                    <input type="number" id="min-courage" value="1" min="0" readonly class="locked-input">
-                </div>
-                <div class="input-group">
-                    <label for="min-spirit">Min Spirit:</label>
-                    <input type="number" id="min-spirit" value="1" min="0" readonly class="locked-input">
-                </div>
-                <div class="input-group">
-                    <label for="min-grace">Min Grace:</label>
-                    <input type="number" id="min-grace" value="1" min="0" readonly class="locked-input">
+                <div class="control-box">
+                    <h3>Calculated Minimums</h3>
+                    <div class="input-group">
+                        <label for="min-courage">Min Courage:</label>
+                        <input type="number" id="min-courage" value="1" min="0" readonly class="locked-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="min-spirit">Min Spirit:</label>
+                        <input type="number" id="min-spirit" value="1" min="0" readonly class="locked-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="min-grace">Min Grace:</label>
+                        <input type="number" id="min-grace" value="1" min="0" readonly class="locked-input">
+                    </div>
                 </div>
             </div>
 
@@ -265,7 +268,7 @@
         <div class="results-layout">
             <!-- Best Build Column -->
             <div class="results-column best-build-card">
-                <h2>Optimal Allocation</h2>
+                <h2>Optimal Configuration</h2>
                 <div id="maxer-output">
                     <p class="placeholder-msg">Configure settings and click "Run Stat Maxer" to optimize.</p>
                 </div>
@@ -315,96 +318,104 @@
 
     <!-- Guided Setup Modal (Wazzard) -->
     <div id="guided-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-content modal-large">
             <div class="modal-header">
                 <h2>Guided Setup <span style="font-size: 0.6em; color: #888; font-style: italic; font-weight: normal;">(Consult a Wazzard)</span></h2>
                 <span class="close-guided-modal close-modal">&times;</span>
             </div>
             
-            <div class="modal-grid" style="grid-template-columns: 1fr; gap: 15px; overflow-y: auto; max-height: 60vh; padding-right: 10px;">
-                
-                <div class="control-box">
-                    <h3>Envoy Status</h3>
-                    <div class="input-group">
-                        <label for="guided-rank">Envoy Rank:</label>
-                        <input type="number" id="guided-rank" value="1" min="1" max="100">
+            <div class="guided-modal-columns">
+                <!-- Left Column inside Modal -->
+                <div class="guided-col">
+                    <div class="control-box">
+                        <h3>Envoy Status</h3>
+                        <div class="input-group">
+                            <label for="guided-rank">Envoy Rank:</label>
+                            <input type="number" id="guided-rank" value="1" min="1" max="100">
+                        </div>
+                        <p class="joinery-caption">Base 16 points + 1 per Rank.</p>
                     </div>
-                    <p class="joinery-caption">Base 16 points + 1 per Rank.</p>
-                </div>
 
-                <div class="control-box">
-                    <h3>Active Elixirs <span style="font-size: 0.8em; color: #aaa;">(+10 Total & Min)</span></h3>
-                    <label class="checkbox-label"><input type="checkbox" id="guided-elixir-c"> Curaidh's Breath (Courage)</label>
-                    <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-s"> Dancing Galdre (Spirit)</label>
-                    <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-g"> Shademaker (Grace)</label>
-                </div>
+                    <div class="control-box">
+                        <h3>Active Elixirs <span style="font-size: 0.8em; color: #aaa;">(+10 Total & Min)</span></h3>
+                        <label class="checkbox-label"><input type="checkbox" id="guided-elixir-c"> Curaidh's Breath (Courage)</label>
+                        <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-s"> Dancing Galdre (Spirit)</label>
+                        <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-g"> Shademaker (Grace)</label>
+                    </div>
 
-                <div class="control-box">
-                    <h3>Ancestral Quests <span style="font-size: 0.8em; color: #aaa;">(+1 Total & Min)</span></h3>
-                    <div class="input-group">
-                        <label for="guided-quest-wolf">Wolf Quest:</label>
-                        <select id="guided-quest-wolf">
-                            <option value="none">Not Completed / None</option>
-                            <option value="courage">Courage</option>
-                            <option value="spirit">Spirit</option>
-                            <option value="grace">Grace</option>
-                        </select>
-                    </div>
-                    <div class="input-group mt-10">
-                        <label for="guided-quest-bear">Bear Quest:</label>
-                        <select id="guided-quest-bear">
-                            <option value="none">Not Completed / None</option>
-                            <option value="courage">Courage</option>
-                            <option value="spirit">Spirit</option>
-                            <option value="grace">Grace</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="control-box">
-                    <h3>Manual Pact Exchanges</h3>
-                    <p class="joinery-caption">Select pacts you have already purchased in-game. (Applying this disables dynamic pact scaling in the optimizer).</p>
-                    <div class="input-group mt-10">
-                        <label>Mora's Pride (C):</label>
-                        <select id="guided-pact-c">
-                            <option value="0">Tier 0 (+0)</option>
-                            <option value="1">Tier 1 (+1)</option>
-                            <option value="3">Tier 2 (+3)</option>
-                            <option value="6">Tier 3 (+6)</option>
-                        </select>
-                    </div>
-                    <div class="input-group mt-10">
-                        <label>Iridis' Favour (S):</label>
-                        <select id="guided-pact-s">
-                            <option value="0">Tier 0 (+0)</option>
-                            <option value="1">Tier 1 (+1)</option>
-                            <option value="3">Tier 2 (+3)</option>
-                            <option value="6">Tier 3 (+6)</option>
-                        </select>
-                    </div>
-                    <div class="input-group mt-10">
-                        <label>Sapehene's Gift (G):</label>
-                        <select id="guided-pact-g">
-                            <option value="0">Tier 0 (+0)</option>
-                            <option value="1">Tier 1 (+1)</option>
-                            <option value="3">Tier 2 (+3)</option>
-                            <option value="6">Tier 3 (+6)</option>
-                        </select>
+                    <div class="control-box">
+                        <h3>Ancestral Quests <span style="font-size: 0.8em; color: #aaa;">(+1 Total & Min)</span></h3>
+                        <div class="input-group">
+                            <label for="guided-quest-wolf">Wolf Quest:</label>
+                            <select id="guided-quest-wolf">
+                                <option value="none">Not Completed / None</option>
+                                <option value="courage">Courage</option>
+                                <option value="spirit">Spirit</option>
+                                <option value="grace">Grace</option>
+                            </select>
+                        </div>
+                        <div class="input-group mt-10">
+                            <label for="guided-quest-bear">Bear Quest:</label>
+                            <select id="guided-quest-bear">
+                                <option value="none">Not Completed / None</option>
+                                <option value="courage">Courage</option>
+                                <option value="spirit">Spirit</option>
+                                <option value="grace">Grace</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="control-box">
-                    <h3>Preferred Minimums & Extras</h3>
-                    <p class="joinery-caption">The optimizer will guarantee at least your preferred minimum. Extra Unallocated Virtues are flat additions to Total.</p>
-                    <div class="input-group mt-10"><label>Pref Min Courage:</label><input type="number" id="guided-pref-c" value="0" min="0"></div>
-                    <div class="input-group mt-10"><label>Pref Min Spirit:</label><input type="number" id="guided-pref-s" value="0" min="0"></div>
-                    <div class="input-group mt-10"><label>Pref Min Grace:</label><input type="number" id="guided-pref-g" value="0" min="0"></div>
-                    <div class="input-group mt-10" style="border-top: 1px dotted #444; padding-top: 10px;"><label>Extra Any Virtues:</label><input type="number" id="guided-extra-any" value="0" min="0"></div>
-                </div>
+                <!-- Right Column inside Modal -->
+                <div class="guided-col">
+                    <div class="control-box">
+                        <h3>Pact Nodes Unlocked</h3>
+                        <p class="joinery-caption">Select unlocked nodes. (Applying this disables dynamic pact scaling in the side panel).</p>
+                        <div class="input-group mt-10">
+                            <label>Mora's Pride (C):</label>
+                            <select id="guided-pact-c">
+                                <option value="0">0 Nodes (+0)</option>
+                                <option value="1">1 Node (+1)</option>
+                                <option value="3">2 Nodes (+3)</option>
+                                <option value="6">3 Nodes (+6)</option>
+                            </select>
+                        </div>
+                        <div class="input-group mt-10">
+                            <label>Iridis' Favour (S):</label>
+                            <select id="guided-pact-s">
+                                <option value="0">0 Nodes (+0)</option>
+                                <option value="1">1 Node (+1)</option>
+                                <option value="3">2 Nodes (+3)</option>
+                                <option value="6">3 Nodes (+6)</option>
+                            </select>
+                        </div>
+                        <div class="input-group mt-10">
+                            <label>Sapehene's Gift (G):</label>
+                            <select id="guided-pact-g">
+                                <option value="0">0 Nodes (+0)</option>
+                                <option value="1">1 Node (+1)</option>
+                                <option value="3">2 Nodes (+3)</option>
+                                <option value="6">3 Nodes (+6)</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div class="control-box">
+                        <h3>Preferred Minimums & Extras</h3>
+                        <p class="joinery-caption">The optimizer will guarantee at least these values. Extra Virtues add to Total and Minimums.</p>
+                        <div class="input-group mt-10"><label>Pref Min Courage:</label><input type="number" id="guided-pref-c" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Pref Min Spirit:</label><input type="number" id="guided-pref-s" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Pref Min Grace:</label><input type="number" id="guided-pref-g" value="0" min="0"></div>
+                        
+                        <div class="input-group mt-10" style="border-top: 1px dotted #444; padding-top: 10px;"><label>Extra Any Virtues:</label><input type="number" id="guided-extra-any" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Extra Courage:</label><input type="number" id="guided-extra-c" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Extra Spirit:</label><input type="number" id="guided-extra-s" value="0" min="0"></div>
+                        <div class="input-group mt-10"><label>Extra Grace:</label><input type="number" id="guided-extra-g" value="0" min="0"></div>
+                    </div>
+                </div>
             </div>
 
-            <button id="apply-guided-btn" class="optimize-btn-style" style="margin-top: 15px; background-color: #3498db; color: white;">Apply to Build</button>
+            <button id="apply-guided-btn" class="optimize-btn-style mt-10" style="background-color: #3498db; color: white;">Apply to Build</button>
         </div>
     </div>
 
