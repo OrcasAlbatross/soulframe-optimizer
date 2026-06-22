@@ -575,3 +575,23 @@ h1 {
     height: 100%;
     background-color: #d4af37; /* Soulframe Gold */
 }
+/* Locked Input Styling for Stat Maxer */
+.locked-input {
+    background-color: #1a1a1a !important; /* Keep it dark */
+    color: #555 !important; /* Dim the text heavily */
+    border: 1px dashed #333 !important;
+    cursor: not-allowed;
+    user-select: none;
+    opacity: 0.7;
+}
+
+/* Ensure focus states don't override the lock visual */
+.locked-input:focus {
+    outline: none;
+    border-color: #ff6b6b !important; /* Red border to signal it is locked if clicked */
+}
+
+/* Close Guided Modal specific layout adjustment */
+.close-guided-modal {
+    margin-left: auto;
+}

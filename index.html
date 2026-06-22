@@ -68,7 +68,7 @@
             <details class="control-box advanced-settings">
                 <summary>Advanced Settings</summary>
                 <p class="joinery-caption" style="margin-bottom: 10px;">
-                    Adjust multipliers to weigh specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
+                    Adjust multipliers to weight specific defenses higher or lower. Optimal armor will be chosen based on the weighted total.
                 </p>
                 <div class="input-group">
                     <label for="skew-phys">Phys Multiplier:</label>
@@ -158,28 +158,34 @@
     <main id="stat-maxer-tab" class="tab-content">
         <!-- Left Side: Controls/Inputs Panel -->
         <div class="controls-panel">
+            
+            <button id="open-guided-modal-btn" class="optimize-btn-style" style="margin-top: 0; margin-bottom: 5px; background-color: #3498db; color: white;">Guided Setup (Consult a Wazzard)</button>
+            <label class="checkbox-label" style="margin-bottom: 15px;">
+                <input type="checkbox" id="manual-edit-enable"> Enable Manual Editing
+            </label>
+
             <div class="control-box">
                 <h3>Virtue Pool</h3>
                 <div class="input-group">
-                    <label for="maxer-points">Free Points:</label>
-                    <input type="number" id="maxer-points" value="50" min="0" max="500">
+                    <label for="maxer-points">Total Points:</label>
+                    <input type="number" id="maxer-points" value="16" min="0" max="500" readonly class="locked-input">
                 </div>
                 <p class="joinery-caption">Max allowed is 500 points to prevent browser freeze.</p>
             </div>
 
             <div class="control-box">
-                <h3>Minimum Thresholds</h3>
+                <h3>Calculated Minimums</h3>
                 <div class="input-group">
                     <label for="min-courage">Min Courage:</label>
-                    <input type="number" id="min-courage" value="0" min="0">
+                    <input type="number" id="min-courage" value="1" min="0" readonly class="locked-input">
                 </div>
                 <div class="input-group">
                     <label for="min-spirit">Min Spirit:</label>
-                    <input type="number" id="min-spirit" value="0" min="0">
+                    <input type="number" id="min-spirit" value="1" min="0" readonly class="locked-input">
                 </div>
                 <div class="input-group">
                     <label for="min-grace">Min Grace:</label>
-                    <input type="number" id="min-grace" value="0" min="0">
+                    <input type="number" id="min-grace" value="1" min="0" readonly class="locked-input">
                 </div>
             </div>
 
@@ -227,20 +233,20 @@
 
             <!-- Collapsible Pact Point Settings with Performance Warning (Pact Scaling is Disabled by default) -->
             <details class="control-box advanced-settings" id="maxer-pact-settings-box">
-                <summary>Pact Point Scaling</summary>
+                <summary>Dynamic Pact Scaling</summary>
                 <p class="joinery-caption" style="margin-bottom: 10px;">
-                    Exchange Pact Points for flat virtue bonuses.
+                    Allow engine to calculate optimal Pact exchanges automatically. Disable if using Manual Pacts in Guided Mode.
                 </p>
                 <label class="checkbox-label" style="cursor: pointer; margin-bottom: 5px;">
-                    <input type="checkbox" id="maxer-pact-enable"> Enable Pact Point Scaling
+                    <input type="checkbox" id="maxer-pact-enable"> Enable Dynamic Pacts
                 </label>
                 <div id="maxer-pact-options" style="display: none; border-top: 1px dotted #444; padding-top: 10px; margin-top: 10px;">
                     <p style="font-size: 0.72em; color: #ff6b6b; margin-bottom: 10px; line-height: 1.3; font-weight: bold;">
-                        ⚠️ WARNING: Enabling Pact scaling generates 64 extra combinations per calculation. This may severely reduce optimization speed at high point counts.
+                        ⚠️ WARNING: Dynamically scaling Pacts adds complexity. The engine will solve it, but manual pacts are faster.
                     </p>
                     <div class="input-group">
-                        <label for="maxer-pact-points">Pact Points:</label>
-                        <input type="number" id="maxer-pact-points" value="20" min="0" max="60">
+                        <label for="maxer-pact-points">Available Pacts:</label>
+                        <input type="number" id="maxer-pact-points" value="60" min="0" max="60">
                     </div>
                     <div class="input-group mt-10">
                         <label for="maxer-pact-pref">Pact Mode:</label>
@@ -307,6 +313,101 @@
         </div>
     </div>
 
+    <!-- Guided Setup Modal (Wazzard) -->
+    <div id="guided-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Guided Setup <span style="font-size: 0.6em; color: #888; font-style: italic; font-weight: normal;">(Consult a Wazzard)</span></h2>
+                <span class="close-guided-modal close-modal">&times;</span>
+            </div>
+            
+            <div class="modal-grid" style="grid-template-columns: 1fr; gap: 15px; overflow-y: auto; max-height: 60vh; padding-right: 10px;">
+                
+                <div class="control-box">
+                    <h3>Envoy Status</h3>
+                    <div class="input-group">
+                        <label for="guided-rank">Envoy Rank:</label>
+                        <input type="number" id="guided-rank" value="1" min="1" max="100">
+                    </div>
+                    <p class="joinery-caption">Base 16 points + 1 per Rank.</p>
+                </div>
+
+                <div class="control-box">
+                    <h3>Active Elixirs <span style="font-size: 0.8em; color: #aaa;">(+10 Total & Min)</span></h3>
+                    <label class="checkbox-label"><input type="checkbox" id="guided-elixir-c"> Curaidh's Breath (Courage)</label>
+                    <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-s"> Dancing Galdre (Spirit)</label>
+                    <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox" id="guided-elixir-g"> Shademaker (Grace)</label>
+                </div>
+
+                <div class="control-box">
+                    <h3>Ancestral Quests <span style="font-size: 0.8em; color: #aaa;">(+1 Total & Min)</span></h3>
+                    <div class="input-group">
+                        <label for="guided-quest-wolf">Wolf Quest:</label>
+                        <select id="guided-quest-wolf">
+                            <option value="none">Not Completed / None</option>
+                            <option value="courage">Courage</option>
+                            <option value="spirit">Spirit</option>
+                            <option value="grace">Grace</option>
+                        </select>
+                    </div>
+                    <div class="input-group mt-10">
+                        <label for="guided-quest-bear">Bear Quest:</label>
+                        <select id="guided-quest-bear">
+                            <option value="none">Not Completed / None</option>
+                            <option value="courage">Courage</option>
+                            <option value="spirit">Spirit</option>
+                            <option value="grace">Grace</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-box">
+                    <h3>Manual Pact Exchanges</h3>
+                    <p class="joinery-caption">Select pacts you have already purchased in-game. (Applying this disables dynamic pact scaling in the optimizer).</p>
+                    <div class="input-group mt-10">
+                        <label>Mora's Pride (C):</label>
+                        <select id="guided-pact-c">
+                            <option value="0">Tier 0 (+0)</option>
+                            <option value="1">Tier 1 (+1)</option>
+                            <option value="3">Tier 2 (+3)</option>
+                            <option value="6">Tier 3 (+6)</option>
+                        </select>
+                    </div>
+                    <div class="input-group mt-10">
+                        <label>Iridis' Favour (S):</label>
+                        <select id="guided-pact-s">
+                            <option value="0">Tier 0 (+0)</option>
+                            <option value="1">Tier 1 (+1)</option>
+                            <option value="3">Tier 2 (+3)</option>
+                            <option value="6">Tier 3 (+6)</option>
+                        </select>
+                    </div>
+                    <div class="input-group mt-10">
+                        <label>Sapehene's Gift (G):</label>
+                        <select id="guided-pact-g">
+                            <option value="0">Tier 0 (+0)</option>
+                            <option value="1">Tier 1 (+1)</option>
+                            <option value="3">Tier 2 (+3)</option>
+                            <option value="6">Tier 3 (+6)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-box">
+                    <h3>Preferred Minimums & Extras</h3>
+                    <p class="joinery-caption">The optimizer will guarantee at least your preferred minimum. Extra Unallocated Virtues are flat additions to Total.</p>
+                    <div class="input-group mt-10"><label>Pref Min Courage:</label><input type="number" id="guided-pref-c" value="0" min="0"></div>
+                    <div class="input-group mt-10"><label>Pref Min Spirit:</label><input type="number" id="guided-pref-s" value="0" min="0"></div>
+                    <div class="input-group mt-10"><label>Pref Min Grace:</label><input type="number" id="guided-pref-g" value="0" min="0"></div>
+                    <div class="input-group mt-10" style="border-top: 1px dotted #444; padding-top: 10px;"><label>Extra Any Virtues:</label><input type="number" id="guided-extra-any" value="0" min="0"></div>
+                </div>
+
+            </div>
+
+            <button id="apply-guided-btn" class="optimize-btn-style" style="margin-top: 15px; background-color: #3498db; color: white;">Apply to Build</button>
+        </div>
+    </div>
+
     <!-- Real-time Loading Spinner Overlay with Progress Bar -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loader-spinner"></div>
@@ -317,7 +418,7 @@
         <span id="loading-percent" style="font-size: 0.85em; color: #aaa;">0%</span>
     </div>
 
-    <!-- Scripts (Ordered sequentially by dependencies) -->
+    <!-- Scripts -->
     <script src="parser.js"></script>
     <script src="calculator.js"></script>
     <script src="ui.js"></script>
