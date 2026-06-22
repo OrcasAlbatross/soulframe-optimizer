@@ -165,25 +165,6 @@
                     <input type="number" id="maxer-points" value="50" min="0" max="500">
                 </div>
                 <p class="joinery-caption">Max allowed is 500 points to prevent browser freeze.</p>
-
-                <!-- Pact Points Settings -->
-                <label class="checkbox-label" style="margin-top: 15px; cursor: pointer;">
-                    <input type="checkbox" id="maxer-pact-enable"> Enable Pact Point Scaling
-                </label>
-                
-                <div id="maxer-pact-options" class="hidden-options">
-                    <div class="input-group">
-                        <label for="maxer-pact-points">Pact Points:</label>
-                        <input type="number" id="maxer-pact-points" value="20" min="0" max="60">
-                    </div>
-                    <div class="input-group mt-10">
-                        <label for="maxer-pact-pref">Pact Mode:</label>
-                        <select id="maxer-pact-pref" style="width: 130px;">
-                            <option value="minimize">Min Spending</option>
-                            <option value="maximize">Max Spending</option>
-                        </select>
-                    </div>
-                </div>
             </div>
 
             <div class="control-box">
@@ -241,6 +222,33 @@
                 <div class="input-group">
                     <label for="maxer-skew-stab">Stability Multiplier:</label>
                     <input type="number" id="maxer-skew-stab" value="1.0" min="0" step="0.1">
+                </div>
+            </details>
+
+            <!-- Collapsible Pact Point Settings with Performance Warning (Pact Scaling is Disabled by default) -->
+            <details class="control-box advanced-settings" id="maxer-pact-settings-box">
+                <summary>Pact Point Scaling</summary>
+                <p class="joinery-caption" style="margin-bottom: 10px;">
+                    Exchange Pact Points for flat virtue bonuses.
+                </p>
+                <label class="checkbox-label" style="cursor: pointer; margin-bottom: 5px;">
+                    <input type="checkbox" id="maxer-pact-enable"> Enable Pact Point Scaling
+                </label>
+                <div id="maxer-pact-options" style="display: none; border-top: 1px dotted #444; padding-top: 10px; margin-top: 10px;">
+                    <p style="font-size: 0.72em; color: #ff6b6b; margin-bottom: 10px; line-height: 1.3; font-weight: bold;">
+                        ⚠️ WARNING: Enabling Pact scaling generates 64 extra combinations per calculation. This may severely reduce optimization speed at high point counts.
+                    </p>
+                    <div class="input-group">
+                        <label for="maxer-pact-points">Pact Points:</label>
+                        <input type="number" id="maxer-pact-points" value="20" min="0" max="60">
+                    </div>
+                    <div class="input-group mt-10">
+                        <label for="maxer-pact-pref">Pact Mode:</label>
+                        <select id="maxer-pact-pref" style="width: 130px;">
+                            <option value="minimize">Min Spending</option>
+                            <option value="maximize">Max Spending</option>
+                        </select>
+                    </div>
                 </div>
             </details>
 

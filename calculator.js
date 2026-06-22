@@ -304,7 +304,7 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
     const totalSteps = totalPoints - minCAlloc + 1;
 
     function runChunk() {
-        const chunkSize = 15; // Process 15 steps of Courage per frame tick
+        const chunkSize = 2; // Process 2 steps of Courage per frame tick
         const endC = Math.min(totalPoints, currentC + chunkSize);
 
         for (let allocC = currentC; allocC <= endC; allocC++) {
