@@ -152,8 +152,8 @@ function calculateWeaponStats(weapon, envoyStats, joinery = null, useMaxLevel = 
 
     return {
         baseDamage,
-        bonusDamage: Number(bonusDamage.toFixed(1)),
-        finalDamage: Number(finalDamage.toFixed(1)),
+        bonusDamage: Math.round(bonusDamage),
+        finalDamage: Math.round(finalDamage),
         requirementsMet: true
     };
 }
