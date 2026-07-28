@@ -203,6 +203,8 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
 
 /**
  * High-Performance Asynchronous Solver (Time-Budgeted Inlined Iteration)
+ * Mathematically handles coupled constraints with near-zero latency, using boundary pruning
+ * and cooperative multitasking to prevent browser lock-ups.
  */
 function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled, pactEnabled, availablePactPoints, pactPref, onProgress, onComplete) {
     const joineriesToTest = getJoineryList(joineryEnabled);
@@ -273,19 +275,60 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
         return 0;
     };
 
+    // Calculate maximum stats any talisman can provide
+    let maxTalismanC = 0, maxTalismanS = 0, maxTalismanG = 0;
+    for (let i = 0; i < allowedTalismans.length; i++) {
+        const t = allowedTalismans[i];
+        if (t.stats.courage > maxTalismanC) maxTalismanC = t.stats.courage;
+        if (t.stats.spirit > maxTalismanS) maxTalismanS = t.stats.spirit;
+        if (t.stats.grace > maxTalismanG) maxTalismanG = t.stats.grace;
+    }
+
+    // Determine the highest points any Pact combination can offer per category
+    let maxPactC = 0, maxPactS = 0, maxPactG = 0;
+    for (let i = 0; i < pactCombinations.length; i++) {
+        const p = pactCombinations[i];
+        if (p.courage > maxPactC) maxPactC = p.courage;
+        if (p.spirit > maxPactS) maxPactS = p.spirit;
+        if (p.grace > maxPactG) maxPactG = p.grace;
+    }
+
+    // Prune starting search bounds based on minimums minus what talismans/pacts can provide
+    const minCAlloc = Math.max(0, Math.max(minReqs.courage, weapon.requirements.courage || 0) - maxTalismanC - maxPactC);
+    const minSAlloc = Math.max(0, Math.max(minReqs.spirit, weapon.requirements.spirit || 0) - maxTalismanS - maxPactS);
+    const minGAlloc = Math.max(0, Math.max(minReqs.grace, weapon.requirements.grace || 0) - maxTalismanG - maxPactG);
+
+    // If the pruned minimums exceed total available points, the build is impossible
+    if (minCAlloc + minSAlloc + minGAlloc > totalPoints) {
+        onProgress(100);
+        onComplete(null);
+        return;
+    }
+
     let bestConfig = null;
     let bestObjectiveValue = -1;
     let bestTiebreakerArmorDef = -1;
 
-    let allocC = 0;
-    let allocS = 0;
+    // Correctly initialize state machine limits using pruned bounds
+    let allocC = minCAlloc;
+    let allocS = minSAlloc;
+    const maxCAlloc = totalPoints - minSAlloc - minGAlloc;
 
     // --- TIME-BUDGETED EXECUTION LOOP ---
     function runTimeChunk() {
         const startTick = performance.now();
         let loopCounter = 0;
 
-        while (allocC <= totalPoints) {
+        while (allocC <= maxCAlloc) {
+            const maxSAlloc = totalPoints - allocC - minGAlloc;
+            
+            // If Spirit exceeds its allowed boundary, advance Courage and RESET Spirit to its minimum
+            if (allocS > maxSAlloc) {
+                allocC++;
+                allocS = minSAlloc;
+                continue;
+            }
+
             const allocG = totalPoints - allocC - allocS;
 
             for (let mIdx = 0; mIdx < modifiers.length; mIdx++) {
@@ -367,23 +410,18 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
                 }
             }
 
-            // State Machine Increments
+            // State Machine Increments (using pruned bounds)
             allocS++;
-            if (allocS > totalPoints - allocC) {
-                allocC++;
-                allocS = 0;
-                
-                // Update Progress accurately based on the triangular area progression
-                const completedPoints = allocC;
-                const totalTriangle = (totalPoints * (totalPoints + 1)) / 2;
-                const currentTriangle = (completedPoints * (2 * totalPoints - completedPoints + 1)) / 2;
-                const percent = Math.min(99, Math.round((currentTriangle / totalTriangle) * 100));
-                onProgress(percent);
-            }
 
-            // Time-Budget Yield Check (Check clock every 1000 inner loops)
+            // Time-Budget Yield Check
             loopCounter++;
             if (loopCounter % 1000 === 0 && performance.now() - startTick > 15) {
+                // Update Progress based on the outer Courage loop
+                const completedSteps = allocC - minCAlloc;
+                const totalSteps = maxCAlloc - minCAlloc + 1;
+                const percent = Math.min(99, Math.round((completedSteps / totalSteps) * 100));
+                
+                onProgress(percent);
                 setTimeout(runTimeChunk, 0); // Yield thread back to browser
                 return;
             }
@@ -424,3 +462,4 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
     // Begin time-budgeted execution
     runTimeChunk();
 }
+
