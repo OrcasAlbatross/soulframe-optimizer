@@ -7,9 +7,9 @@ const GLOBAL_JOINERIES = [
     { name: "Blessed by Mora", virtue: "courage", tier: 1 },
     { name: "Twice Blessed by Mora", virtue: "courage", tier: 2 },
     { name: "Thrice Blessed by Mora", virtue: "courage", tier: 3 },
-    { name: "Blessed by Sapehene", virtue: "grace", tier: 1 },
-    { name: "Twice Blessed by Sapehene", virtue: "grace", tier: 2 },
-    { name: "Thrice Blessed by Sapehene", virtue: "grace", tier: 3 },
+    { name: "Blessed by Saphene", virtue: "grace", tier: 1 },
+    { name: "Twice Blessed by Saphene", virtue: "grace", tier: 2 },
+    { name: "Thrice Blessed by Saphene", virtue: "grace", tier: 3 },
     { name: "Blessed by Iridis", virtue: "spirit", tier: 1 },
     { name: "Twice Blessed by Iridis", virtue: "spirit", tier: 2 },
     { name: "Thrice Blessed by Iridis", virtue: "spirit", tier: 3 }

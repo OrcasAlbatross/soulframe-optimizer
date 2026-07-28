@@ -394,7 +394,7 @@ function renderMaxerResults(result, targetObjective) {
                 <p class="description-sub" style="margin-top: 4px;">Purchase these exact exchanges in-game:</p>
                 ${result.pact.courage > 0 ? `<p class="description-sub"><strong>Mora's Pride (Courage):</strong> +${result.pact.courage} (Costs ${result.pact.courage} Pact Points)</p>` : ''}
                 ${result.pact.spirit > 0 ? `<p class="description-sub"><strong>Iridis' Favour (Spirit):</strong> +${result.pact.spirit} (Costs ${result.pact.spirit} Pact Points)</p>` : ''}
-                ${result.pact.grace > 0 ? `<p class="description-sub"><strong>Sapehene's Gift (Grace):</strong> +${result.pact.grace} (Costs ${result.pact.grace} Pact Points)</p>` : ''}
+                ${result.pact.grace > 0 ? `<p class="description-sub"><strong>Saphene's Gift (Grace):</strong> +${result.pact.grace} (Costs ${result.pact.grace} Pact Points)</p>` : ''}
             </div>
         `;
     }
