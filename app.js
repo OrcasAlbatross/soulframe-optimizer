@@ -45,7 +45,7 @@ async function initializeApp() {
         const defaultWeapon = gameData.weapons.filter(w => !excludedItems.has(w.name))[0];
         selectMaxerWeapon(defaultWeapon); // Set default weapon in ui.js
 
-        document.getElementById('status-msg').innerText = `Loaded ${gameData.armor.length} Armor pieces and ${gameData.weapons.length} Weapons successfully!`;
+        document.getElementById('status-msg').innerText = `Loaded ${gameData.armor.length} Armor, ${gameData.weapons.length} Weapons, and ${gameData.talismans.length} Talismans successfully!`;
         console.log("Data loaded successfully:", gameData);
 
     } catch (error) {

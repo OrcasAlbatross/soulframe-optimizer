@@ -13,6 +13,9 @@
     <header style="position: relative;">
         <h1>Soulframe Optimizer</h1>
         <p id="status-msg">Initializing...</p>
+        <p style="font-size: 0.85em; color: var(--dark-dim-text); margin-top: 5px;">
+            Data sourced live from the amazing contributors at the <a href="https://wiki.avakot.org" target="_blank" class="wiki-link">Soulframe Community Wiki</a>.
+        </p>
 
         <!-- Theme Swapper Button -->
         <button id="theme-toggle-btn" class="secondary-btn"
@@ -23,6 +26,7 @@
             <button class="tab-btn active" data-tab="optimizer-tab">Virtue Allocator</button>
             <button class="tab-btn" data-tab="stat-maxer-tab">Stat Maxer</button>
             <button class="tab-btn" data-tab="exclusions-tab">Exclusion Filters</button>
+            <button class="tab-btn" data-tab="about-tab">About / FAQ</button>
         </nav>
     </header>
 
@@ -310,6 +314,28 @@
                         <p class="placeholder-msg" style="margin-top: 20px;">Allocation details will appear here.</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- About / FAQ Tab Content Container -->
+    <main id="about-tab" class="tab-content">
+        <div class="exclusions-panel" style="grid-column: span 2; max-width: 900px; margin: 0 auto;">
+            <h2 style="color: var(--gold-color); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">About the Optimizer</h2>
+            
+            <div class="control-box" style="margin-bottom: 20px;">
+                <h3 style="margin-bottom: 5px;">How does this work?</h3>
+                <p class="description-sub">This application runs entirely in your web browser. When you open the page, it fetches the raw data tables directly from the Soulframe Community Wiki. <strong>Because there are no backend servers involved, all calculations happen locally on your device. No information or input data ever leaves your computer.</strong></p>
+            </div>
+
+            <div class="control-box" style="margin-bottom: 20px;">
+                <h3 style="margin-bottom: 5px;">Why does the Stat Maxer take a few seconds?</h3>
+                <p class="description-sub">If you have 500 virtue points and Pact Point Scaling enabled, the engine must evaluate over <strong>8 million</strong> different combinations. It uses Cooperative Multitasking to break this math into tiny chunks, ensuring your browser doesn't freeze while it searches for the perfect build.</p>
+            </div>
+
+            <div class="control-box" style="margin-bottom: 20px;">
+                <h3 style="margin-bottom: 5px;">Legal Disclaimer</h3>
+                <p class="description-sub">This is an unofficial, fan-made tool and is <strong>not affiliated with, endorsed, sponsored, or specifically approved by Digital Extremes.</strong> <br><br>Soulframe and all associated properties, logos, and art are trademarks and copyrights of Digital Extremes Ltd. All game data is sourced from the community wiki under their respective open licenses.</p>
             </div>
         </div>
     </main>
