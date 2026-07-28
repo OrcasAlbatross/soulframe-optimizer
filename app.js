@@ -417,3 +417,22 @@ document.getElementById('theme-toggle-btn').addEventListener('click', function()
     this.innerText = isLight ? "Dark Mode" : "Light Mode";
     localStorage.setItem('sf_theme_preference', isLight ? 'light' : 'dark');
 });
+
+// Bulk Exclusion Controls
+document.getElementById('disable-all-btn').addEventListener('click', () => {
+    // Add every item to the excluded Set
+    gameData.armor.forEach(i => excludedItems.add(i.name));
+    gameData.weapons.forEach(i => excludedItems.add(i.name));
+    gameData.talismans.forEach(i => excludedItems.add(i.name));
+    
+    populateExclusionsUI(); // Re-render the checkboxes
+    document.getElementById('exclusion-search').dispatchEvent(new Event('input')); // Re-apply active search filter
+});
+
+document.getElementById('enable-all-btn').addEventListener('click', () => {
+    // Clear the excluded Set entirely
+    excludedItems.clear();
+    
+    populateExclusionsUI(); // Re-render the checkboxes
+    document.getElementById('exclusion-search').dispatchEvent(new Event('input')); // Re-apply active search filter
+});

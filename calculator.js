@@ -203,8 +203,6 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
 
 /**
  * High-Performance Asynchronous Solver (Time-Budgeted Inlined Iteration)
- * Mathematically handles coupled constraints with near-zero latency, using boundary pruning
- * and cooperative multitasking to prevent browser lock-ups.
  */
 function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled, pactEnabled, availablePactPoints, pactPref, onProgress, onComplete) {
     const joineriesToTest = getJoineryList(joineryEnabled);

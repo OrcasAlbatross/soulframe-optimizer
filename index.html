@@ -141,10 +141,14 @@
                 calculations to speed up optimization.
             </p>
 
-            <!-- Real-time Search Bar -->
-            <div class="search-bar-container">
+            <!-- Real-time Search & Bulk Toggles -->
+            <div class="search-bar-container" style="display: flex; gap: 10px; align-items: center;">
                 <input type="text" id="exclusion-search" placeholder="Search armor, weapons, or talismans by name..."
-                    style="width: 100%; padding: 10px; background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9em; outline: none;">
+                    style="flex: 1; padding: 10px; background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9em; outline: none;">
+                <button id="disable-all-btn" class="secondary-btn" style="width: auto; padding: 10px 15px;">Disable
+                    All</button>
+                <button id="enable-all-btn" class="secondary-btn" style="width: auto; padding: 10px 15px;">Enable
+                    All</button>
             </div>
 
             <div class="exclusions-grid">
