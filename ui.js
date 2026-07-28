@@ -388,13 +388,16 @@ function renderMaxerResults(result, targetObjective) {
     // Pact Point Exchange Card (Only rendered if Pact was used)
     const totalPactCost = result.pact.courage + result.pact.spirit + result.pact.grace;
     if (totalPactCost > 0) {
+        // Maps point cost (1, 3, 6) to node count (1, 2, 3)
+        const getPactNodes = (cost) => cost === 6 ? 3 : (cost === 3 ? 2 : (cost === 1 ? 1 : 0));
+
         buildHtml += `
-            <div class="optimal-item" style="border-left: 3px solid #d4af37;">
+            <div class="optimal-item" style="border-left: 3px solid var(--gold-color);">
                 <h4>Pact Exchange Setup (Cost: ${totalPactCost} Pact Points)</h4>
-                <p class="description-sub" style="margin-top: 4px;">Purchase these exact exchanges in-game:</p>
-                ${result.pact.courage > 0 ? `<p class="description-sub"><strong>Mora's Pride (Courage):</strong> +${result.pact.courage} (Costs ${result.pact.courage} Pact Points)</p>` : ''}
-                ${result.pact.spirit > 0 ? `<p class="description-sub"><strong>Iridis' Favour (Spirit):</strong> +${result.pact.spirit} (Costs ${result.pact.spirit} Pact Points)</p>` : ''}
-                ${result.pact.grace > 0 ? `<p class="description-sub"><strong>Saphene's Gift (Grace):</strong> +${result.pact.grace} (Costs ${result.pact.grace} Pact Points)</p>` : ''}
+                <p class="description-sub" style="margin-top: 4px;">Unlock these exact pact point exchanges in-game:</p>
+                ${result.pact.courage > 0 ? `<p class="description-sub"><strong>Mora's Pride (Courage):</strong> ${getPactNodes(result.pact.courage)} Node(s) (+${result.pact.courage} Stats, Costs ${result.pact.courage} Pact Points)</p>` : ''}
+                ${result.pact.spirit > 0 ? `<p class="description-sub"><strong>Iridis' Favour (Spirit):</strong> ${getPactNodes(result.pact.spirit)} Node(s) (+${result.pact.spirit} Stats, Costs ${result.pact.spirit} Pact Points)</p>` : ''}
+                ${result.pact.grace > 0 ? `<p class="description-sub"><strong>Saphene's Gift (Grace):</strong> ${getPactNodes(result.pact.grace)} Node(s) (+${result.pact.grace} Stats, Costs ${result.pact.grace} Pact Points)</p>` : ''}
             </div>
         `;
     }
