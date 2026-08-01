@@ -149,13 +149,11 @@ function runStatMaxer() {
         alert("Data is still loading or failed to load. Please try again in a moment.");
         return;
     }
-
     if (!selectedMaxerWeapon) {
         alert("Please select a weapon first using the modal.");
         return;
     }
 
-    // Show loading spinner
     const loader = document.getElementById('loading-overlay');
     const progressBar = document.getElementById('loading-progress');
     const percentLabel = document.getElementById('loading-percent');
@@ -170,9 +168,17 @@ function runStatMaxer() {
     setTimeout(() => {
         // Retrieve Points and Thresholds
         const points = Math.min(500, parseInt(document.getElementById('maxer-points').value, 10) || 0);
-        const minC = parseInt(document.getElementById('min-courage').value, 10) || 0;
-        const minS = parseInt(document.getElementById('min-spirit').value, 10) || 0;
-        const minG = parseInt(document.getElementById('min-grace').value, 10) || 0;
+        
+        // External Flat Buffs
+        const extC = parseInt(document.getElementById('ext-courage').value, 10) || 0;
+        const extS = parseInt(document.getElementById('ext-spirit').value, 10) || 0;
+        const extG = parseInt(document.getElementById('ext-grace').value, 10) || 0;
+        const extStats = { courage: extC, spirit: extS, grace: extG };
+
+        // Final Target Minimums
+        const minC = parseInt(document.getElementById('min-courage').value, 10) || 1;
+        const minS = parseInt(document.getElementById('min-spirit').value, 10) || 1;
+        const minG = parseInt(document.getElementById('min-grace').value, 10) || 1;
         const minReqs = { courage: minC, spirit: minS, grace: minG };
 
         const targetObjective = document.getElementById('maxer-target').value;
@@ -199,7 +205,7 @@ function runStatMaxer() {
         }
 
         solveStatMaxerAsync(
-            points, minReqs, targetObjective, selectedMaxerWeapon, allowedTalismans, allowedArmor, maxerSkews, true, pactEnabled, pactPoints, pactPref,
+            points, minReqs, extStats, targetObjective, selectedMaxerWeapon, allowedTalismans, allowedArmor, maxerSkews, true, pactEnabled, pactPoints, pactPref,
             (percent) => {
                 if (progressBar) progressBar.style.width = `${percent}%`;
                 if (percentLabel) percentLabel.innerText = `${percent}%`;
@@ -257,36 +263,37 @@ function applyGuidedSetup() {
     const extraS = parseInt(document.getElementById('guided-extra-s').value, 10) || 0;
     const extraG = parseInt(document.getElementById('guided-extra-g').value, 10) || 0;
 
-    let totalPoints = 16 + rank + extraAny + extraC + extraS + extraG;
-    let minC = 1 + pactC + extraC;
-    let minS = 1 + pactS + extraS;
-    let minG = 1 + pactG + extraG;
+    // Base Allocable Points
+    let totalPoints = 16 + rank + extraAny;
 
-    if (hasCuraidh) { totalPoints += 10; minC += 10; }
-    if (hasDancing) { totalPoints += 10; minS += 10; }
-    if (hasShade) { totalPoints += 10; minG += 10; }
+    // External Buffs
+    let extC = extraC;
+    let extS = extraS;
+    let extG = extraG;
 
-    // Quests
-    if (questWolf === 'courage') { totalPoints += 1; minC += 1; }
-    else if (questWolf === 'spirit') { totalPoints += 1; minS += 1; }
-    else if (questWolf === 'grace') { totalPoints += 1; minG += 1; }
+    if (hasCuraidh) extC += 10;
+    if (hasDancing) extS += 10;
+    if (hasShade) extG += 10;
 
-    if (questBear === 'courage') { totalPoints += 1; minC += 1; }
-    else if (questBear === 'spirit') { totalPoints += 1; minS += 1; }
-    else if (questBear === 'grace') { totalPoints += 1; minG += 1; }
+    if (questWolf === 'courage') extC += 1;
+    else if (questWolf === 'spirit') extS += 1;
+    else if (questWolf === 'grace') extG += 1;
 
-    // Apply "Preferred Minimums" User Overrides
-    minC = Math.max(minC, prefC);
-    minS = Math.max(minS, prefS);
-    minG = Math.max(minG, prefG);
+    if (questBear === 'courage') extC += 1;
+    else if (questBear === 'spirit') extS += 1;
+    else if (questBear === 'grace') extG += 1;
 
-    // Inject into Side Panel
+    // 3. Inject Values
     document.getElementById('maxer-points').value = totalPoints;
-    document.getElementById('min-courage').value = minC;
-    document.getElementById('min-spirit').value = minS;
-    document.getElementById('min-grace').value = minG;
+    
+    document.getElementById('ext-courage').value = extC;
+    document.getElementById('ext-spirit').value = extS;
+    document.getElementById('ext-grace').value = extG;
 
-    // Toggle setup flag to True
+    document.getElementById('min-courage').value = Math.max(1, prefC);
+    document.getElementById('min-spirit').value = Math.max(1, prefS);
+    document.getElementById('min-grace').value = Math.max(1, prefG);
+
     guidedSetupPerformed = true;
 
     // Hide the setup warning instantly since values were successfully calculated
@@ -299,8 +306,7 @@ function applyGuidedSetup() {
         pactCheckbox.dispatchEvent(new Event('change'));
     }
 
-    // Flash the side panel inputs to show they updated
-    const inputsToFlash = ['maxer-points', 'min-courage', 'min-spirit', 'min-grace'];
+    const inputsToFlash = ['maxer-points', 'ext-courage', 'ext-spirit', 'ext-grace', 'min-courage', 'min-spirit', 'min-grace'];
     inputsToFlash.forEach(id => {
         const el = document.getElementById(id);
         el.style.transition = 'background-color 0.35s';
@@ -367,7 +373,9 @@ document.getElementById('manual-edit-enable').addEventListener('change', functio
     const manualFieldsBox = document.getElementById('maxer-manual-fields');
     const warningMsg = document.getElementById('maxer-warning-msg');
     const isManual = this.checked;
-    const inputs = ['maxer-points', 'min-courage', 'min-spirit', 'min-grace'];
+    
+    // Include new fields in the lock/unlock array
+    const inputs = ['maxer-points', 'ext-courage', 'ext-spirit', 'ext-grace', 'min-courage', 'min-spirit', 'min-grace'];
     
     if (isManual) {
         manualFieldsBox.style.display = 'flex';

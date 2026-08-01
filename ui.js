@@ -372,6 +372,10 @@ function renderMaxerResults(result, targetObjective) {
     const grandStab = bestHelm.calculated.stability + bestCuirass.calculated.stability + bestLeggings.calculated.stability;
     const grandTotal = grandPhys + grandMag + grandStab;
 
+    const extText = (result.extStats.courage > 0 || result.extStats.spirit > 0 || result.extStats.grace > 0) 
+        ? `| Ext: [ C: ${result.extStats.courage} | S: ${result.extStats.spirit} | G: ${result.extStats.grace} ]` 
+        : '';
+
     // Combined Virtues Card
     let buildHtml = `
         <div class="virtue-summary-card">
@@ -379,8 +383,8 @@ function renderMaxerResults(result, targetObjective) {
             <p><strong>Courage:</strong> <span class="summary-highlight">${result.totalStats.courage}</span></p>
             <p><strong>Spirit:</strong> <span class="summary-highlight">${result.totalStats.spirit}</span></p>
             <p><strong>Grace:</strong> <span class="summary-highlight">${result.totalStats.grace}</span></p>
-            <p class="border-top-separator" style="font-size: 0.8em; color: #aaa; margin-top: 10px; padding-top: 8px;">
-                Allocated Base Spend: <strong>[ C: ${result.allocation.courage} | S: ${result.allocation.spirit} | G: ${result.allocation.grace} ]</strong>
+            <p class="border-top-separator" style="font-size: 0.8em; color: var(--dark-dim-text); margin-top: 10px; padding-top: 8px;">
+                Base Allocation: <strong>[ C: ${result.allocation.courage} | S: ${result.allocation.spirit} | G: ${result.allocation.grace} ]</strong> ${extText}
             </p>
         </div>
     `;

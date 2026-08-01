@@ -182,32 +182,31 @@
                 <input type="checkbox" id="manual-edit-enable"> Enable Manual Editing
             </label>
 
-            <!-- Manual Fields Container: Grouped and hidden by default unless Manual Editing is checked -->
+           <!-- Manual Fields Container: Grouped and hidden by default unless Manual Editing is checked -->
             <div id="maxer-manual-fields" style="display: none; flex-direction: column; gap: 15px;">
                 <div class="control-box">
-                    <h3>Virtue Pool</h3>
+                    <h3>Base Virtue Pool</h3>
                     <div class="input-group">
                         <label for="maxer-points">Total Points:</label>
-                        <input type="number" id="maxer-points" value="16" min="0" max="500" readonly
-                            class="locked-input">
+                        <input type="number" id="maxer-points" value="16" min="3" max="500" readonly class="locked-input">
                     </div>
-                    <p class="joinery-caption">Max allowed is 500 points to prevent browser freeze.</p>
+                    <p class="joinery-caption">Base points to allocate (must spend at least 1 per virtue).</p>
                 </div>
 
                 <div class="control-box">
-                    <h3>Calculated Minimums</h3>
-                    <div class="input-group">
-                        <label for="min-courage">Min Courage:</label>
-                        <input type="number" id="min-courage" value="1" min="0" readonly class="locked-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="min-spirit">Min Spirit:</label>
-                        <input type="number" id="min-spirit" value="1" min="0" readonly class="locked-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="min-grace">Min Grace:</label>
-                        <input type="number" id="min-grace" value="1" min="0" readonly class="locked-input">
-                    </div>
+                    <h3>External Buffs</h3>
+                    <p class="joinery-caption" style="margin-bottom: 8px;">Flat bonuses from Elixirs, Quests, etc.</p>
+                    <div class="input-group"><label for="ext-courage">Extra C:</label><input type="number" id="ext-courage" value="0" min="0" readonly class="locked-input"></div>
+                    <div class="input-group"><label for="ext-spirit">Extra S:</label><input type="number" id="ext-spirit" value="0" min="0" readonly class="locked-input"></div>
+                    <div class="input-group"><label for="ext-grace">Extra G:</label><input type="number" id="ext-grace" value="0" min="0" readonly class="locked-input"></div>
+                </div>
+
+                <div class="control-box">
+                    <h3>Target Final Minimums</h3>
+                    <p class="joinery-caption" style="margin-bottom: 8px;">The final values you want after all buffs are applied.</p>
+                    <div class="input-group"><label for="min-courage">Min Courage:</label><input type="number" id="min-courage" value="1" min="1" readonly class="locked-input"></div>
+                    <div class="input-group"><label for="min-spirit">Min Spirit:</label><input type="number" id="min-spirit" value="1" min="1" readonly class="locked-input"></div>
+                    <div class="input-group"><label for="min-grace">Min Grace:</label><input type="number" id="min-grace" value="1" min="1" readonly class="locked-input"></div>
                 </div>
             </div>
 
@@ -394,7 +393,7 @@
                     </div>
 
                     <div class="control-box">
-                        <h3>Active Elixirs <span style="font-size: 0.8em; color: #aaa;">(+10 Total & Min)</span></h3>
+                        <h3>Active Elixirs <span style="font-size: 0.8em; color: #aaa;">(+10 Virtue Points)</span></h3>
                         <label class="checkbox-label"><input type="checkbox" id="guided-elixir-c"> Curaidh's Breath
                             (Courage)</label>
                         <label class="checkbox-label" style="margin-top: 5px;"><input type="checkbox"
@@ -404,7 +403,7 @@
                     </div>
 
                     <div class="control-box">
-                        <h3>Ancestral Quests <span style="font-size: 0.8em; color: #aaa;">(+1 Total & Min)</span></h3>
+                        <h3>Ancestral Quests <span style="font-size: 0.8em; color: #aaa;">(+1 Virtue Point)</span></h3>
                         <div class="input-group">
                             <label for="guided-quest-wolf">Wolf Quest:</label>
                             <select id="guided-quest-wolf">
