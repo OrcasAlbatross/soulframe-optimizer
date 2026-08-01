@@ -204,7 +204,10 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
 /**
  * High-Performance Asynchronous Solver (Time-Budgeted Inlined Iteration)
  */
-function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled, pactEnabled, availablePactPoints, pactPref, onProgress, onComplete) {
+/**
+ * High-Performance Asynchronous Solver
+ */
+function solveStatMaxerAsync(totalPoints, minReqs, extStats, targetObjective, weapon, allowedTalismans, allowedArmor, skews, joineryEnabled, pactEnabled, availablePactPoints, pactPref, onProgress, onComplete) {
     const joineriesToTest = getJoineryList(joineryEnabled);
     const pactCombinations = getPactCombinations(pactEnabled, availablePactPoints);
     const requiredDamageCap = getWeaponMaxPossibleDamage(weapon);
@@ -218,9 +221,10 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
             const talisman = allowedTalismans[t];
             modifiers.push({
                 pact, talisman,
-                c: pact.courage + talisman.stats.courage,
-                s: pact.spirit + talisman.stats.spirit,
-                g: pact.grace + talisman.stats.grace
+                // Add External Stats (Elixirs/Quests) directly into the pre-calculated static modifier pool!
+                c: pact.courage + talisman.stats.courage + extStats.courage,
+                s: pact.spirit + talisman.stats.spirit + extStats.spirit,
+                g: pact.grace + talisman.stats.grace + extStats.grace
             });
         }
     }
@@ -240,11 +244,8 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
         }
 
         weaponJoineries.push({
-            name: joinery.name,
-            tier: joinery.tier,
-            cHalf: Math.min(5, cPip) / 2,
-            sHalf: Math.min(5, sPip) / 2,
-            gHalf: Math.min(5, gPip) / 2
+            name: joinery.name, tier: joinery.tier,
+            cHalf: Math.min(5, cPip) / 2, sHalf: Math.min(5, sPip) / 2, gHalf: Math.min(5, gPip) / 2
         });
     }
 
@@ -291,12 +292,15 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
         if (p.grace > maxPactG) maxPactG = p.grace;
     }
 
-    // Prune starting search bounds based on minimums minus what talismans/pacts can provide
-    const minCAlloc = Math.max(0, Math.max(minReqs.courage, weapon.requirements.courage || 0) - maxTalismanC - maxPactC);
-    const minSAlloc = Math.max(0, Math.max(minReqs.spirit, weapon.requirements.spirit || 0) - maxTalismanS - maxPactS);
-    const minGAlloc = Math.max(0, Math.max(minReqs.grace, weapon.requirements.grace || 0) - maxTalismanG - maxPactG);
+    // Prune bounds ensuring base allocation is always at least 1 per virtue
+    const requiredC = Math.max(minReqs.courage, weapon.requirements.courage || 0);
+    const requiredS = Math.max(minReqs.spirit, weapon.requirements.spirit || 0);
+    const requiredG = Math.max(minReqs.grace, weapon.requirements.grace || 0);
 
-    // If the pruned minimums exceed total available points, the build is impossible
+    const minCAlloc = Math.max(1, requiredC - maxTalismanC - maxPactC - extStats.courage);
+    const minSAlloc = Math.max(1, requiredS - maxTalismanS - maxPactS - extStats.spirit);
+    const minGAlloc = Math.max(1, requiredG - maxTalismanG - maxPactG - extStats.grace);
+
     if (minCAlloc + minSAlloc + minGAlloc > totalPoints) {
         onProgress(100);
         onComplete(null);
@@ -309,7 +313,6 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
 
     // Correctly initialize state machine limits using pruned bounds
     let allocC = minCAlloc;
-    let allocS = minSAlloc;
     const maxCAlloc = totalPoints - minSAlloc - minGAlloc;
 
     // --- TIME-BUDGETED EXECUTION LOOP ---
@@ -319,108 +322,99 @@ function solveStatMaxerAsync(totalPoints, minReqs, targetObjective, weapon, allo
 
         while (allocC <= maxCAlloc) {
             const maxSAlloc = totalPoints - allocC - minGAlloc;
-            
-            // If Spirit exceeds its allowed boundary, advance Courage and RESET Spirit to its minimum
-            if (allocS > maxSAlloc) {
-                allocC++;
-                allocS = minSAlloc;
-                continue;
-            }
 
-            const allocG = totalPoints - allocC - allocS;
+            for (let allocS = minSAlloc; allocS <= maxSAlloc; allocS++) {
+                const allocG = totalPoints - allocC - allocS;
 
-            for (let mIdx = 0; mIdx < modifiers.length; mIdx++) {
-                const mod = modifiers[mIdx];
-                const tC = allocC + mod.c;
-                const tS = allocS + mod.s;
-                const tG = allocG + mod.g;
+                // Base allocations are strictly >= 1 because of our loop bounds
+                const allocation = { courage: allocC, spirit: allocS, grace: allocG };
 
-                // Thresholds Check
-                if (tC < minReqs.courage || tS < minReqs.spirit || tG < minReqs.grace) continue;
-                if (tC < (weapon.requirements.courage || 0) || tS < (weapon.requirements.spirit || 0) || tG < (weapon.requirements.grace || 0)) continue;
+                for (let mIdx = 0; mIdx < modifiers.length; mIdx++) {
+                    const mod = modifiers[mIdx];
+                    
+                    // Total Stats = Base Allocation + Talisman + Pact + External Buffs (Elixirs)
+                    const tC = allocC + mod.c;
+                    const tS = allocS + mod.s;
+                    const tG = allocG + mod.g;
 
-                // Inline Damage Eval
-                let maxDamageFound = -1;
-                let optJoinery = null;
+                    if (tC < minReqs.courage || tS < minReqs.spirit || tG < minReqs.grace) continue;
+                    if (tC < (weapon.requirements.courage || 0) || tS < (weapon.requirements.spirit || 0) || tG < (weapon.requirements.grace || 0)) continue;
 
-                for (let jIdx = 0; jIdx < weaponJoineries.length; jIdx++) {
-                    const wj = weaponJoineries[jIdx];
-                    let dmg = weaponBase + (tC * wj.cHalf) + (tS * wj.sHalf) + (tG * wj.gHalf);
-                    if (dmg > requiredDamageCap) dmg = requiredDamageCap;
-                    if (dmg > maxDamageFound) {
-                        maxDamageFound = dmg;
-                        optJoinery = wj;
-                    }
-                }
+                    let maxDamageFound = -1;
+                    let optJoinery = null;
 
-                if (maxDamageFound < requiredDamageCap) continue; // Discard invalid builds
-
-                // Tie-breaker Joinery Check
-                for (let jIdx = 0; jIdx < weaponJoineries.length; jIdx++) {
-                    const wj = weaponJoineries[jIdx];
-                    let dmg = weaponBase + (tC * wj.cHalf) + (tS * wj.sHalf) + (tG * wj.gHalf);
-                    if (dmg > requiredDamageCap) dmg = requiredDamageCap;
-                    if (dmg === maxDamageFound) {
-                        optJoinery = wj;
-                        break;
-                    }
-                }
-
-                // Armor Score Evaluation
-                let armorScore = 0;
-                if (targetObjective === 'armor') {
-                    armorScore = findBestArmorScore(tC, tS, tG);
-                }
-
-                // Objective Evaluation
-                let score = 0;
-                if (targetObjective === 'courage') score = tC;
-                else if (targetObjective === 'spirit') score = tS;
-                else if (targetObjective === 'grace') score = tG;
-                else if (targetObjective === 'armor') score = armorScore;
-
-                let isBetter = false;
-                if (score > bestObjectiveValue) {
-                    isBetter = true;
-                } else if (score === bestObjectiveValue) {
-                    if (armorScore > bestTiebreakerArmorDef) {
-                        isBetter = true;
-                    } else if (armorScore === bestTiebreakerArmorDef) {
-                        if (pactPref === 'minimize') {
-                            isBetter = mod.pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
-                        } else {
-                            isBetter = mod.pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
+                    for (let jIdx = 0; jIdx < weaponJoineries.length; jIdx++) {
+                        const wj = weaponJoineries[jIdx];
+                        let dmg = weaponBase + (tC * wj.cHalf) + (tS * wj.sHalf) + (tG * wj.gHalf);
+                        if (dmg > requiredDamageCap) dmg = requiredDamageCap;
+                        if (dmg > maxDamageFound) {
+                            maxDamageFound = dmg;
+                            optJoinery = wj;
                         }
                     }
-                }
 
-                if (isBetter) {
-                    bestObjectiveValue = score;
-                    bestTiebreakerArmorDef = armorScore;
-                    bestConfig = {
-                        allocation: { courage: allocC, spirit: allocS, grace: allocG },
-                        talisman: mod.talisman,
-                        pact: mod.pact,
-                        totalStats: { courage: tC, spirit: tS, grace: tG },
-                        optimalJoinery: { name: optJoinery.name, tier: optJoinery.tier },
-                        weapon: weapon
-                    };
+                    if (maxDamageFound < requiredDamageCap) continue; 
+
+                    for (let jIdx = 0; jIdx < weaponJoineries.length; jIdx++) {
+                        const wj = weaponJoineries[jIdx];
+                        let dmg = weaponBase + (tC * wj.cHalf) + (tS * wj.sHalf) + (tG * wj.gHalf);
+                        if (dmg > requiredDamageCap) dmg = requiredDamageCap;
+                        if (dmg === maxDamageFound) {
+                            optJoinery = wj;
+                            break;
+                        }
+                    }
+
+                    let armorScore = 0;
+                    if (targetObjective === 'armor') armorScore = findBestArmorScore(tC, tS, tG);
+
+                    let score = 0;
+                    if (targetObjective === 'courage') score = tC;
+                    else if (targetObjective === 'spirit') score = tS;
+                    else if (targetObjective === 'grace') score = tG;
+                    else if (targetObjective === 'armor') score = armorScore;
+
+                    let isBetter = false;
+                    if (score > bestObjectiveValue) {
+                        isBetter = true;
+                    } else if (score === bestObjectiveValue) {
+                        if (armorScore > bestTiebreakerArmorDef) {
+                            isBetter = true;
+                        } else if (armorScore === bestTiebreakerArmorDef) {
+                            if (pactPref === 'minimize') {
+                                isBetter = mod.pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
+                            } else {
+                                isBetter = mod.pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
+                            }
+                        }
+                    }
+
+                    if (isBetter) {
+                        bestObjectiveValue = score;
+                        bestTiebreakerArmorDef = armorScore;
+                        bestConfig = {
+                            allocation,
+                            talisman: mod.talisman,
+                            pact: mod.pact,
+                            // Send external stats down the pipe so the UI can display them!
+                            extStats,
+                            totalStats: { courage: tC, spirit: tS, grace: tG },
+                            optimalJoinery: { name: optJoinery.name, tier: optJoinery.tier },
+                            weapon: weapon
+                        };
+                    }
                 }
             }
 
-            // State Machine Increments (using pruned bounds)
-            allocS++;
-
-            // Time-Budget Yield Check
+            allocC++;
             loopCounter++;
-            if (loopCounter % 1000 === 0 && performance.now() - startTick > 15) {
-                // Update Progress based on the outer Courage loop
+            if (loopCounter % 15 === 0 && performance.now() - startTick > 15) {
                 const completedSteps = allocC - minCAlloc;
                 const totalSteps = maxCAlloc - minCAlloc + 1;
                 const percent = Math.min(99, Math.round((completedSteps / totalSteps) * 100));
                 
                 onProgress(percent);
-                setTimeout(runTimeChunk, 0); // Yield thread back to browser
+                setTimeout(runTimeChunk, 0);
                 return;
             }
         }
