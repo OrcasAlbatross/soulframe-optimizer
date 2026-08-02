@@ -1,0 +1,2306 @@
+[
+  {
+    "name": "Arbearer's Braes",
+    "slot": "Leggings",
+    "set": "Arbearer",
+    "baseStats": {
+      "physical": 5,
+      "magick": 1,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 19,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Arbearer's Mask",
+    "slot": "Helm",
+    "set": "Arbearer",
+    "baseStats": {
+      "physical": 4,
+      "magick": 1,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 19,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Arbearer's Pauncher",
+    "slot": "Cuirass",
+    "set": "Arbearer",
+    "baseStats": {
+      "physical": 7,
+      "magick": 2,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 19,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Armet of Orengall",
+    "slot": "Helm",
+    "set": "Orengall",
+    "baseStats": {
+      "physical": 3,
+      "magick": 2,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 17
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 3
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      }
+    }
+  },
+  {
+    "name": "Bascinet of The Mendicant King",
+    "slot": "Helm",
+    "set": "Mendicant King",
+    "baseStats": {
+      "physical": 3,
+      "magick": 1,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 17,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 1,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 1,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Brazen Lung",
+    "slot": "Helm",
+    "set": "Forgetfire",
+    "baseStats": {
+      "physical": 2,
+      "magick": 4,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Circade's Greaves",
+    "slot": "Leggings",
+    "set": "Circade",
+    "baseStats": {
+      "physical": 5,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 11,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Circade's Gutguard",
+    "slot": "Cuirass",
+    "set": "Circade",
+    "baseStats": {
+      "physical": 6,
+      "magick": 0,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 11,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Circade's Helm of Deceit",
+    "slot": "Helm",
+    "set": "Circade",
+    "baseStats": {
+      "physical": 4,
+      "magick": 0,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 11,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Crone Cucurbita Mask",
+    "slot": "Helm",
+    "set": "Cucurbita",
+    "baseStats": {
+      "physical": 3,
+      "magick": 3,
+      "stability": 1
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 9,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 2,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Duelo Ribbon",
+    "slot": "Helm",
+    "set": "Mestra",
+    "baseStats": {
+      "physical": 0,
+      "magick": 0,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Fire King's Kilt",
+    "slot": "Leggings",
+    "set": "Fire King",
+    "baseStats": {
+      "physical": 3,
+      "magick": 2,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Fire King's Plackart",
+    "slot": "Cuirass",
+    "set": "Fire King",
+    "baseStats": {
+      "physical": 5,
+      "magick": 2,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Forgetfire Braes",
+    "slot": "Leggings",
+    "set": "Forgetfire",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 9,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Forgetfire Leathers",
+    "slot": "Cuirass",
+    "set": "Forgetfire",
+    "baseStats": {
+      "physical": 4,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 9,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Forgetfire Visard",
+    "slot": "Helm",
+    "set": "Forgetfire",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 9,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Forsaken Rags",
+    "slot": "Leggings",
+    "set": "Underwear",
+    "baseStats": {
+      "physical": 0,
+      "magick": 0,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Garren's Cloven Hosen",
+    "slot": "Leggings",
+    "set": "Garren",
+    "baseStats": {
+      "physical": 3,
+      "magick": 2,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Garren's Crown of Grace",
+    "slot": "Helm",
+    "set": "Garren",
+    "baseStats": {
+      "physical": 2,
+      "magick": 2,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Great Helm of The Fire King",
+    "slot": "Helm",
+    "set": "Fire King",
+    "baseStats": {
+      "physical": 3,
+      "magick": 2,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Helmless",
+    "slot": "Helm",
+    "set": "Underwear",
+    "baseStats": {
+      "physical": 0,
+      "magick": 0,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Laid Bare",
+    "slot": "Cuirass",
+    "set": "Underwear",
+    "baseStats": {
+      "physical": 0,
+      "magick": 0,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Lil' Zook Mask",
+    "slot": "Helm",
+    "set": "Cucurbita",
+    "baseStats": {
+      "physical": 4,
+      "magick": 1,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 9,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Mendicant King's Sabatons",
+    "slot": "Leggings",
+    "set": "Mendicant King",
+    "baseStats": {
+      "physical": 4,
+      "magick": 2,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 17,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 1,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 1,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Mendicant King's Suit of Rancor",
+    "slot": "Cuirass",
+    "set": "Mendicant King",
+    "baseStats": {
+      "physical": 6,
+      "magick": 3,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 17,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 3,
+        "spirit": 1,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 1,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Mestra's Breeches",
+    "slot": "Leggings",
+    "set": "Mestra",
+    "baseStats": {
+      "physical": 3,
+      "magick": 2,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      }
+    }
+  },
+  {
+    "name": "Mestra's Furbelow",
+    "slot": "Cuirass",
+    "set": "Mestra",
+    "baseStats": {
+      "physical": 4,
+      "magick": 3,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      }
+    }
+  },
+  {
+    "name": "Mestra's Helm",
+    "slot": "Helm",
+    "set": "Mestra",
+    "baseStats": {
+      "physical": 1,
+      "magick": 2,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Mockery Binds",
+    "slot": "Cuirass",
+    "set": "Mockery",
+    "baseStats": {
+      "physical": 4,
+      "magick": 4,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 17
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Mockery Douthrot",
+    "slot": "Leggings",
+    "set": "Mockery",
+    "baseStats": {
+      "physical": 4,
+      "magick": 4,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 17
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Mockery Ilk",
+    "slot": "Helm",
+    "set": "Mockery",
+    "baseStats": {
+      "physical": 3,
+      "magick": 3,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 17
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Orengall's Cuirass",
+    "slot": "Cuirass",
+    "set": "Orengall",
+    "baseStats": {
+      "physical": 5,
+      "magick": 3,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 17
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 3
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      }
+    }
+  },
+  {
+    "name": "Orengall's Greaves",
+    "slot": "Leggings",
+    "set": "Orengall",
+    "baseStats": {
+      "physical": 4,
+      "magick": 3,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 17
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 3
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 3
+      }
+    }
+  },
+  {
+    "name": "Oscelda's Blues",
+    "slot": "Cuirass",
+    "set": "Oscelda",
+    "baseStats": {
+      "physical": 3,
+      "magick": 5,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Oscelda's Diadem",
+    "slot": "Helm",
+    "set": "Oscelda",
+    "baseStats": {
+      "physical": 1,
+      "magick": 3,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Oscelda's Featherbinds",
+    "slot": "Leggings",
+    "set": "Oscelda",
+    "baseStats": {
+      "physical": 2,
+      "magick": 4,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Pensive's Bonnet",
+    "slot": "Helm",
+    "set": "Pensive",
+    "baseStats": {
+      "physical": 2,
+      "magick": 2,
+      "stability": 1
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 6,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Pensive's Cloak",
+    "slot": "Cuirass",
+    "set": "Pensive",
+    "baseStats": {
+      "physical": 4,
+      "magick": 4,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 6,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Pensive's Pantaloons",
+    "slot": "Leggings",
+    "set": "Pensive",
+    "baseStats": {
+      "physical": 3,
+      "magick": 3,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 6,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Poppa Pepo Mask",
+    "slot": "Helm",
+    "set": "Cucurbita",
+    "baseStats": {
+      "physical": 2,
+      "magick": 2,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 9
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 2
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Regalia of Garren Rood",
+    "slot": "Cuirass",
+    "set": "Garren",
+    "baseStats": {
+      "physical": 3,
+      "magick": 3,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 1
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Regent's Drapery",
+    "slot": "Leggings",
+    "set": "Regent",
+    "baseStats": {
+      "physical": 4,
+      "magick": 2,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Regent's Shell",
+    "slot": "Cuirass",
+    "set": "Regent",
+    "baseStats": {
+      "physical": 6,
+      "magick": 3,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Regent's Veil",
+    "slot": "Helm",
+    "set": "Regent",
+    "baseStats": {
+      "physical": 3,
+      "magick": 1,
+      "stability": 1
+    },
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 1,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Sirin's Plainhide",
+    "slot": "Cuirass",
+    "set": "Sirin",
+    "baseStats": {
+      "physical": 4,
+      "magick": 0,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Sirin's Shroud",
+    "slot": "Helm",
+    "set": "Sirin",
+    "baseStats": {
+      "physical": 2,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Sirin's Stalks",
+    "slot": "Leggings",
+    "set": "Sirin",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Steelsinger's Circlet",
+    "slot": "Helm",
+    "set": "Steelsinger",
+    "baseStats": {
+      "physical": 2,
+      "magick": 2,
+      "stability": 1
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 11,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Steelsinger's Shreds",
+    "slot": "Leggings",
+    "set": "Steelsinger",
+    "baseStats": {
+      "physical": 3,
+      "magick": 3,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 11,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Steelsinger's Stithywicks",
+    "slot": "Cuirass",
+    "set": "Steelsinger",
+    "baseStats": {
+      "physical": 3,
+      "magick": 5,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 11,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Tempest Braes",
+    "slot": "Leggings",
+    "set": "Tempest",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 7
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Tempest Leathers",
+    "slot": "Cuirass",
+    "set": "Tempest",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 7
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Tempest Visard",
+    "slot": "Helm",
+    "set": "Tempest",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 7
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Tethren's Cap",
+    "slot": "Helm",
+    "set": "Tethren",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Tethren's Roots",
+    "slot": "Leggings",
+    "set": "Tethren",
+    "baseStats": {
+      "physical": 4,
+      "magick": 0,
+      "stability": 1
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Tethren's Tunic",
+    "slot": "Cuirass",
+    "set": "Tethren",
+    "baseStats": {
+      "physical": 5,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Thawtide Grimguise",
+    "slot": "Helm",
+    "set": "Thawtide",
+    "baseStats": {
+      "physical": 4,
+      "magick": 2,
+      "stability": 1
+    },
+    "requirements": {
+      "courage": 13,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Thawtide Meltcap",
+    "slot": "Helm",
+    "set": "Thawtide",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 14
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Thawtide Shingles",
+    "slot": "Leggings",
+    "set": "Thawtide",
+    "baseStats": {
+      "physical": 4,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 14
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Thawtide Thermals",
+    "slot": "Cuirass",
+    "set": "Thawtide",
+    "baseStats": {
+      "physical": 5,
+      "magick": 0,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 14
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 2
+      }
+    }
+  },
+  {
+    "name": "Wazzard's Bycoket",
+    "slot": "Helm",
+    "set": "Wazzard",
+    "baseStats": {
+      "physical": 2,
+      "magick": 3,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 19,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 3,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wazzard's Robes",
+    "slot": "Cuirass",
+    "set": "Wazzard",
+    "baseStats": {
+      "physical": 3,
+      "magick": 5,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 19,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 3,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wazzard's Trunks",
+    "slot": "Leggings",
+    "set": "Wazzard",
+    "baseStats": {
+      "physical": 3,
+      "magick": 4,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 19,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wyld Oscelda Beltolls",
+    "slot": "Leggings",
+    "set": "Wyld Oscelda",
+    "baseStats": {
+      "physical": 2,
+      "magick": 4,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wyld Oscelda Pendelveil",
+    "slot": "Cuirass",
+    "set": "Wyld Oscelda",
+    "baseStats": {
+      "physical": 3,
+      "magick": 5,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wyld Oscelda's Exhalt",
+    "slot": "Helm",
+    "set": "Wyld Oscelda",
+    "baseStats": {
+      "physical": 1,
+      "magick": 3,
+      "stability": 0
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 2,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 1,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wyld Sirin Finery",
+    "slot": "Cuirass",
+    "set": "Wyld Sirin",
+    "baseStats": {
+      "physical": 4,
+      "magick": 0,
+      "stability": 4
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Wyld Sirin Wevetbelt",
+    "slot": "Leggings",
+    "set": "Wyld Sirin",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Wyld Sirin's Feignmask",
+    "slot": "Helm",
+    "set": "Wyld Sirin",
+    "baseStats": {
+      "physical": 2,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 2
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 1
+      }
+    }
+  },
+  {
+    "name": "Wyld Tethren Flamefoot",
+    "slot": "Leggings",
+    "set": "Wyld Tethren",
+    "baseStats": {
+      "physical": 4,
+      "magick": 0,
+      "stability": 1
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wyld Tethren Solist Shield",
+    "slot": "Cuirass",
+    "set": "Wyld Tethren",
+    "baseStats": {
+      "physical": 5,
+      "magick": 0,
+      "stability": 3
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  },
+  {
+    "name": "Wyld Tethren's Hornhelm",
+    "slot": "Helm",
+    "set": "Wyld Tethren",
+    "baseStats": {
+      "physical": 3,
+      "magick": 0,
+      "stability": 2
+    },
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "physical": {
+        "courage": 2,
+        "spirit": 0,
+        "grace": 0
+      },
+      "magick": {
+        "courage": 0,
+        "spirit": 0,
+        "grace": 0
+      },
+      "stability": {
+        "courage": 1,
+        "spirit": 0,
+        "grace": 0
+      }
+    }
+  }
+]

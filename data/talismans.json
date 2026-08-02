@@ -1,0 +1,255 @@
+[
+  {
+    "name": "Bloomin' Bodkin",
+    "slot": "Talisman",
+    "set": "Silent Rose",
+    "rarity": "Uncommon",
+    "stats": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 6
+    }
+  },
+  {
+    "name": "Cardinal Charm",
+    "slot": "Talisman",
+    "set": "Unique",
+    "rarity": "Common",
+    "stats": {
+      "courage": 1,
+      "spirit": 2,
+      "grace": 1
+    }
+  },
+  {
+    "name": "Dawn Pendant",
+    "slot": "Talisman",
+    "set": "Circade",
+    "rarity": "Common",
+    "stats": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 1
+    }
+  },
+  {
+    "name": "Direskull",
+    "slot": "Talisman",
+    "set": "Orengall",
+    "rarity": "Common",
+    "stats": {
+      "courage": 1,
+      "spirit": 1,
+      "grace": 4
+    }
+  },
+  {
+    "name": "Dusk Pendant",
+    "slot": "Talisman",
+    "set": "Circade",
+    "rarity": "Common",
+    "stats": {
+      "courage": 1,
+      "spirit": 0,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Medallion of Mora",
+    "slot": "Talisman",
+    "set": "Kith of Kings",
+    "rarity": "Common",
+    "stats": {
+      "courage": 1,
+      "spirit": 0,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Midnight Pendant",
+    "slot": "Talisman",
+    "set": "Circade",
+    "rarity": "Common",
+    "stats": {
+      "courage": 0,
+      "spirit": 1,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Molten Mora",
+    "slot": "Talisman",
+    "set": "Kith of Kings",
+    "rarity": "Uncommon",
+    "stats": {
+      "courage": 6,
+      "spirit": 0,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Orengall's Fang",
+    "slot": "Talisman",
+    "set": "Orengall",
+    "rarity": "Common",
+    "stats": {
+      "courage": 1,
+      "spirit": 4,
+      "grace": 1
+    }
+  },
+  {
+    "name": "Paragon Periapt",
+    "slot": "Talisman",
+    "set": "Founders",
+    "rarity": "Common",
+    "stats": {
+      "courage": 3,
+      "spirit": 3,
+      "grace": 3
+    }
+  },
+  {
+    "name": "Prelude Honour",
+    "slot": "Talisman",
+    "set": "Unique",
+    "rarity": "Common",
+    "stats": {
+      "courage": 1,
+      "spirit": 1,
+      "grace": 1
+    }
+  },
+  {
+    "name": "Rose's Bodkin",
+    "slot": "Talisman",
+    "set": "Silent Rose",
+    "rarity": "Common",
+    "stats": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 1
+    }
+  },
+  {
+    "name": "Sproutfolk Seed",
+    "slot": "Talisman",
+    "set": "Alca's Children",
+    "rarity": "Common",
+    "stats": {
+      "courage": 0,
+      "spirit": 1,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Sproutfolk Shoot",
+    "slot": "Talisman",
+    "set": "Alca's Children",
+    "rarity": "Uncommon",
+    "stats": {
+      "courage": 0,
+      "spirit": 6,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Synod's Bell Jar",
+    "slot": "Talisman",
+    "set": "Unique",
+    "rarity": "Common",
+    "stats": {
+      "courage": 4,
+      "spirit": 1,
+      "grace": 1
+    }
+  },
+  {
+    "name": "The Cogah Creutair",
+    "slot": "Talisman",
+    "set": "Cogah",
+    "rarity": "Common",
+    "stats": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 2
+    }
+  },
+  {
+    "name": "The Cogah Grod",
+    "slot": "Talisman",
+    "set": "Cogah",
+    "rarity": "Common",
+    "stats": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 0
+    }
+  },
+  {
+    "name": "The Cogah Lorcaan",
+    "slot": "Talisman",
+    "set": "Cogah",
+    "rarity": "Common",
+    "stats": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Triune Talisman",
+    "slot": "Talisman",
+    "set": "Circade",
+    "rarity": "Common",
+    "stats": {
+      "courage": 3,
+      "spirit": 3,
+      "grace": 3
+    }
+  },
+  {
+    "name": "Wazzard's Wish",
+    "slot": "Talisman",
+    "set": "Unique",
+    "rarity": "Common",
+    "stats": {
+      "courage": 0,
+      "spirit": 1,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Wylding's Heart",
+    "slot": "Talisman",
+    "set": "Founders",
+    "rarity": "Uncommon",
+    "stats": {
+      "courage": 0,
+      "spirit": 3,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Wylding's Hilt",
+    "slot": "Talisman",
+    "set": "Founders",
+    "rarity": "Uncommon",
+    "stats": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    }
+  },
+  {
+    "name": "Wylding's Hush",
+    "slot": "Talisman",
+    "set": "Founders",
+    "rarity": "Uncommon",
+    "stats": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 3
+    }
+  }
+]

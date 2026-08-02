@@ -1,0 +1,1010 @@
+[
+  {
+    "name": "Avex",
+    "slot": "Weapon",
+    "type": "Bow",
+    "requirements": {
+      "courage": 13,
+      "spirit": 0,
+      "grace": 11
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 45,
+    "maxAttack": 93,
+    "damageCap": 161
+  },
+  {
+    "name": "Basker's Wrest",
+    "slot": "Sidearm",
+    "type": "Magick",
+    "requirements": {
+      "courage": 7,
+      "spirit": 8,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 34,
+    "maxAttack": 82,
+    "damageCap": 133
+  },
+  {
+    "name": "Blitzel",
+    "slot": "Weapon",
+    "type": "Bow",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 47,
+    "maxAttack": 95,
+    "damageCap": 166
+  },
+  {
+    "name": "Bog & Myrtle",
+    "slot": "Weapon",
+    "type": "Shield",
+    "requirements": {
+      "courage": 11,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 42,
+    "maxAttack": 96,
+    "damageCap": 159
+  },
+  {
+    "name": "Cenotaph",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 14,
+      "spirit": 9,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 53,
+    "maxAttack": 107,
+    "damageCap": 187
+  },
+  {
+    "name": "Clivers",
+    "slot": "Sidearm",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 25,
+    "maxAttack": 52,
+    "damageCap": 90
+  },
+  {
+    "name": "Cobladh",
+    "slot": "Sidearm",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 7
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 157
+  },
+  {
+    "name": "Dewelion",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 19
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 3
+    },
+    "baseAttack": 48,
+    "maxAttack": 102,
+    "damageCap": 174
+  },
+  {
+    "name": "Duhk Halic",
+    "slot": "Weapon",
+    "type": "Polearm",
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 66,
+    "maxAttack": 120,
+    "damageCap": 219
+  },
+  {
+    "name": "Espadarte",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 6,
+      "spirit": 0,
+      "grace": 8
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 46,
+    "maxAttack": 100,
+    "damageCap": 169
+  },
+  {
+    "name": "Esthelle",
+    "slot": "Sidearm",
+    "type": "Magick",
+    "requirements": {
+      "courage": 0,
+      "spirit": 7,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 34,
+    "maxAttack": 82,
+    "damageCap": 133
+  },
+  {
+    "name": "Falx",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 54,
+    "maxAttack": 108,
+    "damageCap": 189
+  },
+  {
+    "name": "Farilwyd",
+    "slot": "Weapon",
+    "type": "Polearm",
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 10
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 68,
+    "maxAttack": 0,
+    "damageCap": 0
+  },
+  {
+    "name": "Gathannan",
+    "slot": "Weapon",
+    "type": "Polearm",
+    "requirements": {
+      "courage": 19,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 69,
+    "maxAttack": 123,
+    "damageCap": 227
+  },
+  {
+    "name": "Grinn",
+    "slot": "Sidearm",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 14
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 157
+  },
+  {
+    "name": "Gwylen",
+    "slot": "Weapon",
+    "type": "Magick",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 1,
+      "grace": 0
+    },
+    "baseAttack": 40,
+    "maxAttack": 88,
+    "damageCap": 128
+  },
+  {
+    "name": "Igne Mora",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 9,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 49,
+    "maxAttack": 103,
+    "damageCap": 177
+  },
+  {
+    "name": "Ilverac",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 52,
+    "maxAttack": 106,
+    "damageCap": 184
+  },
+  {
+    "name": "Juniper",
+    "slot": "Weapon",
+    "type": "Bow",
+    "requirements": {
+      "courage": 0,
+      "spirit": 5,
+      "grace": 7
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 2
+    },
+    "baseAttack": 45,
+    "maxAttack": 93,
+    "damageCap": 161
+  },
+  {
+    "name": "Lyke-Wake",
+    "slot": "Weapon",
+    "type": "Shield",
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 157
+  },
+  {
+    "name": "Maestro",
+    "slot": "Weapon",
+    "type": "Bow",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 13
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 2
+    },
+    "baseAttack": 45,
+    "maxAttack": 93,
+    "damageCap": 161
+  },
+  {
+    "name": "Marrow's Bane",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 21,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 4,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 54,
+    "maxAttack": 108,
+    "damageCap": 189
+  },
+  {
+    "name": "Navalha",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 14
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 3
+    },
+    "baseAttack": 39,
+    "maxAttack": 93,
+    "damageCap": 152
+  },
+  {
+    "name": "Needleseye",
+    "slot": "Weapon",
+    "type": "Heavy",
+    "requirements": {
+      "courage": 18,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 66,
+    "maxAttack": 120,
+    "damageCap": 219
+  },
+  {
+    "name": "Nettle",
+    "slot": "Sidearm",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 1
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 136
+  },
+  {
+    "name": "Nurash",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 15,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 54,
+    "maxAttack": 108,
+    "damageCap": 189
+  },
+  {
+    "name": "Odiac",
+    "slot": "Sidearm",
+    "type": "Magick",
+    "requirements": {
+      "courage": 6,
+      "spirit": 6,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 35,
+    "maxAttack": 83,
+    "damageCap": 136
+  },
+  {
+    "name": "Orst-III",
+    "slot": "Weapon",
+    "type": "Heavy",
+    "requirements": {
+      "courage": 12,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 76,
+    "maxAttack": 130,
+    "damageCap": 244
+  },
+  {
+    "name": "Oryn-Umbr",
+    "slot": "Weapon",
+    "type": "Shield",
+    "requirements": {
+      "courage": 13,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 157
+  },
+  {
+    "name": "Precklies",
+    "slot": "Sidearm",
+    "type": "Flyblade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 1
+    },
+    "baseAttack": 31,
+    "maxAttack": 79,
+    "damageCap": 110
+  },
+  {
+    "name": "Purity",
+    "slot": "Weapon",
+    "type": "Heavy",
+    "requirements": {
+      "courage": 17,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 68,
+    "maxAttack": 122,
+    "damageCap": 224
+  },
+  {
+    "name": "Rivt-II",
+    "slot": "Weapon",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 13
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 3
+    },
+    "baseAttack": 26,
+    "maxAttack": 53,
+    "damageCap": 92
+  },
+  {
+    "name": "Rook",
+    "slot": "Weapon",
+    "type": "Polearm",
+    "requirements": {
+      "courage": 11,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 65,
+    "maxAttack": 119,
+    "damageCap": 217
+  },
+  {
+    "name": "Rostrum",
+    "slot": "Weapon",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 2
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 157
+  },
+  {
+    "name": "Seathorn",
+    "slot": "Weapon",
+    "type": "Magick",
+    "requirements": {
+      "courage": 0,
+      "spirit": 18,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 3,
+      "grace": 2
+    },
+    "baseAttack": 44,
+    "maxAttack": 92,
+    "damageCap": 158
+  },
+  {
+    "name": "Silistavf",
+    "slot": "Weapon",
+    "type": "Magick",
+    "requirements": {
+      "courage": 8,
+      "spirit": 15,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 47,
+    "maxAttack": 95,
+    "damageCap": 166
+  },
+  {
+    "name": "Skílter",
+    "slot": "Sidearm",
+    "type": "Flyblade",
+    "requirements": {
+      "courage": 7,
+      "spirit": 0,
+      "grace": 6
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 33,
+    "maxAttack": 81,
+    "damageCap": 131
+  },
+  {
+    "name": "Sollos-I",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 13,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 47,
+    "maxAttack": 101,
+    "damageCap": 172
+  },
+  {
+    "name": "Stultin",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 16,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 53,
+    "maxAttack": 107,
+    "damageCap": 187
+  },
+  {
+    "name": "Tessard",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 14,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 48,
+    "maxAttack": 102,
+    "damageCap": 174
+  },
+  {
+    "name": "The Alder",
+    "slot": "Weapon",
+    "type": "Magick",
+    "requirements": {
+      "courage": 0,
+      "spirit": 7,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 0
+    },
+    "baseAttack": 41,
+    "maxAttack": 89,
+    "damageCap": 151
+  },
+  {
+    "name": "The Erstroot",
+    "slot": "Weapon",
+    "type": "Magick",
+    "requirements": {
+      "courage": 0,
+      "spirit": 16,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 3,
+      "grace": 0
+    },
+    "baseAttack": 40,
+    "maxAttack": 88,
+    "damageCap": 148
+  },
+  {
+    "name": "The Ivor",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 7,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 47,
+    "maxAttack": 101,
+    "damageCap": 172
+  },
+  {
+    "name": "The Paragon",
+    "slot": "Weapon",
+    "type": "Heavy",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 2,
+      "grace": 2
+    },
+    "baseAttack": 64,
+    "maxAttack": 118,
+    "damageCap": 214
+  },
+  {
+    "name": "The Royal Tines",
+    "slot": "Weapon",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 10
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 2
+    },
+    "baseAttack": 26,
+    "maxAttack": 53,
+    "damageCap": 92
+  },
+  {
+    "name": "The Starling",
+    "slot": "Weapon",
+    "type": "Bow",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 7
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 45,
+    "maxAttack": 93,
+    "damageCap": 161
+  },
+  {
+    "name": "Thistle",
+    "slot": "Weapon",
+    "type": "Bow",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 1
+    },
+    "baseAttack": 44,
+    "maxAttack": 92,
+    "damageCap": 136
+  },
+  {
+    "name": "Thrice Spurns",
+    "slot": "Sidearm",
+    "type": "Flyblade",
+    "requirements": {
+      "courage": 7,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 32,
+    "maxAttack": 80,
+    "damageCap": 128
+  },
+  {
+    "name": "Unsula",
+    "slot": "Weapon",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 10
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 26,
+    "maxAttack": 53,
+    "damageCap": 92
+  },
+  {
+    "name": "Vasp-IV",
+    "slot": "Weapon",
+    "type": "Polearm",
+    "requirements": {
+      "courage": 13,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 65,
+    "maxAttack": 119,
+    "damageCap": 217
+  },
+  {
+    "name": "Veilk",
+    "slot": "Weapon",
+    "type": "Polearm",
+    "requirements": {
+      "courage": 13,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 59,
+    "maxAttack": 113,
+    "damageCap": 202
+  },
+  {
+    "name": "Vetch",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 11,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 2,
+      "spirit": 0,
+      "grace": 2
+    },
+    "baseAttack": 48,
+    "maxAttack": 102,
+    "damageCap": 174
+  },
+  {
+    "name": "Virdigris",
+    "slot": "Sidearm",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 12
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 2
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 157
+  },
+  {
+    "name": "Vrusht-IX",
+    "slot": "Weapon",
+    "type": "Heavy",
+    "requirements": {
+      "courage": 18,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 3,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 63,
+    "maxAttack": 117,
+    "damageCap": 212
+  },
+  {
+    "name": "Witan",
+    "slot": "Sidearm",
+    "type": "Short Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 6,
+      "grace": 6
+    },
+    "attunement": {
+      "courage": 0,
+      "spirit": 2,
+      "grace": 2
+    },
+    "baseAttack": 41,
+    "maxAttack": 95,
+    "damageCap": 157
+  },
+  {
+    "name": "Wulder",
+    "slot": "Weapon",
+    "type": "Long Blade",
+    "requirements": {
+      "courage": 0,
+      "spirit": 0,
+      "grace": 0
+    },
+    "attunement": {
+      "courage": 1,
+      "spirit": 0,
+      "grace": 0
+    },
+    "baseAttack": 46,
+    "maxAttack": 100,
+    "damageCap": 146
+  }
+]
