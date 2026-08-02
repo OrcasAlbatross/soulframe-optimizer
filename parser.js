@@ -1,20 +1,16 @@
-// Generic function to fetch a module from the Wiki and cache it
-async function fetchWikiModule(moduleName, cacheKey) {
-    const cached = sessionStorage.getItem(cacheKey);
-    if (cached) {
-        return JSON.parse(cached);
-    }
+const fs = require('fs');
+const path = require('path');
 
+// Helper to fetch raw text from MediaWiki API using Node.js native fetch
+async function fetchWikiModule(moduleName) {
+    console.log(`Fetching ${moduleName} from wiki...`);
     //Yeah yeah, api url here i know
-    const apiUrl = `https://wiki.avakot.org/w/api.php?action=query&prop=revisions&rvprop=content&titles=${moduleName}&format=json&origin=*`;
+    const apiUrl = `https://wiki.avakot.org/w/api.php?action=query&prop=revisions&rvprop=content&titles=${moduleName}&format=json`;
     const response = await fetch(apiUrl);
     const json = await response.json();
-    
     const pages = json.query.pages;
     const pageId = Object.keys(pages)[0];
-    const rawText = pages[pageId].revisions[0]['*'];
-    
-    return rawText;
+    return pages[pageId].revisions[0]['*'];
 }
 
 // Parses "3 C; 1 S" into an object: { courage: 3, spirit: 1, grace: 0 }
@@ -160,3 +156,32 @@ function parseTalismanData(data) {
     }
     return parsedList;
 }
+
+async function runScraper() {
+    try {
+        const rawArmor = await fetchWikiModule('Module:Data/Armour');
+        const rawWeapons = await fetchWikiModule('Module:Data/Weapons');
+
+        const armor = parseArmorData(rawArmor);
+        const talismans = parseTalismanData(rawArmor);
+        const weapons = parseWeaponData(rawWeapons);
+
+        // Ensure data directory exists
+        const dataDir = path.join(__dirname, 'data');
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir);
+        }
+
+        // Save cleanly to JSON files
+        fs.writeFileSync(path.join(dataDir, 'armor.json'), JSON.stringify(armor, null, 2));
+        fs.writeFileSync(path.join(dataDir, 'talismans.json'), JSON.stringify(talismans, null, 2));
+        fs.writeFileSync(path.join(dataDir, 'weapons.json'), JSON.stringify(weapons, null, 2));
+
+        console.log(`Successfully saved ${armor.length} Armor, ${weapons.length} Weapons, and ${talismans.length} Talismans to /data!`);
+    } catch (err) {
+        console.error("Scraping failed:", err);
+        process.exit(1);
+    }
+}
+
+runScraper();

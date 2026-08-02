@@ -15,10 +15,9 @@ let guidedSetupPerformed = false; // Tracks if the user has consulted the Wazzar
 
 // Fetch and load data on initialization
 async function initializeApp() {
-    console.log("Loading live data from Soulframe Wiki...");
-    document.getElementById('status-msg').innerText = "Fetching live data from the wiki...";
+    console.log("Loading static data JSONs...");
+    document.getElementById('status-msg').innerText = "Initializing database...";
 
-    // Apply saved theme preference immediately on load
     const savedTheme = localStorage.getItem('sf_theme_preference');
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
@@ -26,18 +25,17 @@ async function initializeApp() {
     }
 
     try {
-        // Fetch and parse Armor
-        const rawArmor = await fetchWikiModule('Module:Data/Armour', 'sf_raw_armor');
-        gameData.armor = parseArmorData(rawArmor);
-        gameData.talismans = parseTalismanData(rawArmor);
-        sessionStorage.setItem('sf_raw_armor', JSON.stringify(rawArmor));
+        // Fetch pre-compiled JSONs
+        const [armorRes, weaponsRes, talismansRes] = await Promise.all([
+            fetch('./data/armor.json'),
+            fetch('./data/weapons.json'),
+            fetch('./data/talismans.json')
+        ]);
 
-        // Fetch and parse Weapons
-        const rawWeapons = await fetchWikiModule('Module:Data/Weapons', 'sf_raw_weapons');
-        gameData.weapons = parseWeaponData(rawWeapons);
-        sessionStorage.setItem('sf_raw_weapons', JSON.stringify(rawWeapons));
+        gameData.armor = await armorRes.json();
+        gameData.weapons = await weaponsRes.json();
+        gameData.talismans = await talismansRes.json();
 
-        // Call dynamically built filter generators in ui.js
         populateFilters();
         populateExclusionsUI();
         
@@ -50,7 +48,7 @@ async function initializeApp() {
 
     } catch (error) {
         console.error("Failed to load data:", error);
-        document.getElementById('status-msg').innerText = "Error loading wiki data. Check browser console.";
+        document.getElementById('status-msg').innerText = "Error loading static data. Check browser console.";
     }
 }
 

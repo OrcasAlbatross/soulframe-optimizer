@@ -1,0 +1,32 @@
+name: Daily Wiki Data Scraper
+
+# Run automatically every day at 12:00 AM UTC, and allow manual triggers
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Parser Script
+        run: node parser.js
+
+      - name: Commit and Push Data Updates
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f data/*.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update wiki data [skip ci]" && git push)
