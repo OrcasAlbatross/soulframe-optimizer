@@ -4,13 +4,22 @@ const path = require('path');
 // Helper to fetch raw text from MediaWiki API using Node.js native fetch
 async function fetchWikiModule(moduleName) {
     console.log(`Fetching ${moduleName} from wiki...`);
-    //Yeah yeah, api url here i know
-    const apiUrl = `https://wiki.avakot.org/w/api.php?action=query&prop=revisions&rvprop=content&titles=${moduleName}&format=json`;
+    const apiUrl = `https://wiki.avakot.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=*&titles=${moduleName}&format=json`;
     const response = await fetch(apiUrl);
     const json = await response.json();
     const pages = json.query.pages;
     const pageId = Object.keys(pages)[0];
-    return pages[pageId].revisions[0]['*'];
+    const page = pages[pageId];
+
+    // Safely extract from the new 'slots.main' format, falling back to legacy '*' format if needed
+    if (page.revisions && page.revisions[0]) {
+        const rev = page.revisions[0];
+        if (rev.slots && rev.slots.main && rev.slots.main['*']) {
+            return rev.slots.main['*'];
+        }
+        return rev['*'];
+    }
+    throw new Error(`Failed to find revision content for ${moduleName}`);
 }
 
 // Parses "3 C; 1 S" into an object: { courage: 3, spirit: 1, grace: 0 }

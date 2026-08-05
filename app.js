@@ -238,7 +238,7 @@ function closeGuidedModal() {
 }
 
 function applyGuidedSetup() {
-    // Gather Inputs
+    // Gather Status, Elixirs, Quests
     const rank = parseInt(document.getElementById('guided-rank').value, 10) || 1;
     
     const hasCuraidh = document.getElementById('guided-elixir-c').checked;
@@ -248,10 +248,12 @@ function applyGuidedSetup() {
     const questWolf = document.getElementById('guided-quest-wolf').value;
     const questBear = document.getElementById('guided-quest-bear').value;
 
+    // Gather Manual Pacts
     const pactC = parseInt(document.getElementById('guided-pact-c').value, 10) || 0;
     const pactS = parseInt(document.getElementById('guided-pact-s').value, 10) || 0;
     const pactG = parseInt(document.getElementById('guided-pact-g').value, 10) || 0;
 
+    // Gather Preferred Minimums and Extras
     const prefC = parseInt(document.getElementById('guided-pref-c').value, 10) || 0;
     const prefS = parseInt(document.getElementById('guided-pref-s').value, 10) || 0;
     const prefG = parseInt(document.getElementById('guided-pref-g').value, 10) || 0;
@@ -264,10 +266,10 @@ function applyGuidedSetup() {
     // Base Allocable Points
     let totalPoints = 16 + rank + extraAny;
 
-    // External Buffs
-    let extC = extraC;
-    let extS = extraS;
-    let extG = extraG;
+    // Calculate External Buffs (Includes Elixirs, Quests, Manual Pacts, and Extra Virtues)
+    let extC = extraC + pactC;
+    let extS = extraS + pactS;
+    let extG = extraG + pactG;
 
     if (hasCuraidh) extC += 10;
     if (hasDancing) extS += 10;
@@ -281,22 +283,24 @@ function applyGuidedSetup() {
     else if (questBear === 'spirit') extS += 1;
     else if (questBear === 'grace') extG += 1;
 
-    // 3. Inject Values
+    // Inject calculated values directly into the side-panel UI Input Boxes!
     document.getElementById('maxer-points').value = totalPoints;
     
-    document.getElementById('ext-courage').value = extC;
-    document.getElementById('ext-spirit').value = extS;
-    document.getElementById('ext-grace').value = extG;
+    document.getElementById('ext-courage').value = extC; //  Updates Extra C UI Box
+    document.getElementById('ext-spirit').value = extS;   // Updates Extra S UI Box
+    document.getElementById('ext-grace').value = extG;    // Updates Extra G UI Box
 
     document.getElementById('min-courage').value = Math.max(1, prefC);
     document.getElementById('min-spirit').value = Math.max(1, prefS);
     document.getElementById('min-grace').value = Math.max(1, prefG);
 
+    // Toggle setup flag
     guidedSetupPerformed = true;
 
     // Hide the setup warning instantly since values were successfully calculated
     document.getElementById('maxer-warning-msg').style.display = 'none';
 
+    // Auto-disable dynamic pacts if manual pact nodes were selected
     if (pactC > 0 || pactS > 0 || pactG > 0) {
         const pactCheckbox = document.getElementById('maxer-pact-enable');
         pactCheckbox.checked = false;
@@ -304,12 +308,15 @@ function applyGuidedSetup() {
         pactCheckbox.dispatchEvent(new Event('change'));
     }
 
+    // Flash UI fields to visually confirm the update
     const inputsToFlash = ['maxer-points', 'ext-courage', 'ext-spirit', 'ext-grace', 'min-courage', 'min-spirit', 'min-grace'];
     inputsToFlash.forEach(id => {
         const el = document.getElementById(id);
-        el.style.transition = 'background-color 0.35s';
-        el.style.backgroundColor = '#1e3040';
-        setTimeout(() => el.style.backgroundColor = '', 450);
+        if (el) {
+            el.style.transition = 'background-color 0.35s';
+            el.style.backgroundColor = '#1e3040';
+            setTimeout(() => el.style.backgroundColor = '', 450);
+        }
     });
 
     closeGuidedModal();
