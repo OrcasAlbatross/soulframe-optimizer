@@ -41,6 +41,53 @@ function populateFilters() {
         opt.textContent = type;
         sidearmFilter.appendChild(opt);
     });
+
+    // Bind change listeners to update moveset options dynamically
+    document.getElementById('primary-filter').onchange = () => {
+        updateMovesetDropdown("Weapon", "primary-filter", "primary-moveset-container", "primary-moveset-filter");
+    };
+
+    document.getElementById('sidearm-filter').onchange = () => {
+        updateMovesetDropdown("Sidearm", "sidearm-filter", "sidearm-moveset-container", "sidearm-moveset-filter");
+    };
+}
+
+// Dynamically populate and toggle moveset dropdowns based on selected weapon class
+function updateMovesetDropdown(slot, classSelectId, containerId, selectId) {
+    const classVal = document.getElementById(classSelectId).value;
+    const container = document.getElementById(containerId);
+    const select = document.getElementById(selectId);
+
+    if (classVal === 'all') {
+        container.style.display = 'none';
+        select.value = 'all';
+        return;
+    }
+
+    // Collect unique movesets for the selected slot and class
+    const movesets = new Set();
+    gameData.weapons.forEach(w => {
+        if (w.slot === slot && w.type === classVal && !excludedItems.has(w.name)) {
+            if (w.moveset && w.moveset !== "Unknown") {
+                movesets.add(w.moveset);
+            }
+        }
+    });
+
+    // If movesets exist for this class, populate and display the dropdown
+    if (movesets.size > 0) {
+        select.innerHTML = '<option value="all">Any Moveset</option>';
+        Array.from(movesets).sort().forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            select.appendChild(opt);
+        });
+        container.style.display = 'flex';
+    } else {
+        container.style.display = 'none';
+        select.value = 'all';
+    }
 }
 
 // Populate the modal's scrollable list of weapons with search & filter configurations
