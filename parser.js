@@ -118,6 +118,7 @@ function parseWeaponData(data) {
             name: nameMatch[1],
             slot: getString("Slot"), // Weapon or Sidearm
             type: getString("Art"),  // Bow, Shield, Long Blade, etc.
+            moveset: getString("Moveset"), //Subtype moveset of the Art: Cleaver, Rapier, etc.
             requirements: parsePips(getString("ReqVirtue")),
             attunement: parsePips(getString("Attunement")),
             baseAttack: lvl0Attack,
