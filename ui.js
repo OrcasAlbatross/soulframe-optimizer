@@ -568,8 +568,19 @@ function renderMaxerResults(result, targetObjective) {
     const cuirasses = recalculatedArmor.filter(i => i.piece.slot === "Cuirass").sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
     const leggings = recalculatedArmor.filter(i => i.piece.slot === "Leggings").sort((a, b) => b.calculated.weightedTotal - a.calculated.weightedTotal);
 
-    // Recalculate and sort Weapons
-    const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
+    // Recalculate and sort Weapons (Enforce matching moveset for the active weapon's slot)
+    const mainSlot = result.weapon.slot;
+    const mainMoveset = result.weapon.moveset;
+
+    const allowedWeapons = gameData.weapons.filter(w => {
+        if (excludedItems.has(w.name)) return false;
+        // If this weapon is in the SAME slot as your active weapon, force it to match moveset
+        if (w.slot === mainSlot && mainMoveset && mainMoveset !== "Unknown") {
+            return w.moveset === mainMoveset;
+        }
+        return true;
+    });
+
     const joineriesToTest = getJoineryList(true);
     const weaponCombinations = [];
 
