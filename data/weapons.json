@@ -3,6 +3,7 @@
     "name": "Avex",
     "slot": "Weapon",
     "type": "Bow",
+    "moveset": "Heavy Stab",
     "requirements": {
       "courage": 13,
       "spirit": 0,
@@ -21,6 +22,7 @@
     "name": "Basker's Wrest",
     "slot": "Sidearm",
     "type": "Magick",
+    "moveset": "Wrist Casters",
     "requirements": {
       "courage": 7,
       "spirit": 8,
@@ -39,6 +41,7 @@
     "name": "Blitzel",
     "slot": "Weapon",
     "type": "Bow",
+    "moveset": "Arrow Hail",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -57,6 +60,7 @@
     "name": "Bog & Myrtle",
     "slot": "Weapon",
     "type": "Shield",
+    "moveset": "Sword & Shield",
     "requirements": {
       "courage": 11,
       "spirit": 0,
@@ -75,6 +79,7 @@
     "name": "Cenotaph",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Cleaver",
     "requirements": {
       "courage": 14,
       "spirit": 9,
@@ -93,6 +98,7 @@
     "name": "Clivers",
     "slot": "Sidearm",
     "type": "Short Blade",
+    "moveset": "Dual Blades",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -111,6 +117,7 @@
     "name": "Cobladh",
     "slot": "Sidearm",
     "type": "Short Blade",
+    "moveset": "Dagger",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -129,6 +136,7 @@
     "name": "Dewelion",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Rapier",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -147,6 +155,7 @@
     "name": "Duhk Halic",
     "slot": "Weapon",
     "type": "Polearm",
+    "moveset": "Polearm",
     "requirements": {
       "courage": 12,
       "spirit": 0,
@@ -165,6 +174,7 @@
     "name": "Espadarte",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Rapier",
     "requirements": {
       "courage": 6,
       "spirit": 0,
@@ -183,6 +193,7 @@
     "name": "Esthelle",
     "slot": "Sidearm",
     "type": "Magick",
+    "moveset": "Wrist Casters",
     "requirements": {
       "courage": 0,
       "spirit": 7,
@@ -201,6 +212,7 @@
     "name": "Falx",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Cleaver",
     "requirements": {
       "courage": 12,
       "spirit": 0,
@@ -219,6 +231,7 @@
     "name": "Farilwyd",
     "slot": "Weapon",
     "type": "Polearm",
+    "moveset": "Polearm",
     "requirements": {
       "courage": 12,
       "spirit": 0,
@@ -237,6 +250,7 @@
     "name": "Gathannan",
     "slot": "Weapon",
     "type": "Polearm",
+    "moveset": "Polearm",
     "requirements": {
       "courage": 19,
       "spirit": 0,
@@ -255,6 +269,7 @@
     "name": "Grinn",
     "slot": "Sidearm",
     "type": "Short Blade",
+    "moveset": "Dagger",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -273,6 +288,7 @@
     "name": "Gwylen",
     "slot": "Weapon",
     "type": "Magick",
+    "moveset": "Staff",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -291,6 +307,7 @@
     "name": "Igne Mora",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 9,
       "spirit": 0,
@@ -309,6 +326,7 @@
     "name": "Ilverac",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 12,
       "spirit": 0,
@@ -327,6 +345,7 @@
     "name": "Juniper",
     "slot": "Weapon",
     "type": "Bow",
+    "moveset": "Arrow Hail",
     "requirements": {
       "courage": 0,
       "spirit": 5,
@@ -345,6 +364,7 @@
     "name": "Lyke-Wake",
     "slot": "Weapon",
     "type": "Shield",
+    "moveset": "Sword & Shield",
     "requirements": {
       "courage": 12,
       "spirit": 0,
@@ -363,6 +383,7 @@
     "name": "Maestro",
     "slot": "Weapon",
     "type": "Bow",
+    "moveset": "Arrow Hail",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -381,6 +402,7 @@
     "name": "Marrow's Bane",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Cleaver",
     "requirements": {
       "courage": 21,
       "spirit": 0,
@@ -399,6 +421,7 @@
     "name": "Navalha",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Rapier",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -417,6 +440,7 @@
     "name": "Needleseye",
     "slot": "Weapon",
     "type": "Heavy",
+    "moveset": "Greatsword",
     "requirements": {
       "courage": 18,
       "spirit": 0,
@@ -435,6 +459,7 @@
     "name": "Nettle",
     "slot": "Sidearm",
     "type": "Short Blade",
+    "moveset": "Dagger",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -453,6 +478,7 @@
     "name": "Nurash",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Cleaver",
     "requirements": {
       "courage": 15,
       "spirit": 0,
@@ -471,6 +497,7 @@
     "name": "Odiac",
     "slot": "Sidearm",
     "type": "Magick",
+    "moveset": "Wrist Casters",
     "requirements": {
       "courage": 6,
       "spirit": 6,
@@ -489,6 +516,7 @@
     "name": "Orst-III",
     "slot": "Weapon",
     "type": "Heavy",
+    "moveset": "Heavy Mace",
     "requirements": {
       "courage": 12,
       "spirit": 0,
@@ -507,6 +535,7 @@
     "name": "Oryn-Umbr",
     "slot": "Weapon",
     "type": "Shield",
+    "moveset": "Sword & Shield",
     "requirements": {
       "courage": 13,
       "spirit": 0,
@@ -525,6 +554,7 @@
     "name": "Precklies",
     "slot": "Sidearm",
     "type": "Flyblade",
+    "moveset": "Flyblades",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -543,6 +573,7 @@
     "name": "Purity",
     "slot": "Weapon",
     "type": "Heavy",
+    "moveset": "Greatsword",
     "requirements": {
       "courage": 17,
       "spirit": 0,
@@ -561,6 +592,7 @@
     "name": "Rivt-II",
     "slot": "Weapon",
     "type": "Short Blade",
+    "moveset": "Dual Blades",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -579,6 +611,7 @@
     "name": "Rook",
     "slot": "Weapon",
     "type": "Polearm",
+    "moveset": "Polearm",
     "requirements": {
       "courage": 11,
       "spirit": 0,
@@ -597,6 +630,7 @@
     "name": "Rostrum",
     "slot": "Weapon",
     "type": "Short Blade",
+    "moveset": "Dagger",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -615,6 +649,7 @@
     "name": "Seathorn",
     "slot": "Weapon",
     "type": "Magick",
+    "moveset": "Staff",
     "requirements": {
       "courage": 0,
       "spirit": 18,
@@ -633,6 +668,7 @@
     "name": "Silistavf",
     "slot": "Weapon",
     "type": "Magick",
+    "moveset": "Staff",
     "requirements": {
       "courage": 8,
       "spirit": 15,
@@ -651,6 +687,7 @@
     "name": "Skílter",
     "slot": "Sidearm",
     "type": "Flyblade",
+    "moveset": "Flyblades",
     "requirements": {
       "courage": 7,
       "spirit": 0,
@@ -669,6 +706,7 @@
     "name": "Sollos-I",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 13,
       "spirit": 0,
@@ -687,6 +725,7 @@
     "name": "Stultin",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 16,
       "spirit": 0,
@@ -705,6 +744,7 @@
     "name": "Tessard",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 14,
       "spirit": 0,
@@ -723,6 +763,7 @@
     "name": "The Alder",
     "slot": "Weapon",
     "type": "Magick",
+    "moveset": "Staff",
     "requirements": {
       "courage": 0,
       "spirit": 7,
@@ -741,6 +782,7 @@
     "name": "The Erstroot",
     "slot": "Weapon",
     "type": "Magick",
+    "moveset": "Staff",
     "requirements": {
       "courage": 0,
       "spirit": 16,
@@ -759,6 +801,7 @@
     "name": "The Ivor",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 7,
       "spirit": 0,
@@ -777,6 +820,7 @@
     "name": "The Paragon",
     "slot": "Weapon",
     "type": "Heavy",
+    "moveset": "Greatsword",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -795,6 +839,7 @@
     "name": "The Royal Tines",
     "slot": "Weapon",
     "type": "Short Blade",
+    "moveset": "Dual Blades",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -813,6 +858,7 @@
     "name": "The Starling",
     "slot": "Weapon",
     "type": "Bow",
+    "moveset": "Arrow Hail",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -831,6 +877,7 @@
     "name": "Thistle",
     "slot": "Weapon",
     "type": "Bow",
+    "moveset": "Arrow Hail",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -849,6 +896,7 @@
     "name": "Thrice Spurns",
     "slot": "Sidearm",
     "type": "Flyblade",
+    "moveset": "Flyblades",
     "requirements": {
       "courage": 7,
       "spirit": 0,
@@ -867,6 +915,7 @@
     "name": "Unsula",
     "slot": "Weapon",
     "type": "Short Blade",
+    "moveset": "Dual Blades",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -885,6 +934,7 @@
     "name": "Vasp-IV",
     "slot": "Weapon",
     "type": "Polearm",
+    "moveset": "Polearm",
     "requirements": {
       "courage": 13,
       "spirit": 0,
@@ -903,6 +953,7 @@
     "name": "Veilk",
     "slot": "Weapon",
     "type": "Polearm",
+    "moveset": "Poleaxe",
     "requirements": {
       "courage": 13,
       "spirit": 0,
@@ -921,6 +972,7 @@
     "name": "Vetch",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 11,
       "spirit": 0,
@@ -939,6 +991,7 @@
     "name": "Virdigris",
     "slot": "Sidearm",
     "type": "Short Blade",
+    "moveset": "Dagger",
     "requirements": {
       "courage": 0,
       "spirit": 0,
@@ -957,6 +1010,7 @@
     "name": "Vrusht-IX",
     "slot": "Weapon",
     "type": "Heavy",
+    "moveset": "Heavy Mace",
     "requirements": {
       "courage": 18,
       "spirit": 0,
@@ -975,6 +1029,7 @@
     "name": "Witan",
     "slot": "Sidearm",
     "type": "Short Blade",
+    "moveset": "Dagger",
     "requirements": {
       "courage": 0,
       "spirit": 6,
@@ -993,6 +1048,7 @@
     "name": "Wulder",
     "slot": "Weapon",
     "type": "Long Blade",
+    "moveset": "Longsword",
     "requirements": {
       "courage": 0,
       "spirit": 0,
