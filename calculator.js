@@ -201,9 +201,7 @@ function getBestWeaponForSlot(slot, envoyStats, allowedWeapons, joineryEnabled) 
     return bestWeaponConfig;
 }
 
-/**
- * High-Performance Asynchronous Solver (Time-Budgeted Inlined Iteration)
- */
+
 /**
  * High-Performance Asynchronous Solver
  */
@@ -310,6 +308,7 @@ function solveStatMaxerAsync(totalPoints, minReqs, extStats, targetObjective, we
     let bestConfig = null;
     let bestObjectiveValue = -1;
     let bestTiebreakerArmorDef = -1;
+    let bestCappedDamage = -1; // Track highest achievable damage
 
     // Correctly initialize state machine limits using pruned bounds
     let allocC = minCAlloc;
@@ -353,7 +352,11 @@ function solveStatMaxerAsync(totalPoints, minReqs, extStats, targetObjective, we
                         }
                     }
 
-                    if (maxDamageFound < requiredDamageCap) continue; 
+                    // Calculate damage bounded by the cap
+                    let cappedDamage = Math.min(maxDamageFound, requiredDamageCap);
+
+                    // Discard ONLY if this build's damage is strictly worse than the best we've already found
+                    if (cappedDamage < bestCappedDamage) continue;
 
                     for (let jIdx = 0; jIdx < weaponJoineries.length; jIdx++) {
                         const wj = weaponJoineries[jIdx];
@@ -375,21 +378,30 @@ function solveStatMaxerAsync(totalPoints, minReqs, extStats, targetObjective, we
                     else if (targetObjective === 'armor') score = armorScore;
 
                     let isBetter = false;
-                    if (score > bestObjectiveValue) {
+                    
+                    // Priority 1: Maximize Weapon Damage (up to the cap)
+                    if (cappedDamage > bestCappedDamage) {
                         isBetter = true;
-                    } else if (score === bestObjectiveValue) {
-                        if (armorScore > bestTiebreakerArmorDef) {
+                    } 
+                    // Priority 2: If damage is tied (or both hit the cap), evaluate objectives
+                    else if (cappedDamage === bestCappedDamage) {
+                        if (score > bestObjectiveValue) {
                             isBetter = true;
-                        } else if (armorScore === bestTiebreakerArmorDef) {
-                            if (pactPref === 'minimize') {
-                                isBetter = mod.pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
-                            } else {
-                                isBetter = mod.pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
+                        } else if (score === bestObjectiveValue) {
+                            if (armorScore > bestTiebreakerArmorDef) {
+                                isBetter = true;
+                            } else if (armorScore === bestTiebreakerArmorDef) {
+                                if (pactPref === 'minimize') {
+                                    isBetter = mod.pact.cost < (bestConfig ? bestConfig.pact.cost : 999);
+                                } else {
+                                    isBetter = mod.pact.cost > (bestConfig ? bestConfig.pact.cost : -1);
+                                }
                             }
                         }
                     }
 
                     if (isBetter) {
+                        bestCappedDamage = cappedDamage;
                         bestObjectiveValue = score;
                         bestTiebreakerArmorDef = armorScore;
                         bestConfig = {
@@ -400,7 +412,9 @@ function solveStatMaxerAsync(totalPoints, minReqs, extStats, targetObjective, we
                             extStats,
                             totalStats: { courage: tC, spirit: tS, grace: tG },
                             optimalJoinery: { name: optJoinery.name, tier: optJoinery.tier },
-                            weapon: weapon
+                            weapon: weapon,
+                            requiredDamageCap: requiredDamageCap,
+                            hitDamageCap: cappedDamage >= requiredDamageCap
                         };
                     }
                 }

@@ -38,7 +38,7 @@ async function initializeApp() {
 
         populateFilters();
         populateExclusionsUI();
-        
+
         // Find default weapon selection if nothing is currently selected
         const defaultWeapon = gameData.weapons.filter(w => !excludedItems.has(w.name))[0];
         selectMaxerWeapon(defaultWeapon); // Set default weapon in ui.js
@@ -72,7 +72,9 @@ function runOptimization() {
 
     // Retrieve Weapon filters
     const primaryFilterVal = document.getElementById('primary-filter').value;
+    const primaryMovesetVal = document.getElementById('primary-moveset-filter').value;
     const sidearmFilterVal = document.getElementById('sidearm-filter').value;
+    const sidearmMovesetVal = document.getElementById('sidearm-moveset-filter').value;
 
     // Retrieve Stat Skews (Advanced Settings)
     const skewPhys = parseFloat(document.getElementById('skew-phys').value) || 0;
@@ -102,11 +104,17 @@ function runOptimization() {
     let filteredPrimaries = allowedWeapons.filter(w => w.slot === "Weapon");
     if (primaryFilterVal !== "all") {
         filteredPrimaries = filteredPrimaries.filter(w => w.type === primaryFilterVal);
+        if (primaryMovesetVal !== "all") {
+            filteredPrimaries = filteredPrimaries.filter(w => w.moveset === primaryMovesetVal);
+        }
     }
 
     let filteredSidearms = allowedWeapons.filter(w => w.slot === "Sidearm");
     if (sidearmFilterVal !== "all") {
         filteredSidearms = filteredSidearms.filter(w => w.type === sidearmFilterVal);
+        if (sidearmMovesetVal !== "all") {
+            filteredSidearms = filteredSidearms.filter(w => w.moveset === sidearmMovesetVal);
+        }
     }
 
     const filteredWeapons = [...filteredPrimaries, ...filteredSidearms];
@@ -155,7 +163,7 @@ function runStatMaxer() {
     const loader = document.getElementById('loading-overlay');
     const progressBar = document.getElementById('loading-progress');
     const percentLabel = document.getElementById('loading-percent');
-    
+
     if (loader) {
         progressBar.style.width = "0%";
         percentLabel.innerText = "0%";
@@ -166,7 +174,7 @@ function runStatMaxer() {
     setTimeout(() => {
         // Retrieve Points and Thresholds
         const points = Math.min(500, parseInt(document.getElementById('maxer-points').value, 10) || 0);
-        
+
         // External Flat Buffs
         const extC = parseInt(document.getElementById('ext-courage').value, 10) || 0;
         const extS = parseInt(document.getElementById('ext-spirit').value, 10) || 0;
@@ -196,8 +204,8 @@ function runStatMaxer() {
         // Filter Datasets
         const allowedArmor = gameData.armor.filter(p => !excludedItems.has(p.name));
         const allowedWeapons = gameData.weapons.filter(w => !excludedItems.has(w.name));
-        
-        const allowedTalismans = [ { name: "None", stats: { courage: 0, spirit: 0, grace: 0 } } ];
+
+        const allowedTalismans = [{ name: "None", stats: { courage: 0, spirit: 0, grace: 0 } }];
         if (talismanEnabled) {
             gameData.talismans.filter(t => !excludedItems.has(t.name)).forEach(t => allowedTalismans.push(t));
         }
@@ -238,9 +246,9 @@ function closeGuidedModal() {
 }
 
 function applyGuidedSetup() {
-    // Gather Inputs
+    // Gather Status, Elixirs, Quests
     const rank = parseInt(document.getElementById('guided-rank').value, 10) || 1;
-    
+
     const hasCuraidh = document.getElementById('guided-elixir-c').checked;
     const hasDancing = document.getElementById('guided-elixir-s').checked;
     const hasShade = document.getElementById('guided-elixir-g').checked;
@@ -248,14 +256,16 @@ function applyGuidedSetup() {
     const questWolf = document.getElementById('guided-quest-wolf').value;
     const questBear = document.getElementById('guided-quest-bear').value;
 
+    // Gather Manual Pacts
     const pactC = parseInt(document.getElementById('guided-pact-c').value, 10) || 0;
     const pactS = parseInt(document.getElementById('guided-pact-s').value, 10) || 0;
     const pactG = parseInt(document.getElementById('guided-pact-g').value, 10) || 0;
 
+    // Gather Preferred Minimums and Extras
     const prefC = parseInt(document.getElementById('guided-pref-c').value, 10) || 0;
     const prefS = parseInt(document.getElementById('guided-pref-s').value, 10) || 0;
     const prefG = parseInt(document.getElementById('guided-pref-g').value, 10) || 0;
-    
+
     const extraAny = parseInt(document.getElementById('guided-extra-any').value, 10) || 0;
     const extraC = parseInt(document.getElementById('guided-extra-c').value, 10) || 0;
     const extraS = parseInt(document.getElementById('guided-extra-s').value, 10) || 0;
@@ -264,10 +274,10 @@ function applyGuidedSetup() {
     // Base Allocable Points
     let totalPoints = 16 + rank + extraAny;
 
-    // External Buffs
-    let extC = extraC;
-    let extS = extraS;
-    let extG = extraG;
+    // Calculate External Buffs (Includes Elixirs, Quests, Manual Pacts, and Extra Virtues)
+    let extC = extraC + pactC;
+    let extS = extraS + pactS;
+    let extG = extraG + pactG;
 
     if (hasCuraidh) extC += 10;
     if (hasDancing) extS += 10;
@@ -281,22 +291,24 @@ function applyGuidedSetup() {
     else if (questBear === 'spirit') extS += 1;
     else if (questBear === 'grace') extG += 1;
 
-    // 3. Inject Values
+    // Inject calculated values directly into the side-panel UI Input Boxes!
     document.getElementById('maxer-points').value = totalPoints;
-    
-    document.getElementById('ext-courage').value = extC;
-    document.getElementById('ext-spirit').value = extS;
-    document.getElementById('ext-grace').value = extG;
+
+    document.getElementById('ext-courage').value = extC; //  Updates Extra C UI Box
+    document.getElementById('ext-spirit').value = extS;   // Updates Extra S UI Box
+    document.getElementById('ext-grace').value = extG;    // Updates Extra G UI Box
 
     document.getElementById('min-courage').value = Math.max(1, prefC);
     document.getElementById('min-spirit').value = Math.max(1, prefS);
     document.getElementById('min-grace').value = Math.max(1, prefG);
 
+    // Toggle setup flag
     guidedSetupPerformed = true;
 
     // Hide the setup warning instantly since values were successfully calculated
     document.getElementById('maxer-warning-msg').style.display = 'none';
 
+    // Auto-disable dynamic pacts if manual pact nodes were selected
     if (pactC > 0 || pactS > 0 || pactG > 0) {
         const pactCheckbox = document.getElementById('maxer-pact-enable');
         pactCheckbox.checked = false;
@@ -304,12 +316,15 @@ function applyGuidedSetup() {
         pactCheckbox.dispatchEvent(new Event('change'));
     }
 
+    // Flash UI fields to visually confirm the update
     const inputsToFlash = ['maxer-points', 'ext-courage', 'ext-spirit', 'ext-grace', 'min-courage', 'min-spirit', 'min-grace'];
     inputsToFlash.forEach(id => {
         const el = document.getElementById(id);
-        el.style.transition = 'background-color 0.35s';
-        el.style.backgroundColor = '#1e3040';
-        setTimeout(() => el.style.backgroundColor = '', 450);
+        if (el) {
+            el.style.transition = 'background-color 0.35s';
+            el.style.backgroundColor = '#1e3040';
+            setTimeout(() => el.style.backgroundColor = '', 450);
+        }
     });
 
     closeGuidedModal();
@@ -361,20 +376,20 @@ document.getElementById('modal-weapon-type-filter').addEventListener('change', p
 document.getElementById('modal-weapon-slot-filter').addEventListener('change', populateModalWeapons);
 
 // Toggle advanced skews conditionally
-document.getElementById('maxer-target').addEventListener('change', function() {
+document.getElementById('maxer-target').addEventListener('change', function () {
     const advBox = document.getElementById('maxer-advanced-settings');
     advBox.style.display = (this.value === 'armor') ? 'block' : 'none';
 });
 
 // Manual Editing Checkbox Toggle
-document.getElementById('manual-edit-enable').addEventListener('change', function() {
+document.getElementById('manual-edit-enable').addEventListener('change', function () {
     const manualFieldsBox = document.getElementById('maxer-manual-fields');
     const warningMsg = document.getElementById('maxer-warning-msg');
     const isManual = this.checked;
-    
+
     // Include new fields in the lock/unlock array
     const inputs = ['maxer-points', 'ext-courage', 'ext-spirit', 'ext-grace', 'min-courage', 'min-spirit', 'min-grace'];
-    
+
     if (isManual) {
         manualFieldsBox.style.display = 'flex';
         warningMsg.style.display = 'none'; // Hide warning when manual editing is active
@@ -398,14 +413,14 @@ document.getElementById('manual-edit-enable').addEventListener('change', functio
 });
 
 // Clamping inputs
-document.getElementById('maxer-points').addEventListener('input', function() {
+document.getElementById('maxer-points').addEventListener('input', function () {
     let val = parseInt(this.value, 10);
     if (isNaN(val)) return;
     if (val > 500) this.value = 500;
     else if (val < 0) this.value = 0;
 });
 
-document.getElementById('maxer-pact-points').addEventListener('input', function() {
+document.getElementById('maxer-pact-points').addEventListener('input', function () {
     let val = parseInt(this.value, 10);
     if (isNaN(val)) return;
     if (val > 60) this.value = 60;
@@ -413,12 +428,12 @@ document.getElementById('maxer-pact-points').addEventListener('input', function(
 });
 
 // Toggle Pact Options visibility
-document.getElementById('maxer-pact-enable').addEventListener('change', function() {
+document.getElementById('maxer-pact-enable').addEventListener('change', function () {
     document.getElementById('maxer-pact-options').style.display = this.checked ? 'block' : 'none';
 });
 
 // Theme Swapping Event Listener
-document.getElementById('theme-toggle-btn').addEventListener('click', function() {
+document.getElementById('theme-toggle-btn').addEventListener('click', function () {
     const isLight = document.body.classList.toggle('light-mode');
     this.innerText = isLight ? "Dark Mode" : "Light Mode";
     localStorage.setItem('sf_theme_preference', isLight ? 'light' : 'dark');
@@ -430,7 +445,7 @@ document.getElementById('disable-all-btn').addEventListener('click', () => {
     gameData.armor.forEach(i => excludedItems.add(i.name));
     gameData.weapons.forEach(i => excludedItems.add(i.name));
     gameData.talismans.forEach(i => excludedItems.add(i.name));
-    
+
     populateExclusionsUI(); // Re-render the checkboxes
     document.getElementById('exclusion-search').dispatchEvent(new Event('input')); // Re-apply active search filter
 });
@@ -438,7 +453,7 @@ document.getElementById('disable-all-btn').addEventListener('click', () => {
 document.getElementById('enable-all-btn').addEventListener('click', () => {
     // Clear the excluded Set entirely
     excludedItems.clear();
-    
+
     populateExclusionsUI(); // Re-render the checkboxes
     document.getElementById('exclusion-search').dispatchEvent(new Event('input')); // Re-apply active search filter
 });

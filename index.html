@@ -45,7 +45,7 @@
         <h1>Soulframe Optimizer</h1>
         <p id="status-msg">Initializing...</p>
         <p style="font-size: 0.85em; color: var(--dark-dim-text); margin-top: 5px;">
-            Data sourced from the amazing contributors at the <a href="https://wiki.avakot.org" target="_blank" class="wiki-link">Soulframe Community Wiki</a>.
+            Equipment stats provided by the amazing contributors at the <a href="https://wiki.avakot.org" target="_blank" class="wiki-link">Soulframe Community Wiki</a>.
         </p>
 
         <!-- Theme Swapper Button -->
@@ -99,10 +99,25 @@
                         <option value="all">All Primaries</option>
                     </select>
                 </div>
+                <!-- Dynamic Primary Moveset Dropdown (Hidden by default) -->
+                <div id="primary-moveset-container" class="input-group mt-10" style="display: none;">
+                    <label for="primary-moveset-filter">Moveset:</label>
+                    <select id="primary-moveset-filter">
+                        <option value="all">Any Moveset</option>
+                    </select>
+                </div>
+
                 <div class="input-group mt-10">
                     <label for="sidearm-filter">Sidearm Class:</label>
                     <select id="sidearm-filter">
                         <option value="all">All Sidearms</option>
+                    </select>
+                </div>
+                <!-- Dynamic Sidearm Moveset Dropdown (Hidden by default) -->
+                <div id="sidearm-moveset-container" class="input-group mt-10" style="display: none;">
+                    <label for="sidearm-moveset-filter">Moveset:</label>
+                    <select id="sidearm-moveset-filter">
+                        <option value="all">Any Moveset</option>
                     </select>
                 </div>
             </div>
@@ -336,12 +351,12 @@
                 </div>
             </div>
 
-            <!-- Alternative Lists Column -->
+        <!-- Alternative Lists Column -->
             <div class="results-column alternative-lists">
                 <div class="alt-section">
-                    <h2>Allocation Breakdown</h2>
+                    <h2>Alternative Runner-ups</h2>
                     <div id="maxer-allocation-details" class="list-container" style="max-height: 400px;">
-                        <p class="placeholder-msg" style="margin-top: 20px;">Allocation details will appear here.</p>
+                        <p class="placeholder-msg" style="margin-top: 20px;">Alternative gear and weapon options will appear here after optimization.</p>
                     </div>
                 </div>
             </div>
@@ -355,7 +370,7 @@
             
             <div class="control-box" style="margin-bottom: 20px;">
                 <h3 style="margin-bottom: 5px;">How does this work?</h3>
-                <p class="description-sub">This application runs entirely in your web browser. When you open the page, it fetches the raw data tables directly from the Soulframe Community Wiki. <strong>Because there are no backend servers involved, all calculations happen locally on your device. No information or input data ever leaves your computer.</strong></p>
+                <p class="description-sub">This application runs entirely in your web browser. <strong>Because there are no backend servers involved, all calculations happen locally on your device. No information or input data ever leaves your computer.</strong></p>
             </div>
 
             <div class="control-box" style="margin-bottom: 20px;">
@@ -365,7 +380,7 @@
 
             <div class="control-box" style="margin-bottom: 20px;">
                 <h3 style="margin-bottom: 5px;">Legal Disclaimer</h3>
-                <p class="description-sub">This is an unofficial, fan-made tool and is <strong>not affiliated with, endorsed, sponsored, or specifically approved by Digital Extremes.</strong> <br><br>Soulframe and all associated properties, logos, and art are trademarks and copyrights of Digital Extremes Ltd. All game data is sourced from the community wiki under their respective open licenses.</p>
+                <p class="description-sub">This is an unofficial, fan-made tool and is <strong>not affiliated with, endorsed, sponsored, or specifically approved by Digital Extremes.</strong> <br><br>Soulframe and all associated properties, logos, and art are trademarks and copyrights of Digital Extremes Ltd. All game data is sourced from the community wiki under their respective open licenses.<br><br>This project wouldn't be possible without the amazing work of the <a href="https://avakot.org" target="_blank" class="wiki-link">Avakot Community</a>.</p>
             </div>
         </div>
     </main>
