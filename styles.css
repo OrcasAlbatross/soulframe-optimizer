@@ -767,3 +767,24 @@ body.light-mode .maxer-warning {
     border-color: rgba(231, 76, 60, 0.2);
     color: #c0392b;
 }
+/* Subtle Background Floral Pattern Texture */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('assets/background-pattern.png');
+    background-repeat: repeat;
+    background-size: 600px 600px; /* Scales the pattern nicely */
+    opacity: 0.05; /* Extremely subtle in Dark Mode to preserve contrast */
+    pointer-events: none; /* Allows clicks to pass right through */
+    z-index: -1; /* Placed behind all content */
+    transition: opacity 0.2s;
+}
+
+/* Light Mode Texture Adjustment */
+body.light-mode::before {
+    opacity: 0; /* Slightly more visible on light backgrounds */
+}
