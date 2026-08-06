@@ -401,7 +401,7 @@ function renderMaxerResults(result, targetObjective) {
             <div class="optimal-item" style="border-left-color: #ff6b6b;">
                 <h4 style="color: #ff6b6b;">No Valid Configuration Found</h4>
                 <p class="description-sub" style="margin-top: 5px;">
-                    Your points pool is too low to satisfy your minimum thresholds, your selected weapon's wielding requirements, or it is impossible to reach the weapon's maximum damage cap.
+                    Your available points pool is too low to satisfy your custom minimum thresholds or your selected weapon's wielding requirements. Increase your points or lower your minimums to proceed.
                 </p>
             </div>
         `;
@@ -419,19 +419,43 @@ function renderMaxerResults(result, targetObjective) {
     const grandStab = bestHelm.calculated.stability + bestCuirass.calculated.stability + bestLeggings.calculated.stability;
     const grandTotal = grandPhys + grandMag + grandStab;
 
-    const extText = (result.extStats.courage > 0 || result.extStats.spirit > 0 || result.extStats.grace > 0) 
-        ? `| Ext: [ C: ${result.extStats.courage} | S: ${result.extStats.spirit} | G: ${result.extStats.grace} ]` 
-        : '';
+    let buildHtml = ``;
+
+    // WARNING 1: Missed Damage Cap
+    if (!result.hitDamageCap) {
+        buildHtml += `
+            <div class="maxer-warning" style="margin-top: 0; margin-bottom: 15px; display: block;">
+                ⚠️ <strong>Damage Cap Unreachable:</strong> Your available points and minimums restrict this weapon from reaching its max potential damage (${result.requiredDamageCap}). Displaying the highest damage build achievable.
+            </div>
+        `;
+    }
+
+    // WARNING 2: Objective Mismatch (Target Virtue outweighed by another)
+    if (targetObjective !== 'armor') {
+        const s = result.totalStats;
+        const targetVal = s[targetObjective];
+        const maxVal = Math.max(s.courage, s.spirit, s.grace);
+        
+        if (targetVal < maxVal) {
+            const capitalizedTarget = targetObjective.charAt(0).toUpperCase() + targetObjective.slice(1);
+            buildHtml += `
+                <div class="maxer-warning" style="margin-top: 0; margin-bottom: 15px; display: block; border-color: #f39c12; background-color: rgba(243, 156, 18, 0.08); color: #f39c12;">
+                    ℹ️ <strong>Target Virtue Outweighed:</strong> To meet your minimum thresholds or maximize weapon damage, another virtue required more points than your target (${capitalizedTarget}).
+                </div>
+            `;
+        }
+    }
 
     // Combined Virtues Card
-    let buildHtml = `
+    buildHtml += `
         <div class="virtue-summary-card">
             <h3>Final Combined Virtues</h3>
             <p><strong>Courage:</strong> <span class="summary-highlight">${result.totalStats.courage}</span></p>
             <p><strong>Spirit:</strong> <span class="summary-highlight">${result.totalStats.spirit}</span></p>
             <p><strong>Grace:</strong> <span class="summary-highlight">${result.totalStats.grace}</span></p>
             <p class="border-top-separator" style="font-size: 0.8em; color: var(--dark-dim-text); margin-top: 10px; padding-top: 8px;">
-                Base Allocation: <strong>[ C: ${result.allocation.courage} | S: ${result.allocation.spirit} | G: ${result.allocation.grace} ]</strong> ${extText}
+                Base Allocation: <strong>[ C: ${result.allocation.courage} | S: ${result.allocation.spirit} | G: ${result.allocation.grace} ]</strong> 
+                ${(result.extStats.courage > 0 || result.extStats.spirit > 0 || result.extStats.grace > 0) ? `| Ext: [ C: ${result.extStats.courage} | S: ${result.extStats.spirit} | G: ${result.extStats.grace} ]` : ''}
             </p>
         </div>
     `;
